@@ -4,15 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/apricot"
+    android:backgroundFirst="@color/apricot"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/wheatonTitle_Main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:fontFamily="@font/outfit_bold"
+        android:text="Wheaton"
+        android:textColor="@color/black"
+        android:textSize="90px"
+        app:layout_constraintBottom_toTopOf="@id/beaconTitle_Main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.1" />
+
+    <TextView
+        android:id="@+id/beaconTitle_Main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BEACON"
+        android:textSize="150px"
+        android:fontFamily="@font/outfit_black"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.241" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

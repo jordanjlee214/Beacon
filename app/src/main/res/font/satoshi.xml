@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="100"
+        android:font="@font/satoshi_lightitalic" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="100"
+        android:font="@font/satoshi_light" />
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="100"
+        android:font="@font/satoshi_italic" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="100"
+        android:font="@font/satoshi_regular" />
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="100"
+        android:font="@font/satoshi_mediumitalic" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="100"
+        android:font="@font/satoshi_medium" />
+
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="100"
+        android:font="@font/satoshi_bolditalic" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="100"
+        android:font="@font/satoshi_bold" />
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="150"
+        android:font="@font/satoshi_blackitalic" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="200"
+        android:font="@font/satoshi_black" />
+</font-family>
