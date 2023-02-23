@@ -4,6 +4,133 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/apricot"
     tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/wheatonTitle_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/outfit_bold"
+        android:text="Wheaton"
+        android:textColor="@color/black"
+        android:textSize="90px"
+        app:layout_constraintBottom_toTopOf="@id/beaconTitle_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.1" />
+
+    <TextView
+        android:id="@+id/beaconTitle_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BEACON"
+        android:textSize="150px"
+        android:fontFamily="@font/outfit_black"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.241" />
+
+    <EditText
+        android:id="@+id/emailInput_login"
+        android:layout_width="350sp"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:hint="  Email"
+        android:textColor="@color/black"
+        android:textSize="23sp"
+        android:padding="8dp"
+        android:windowSoftInputMode="stateVisible|adjustPan"
+        android:drawableStart="@drawable/email_icon"
+        android:fontFamily="@font/satoshi_bold"
+        android:background="@drawable/input"
+        android:textColorHint="@color/gray"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.4"/>
+
+    <EditText
+        android:id="@+id/passwordInput_login"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:drawableStart="@drawable/password_icon"
+        android:fontFamily="@font/satoshi_bold"
+        android:hint="  Password"
+        android:inputType="textPassword"
+        android:padding="8dp"
+        android:windowSoftInputMode="stateVisible|adjustPan"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="23sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.53" />
+
+    <Button
+        android:id="@+id/signInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.67"
+        android:text="  Sign In  "
+        android:textAllCaps="false"
+        android:background="@drawable/input"
+        android:padding="10sp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/outfit_black"
+        android:backgroundTint="@color/teal">
+
+    </Button>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/signUp"
+        android:text="Create new account below"
+        android:textColor="@color/black"
+        android:fontFamily="@font/satoshi_black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="23sp"
+        android:textAllCaps="false"
+        app:layout_constraintVertical_bias="0.77"
+        >
+    </TextView>
+
+    <Button
+        android:id="@+id/signUpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.87"
+        android:text="  Register  "
+        android:textAllCaps="false"
+        android:background="@drawable/input"
+        android:padding="10sp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/satoshi_black"
+        android:backgroundTint="@color/teal">
+
+    </Button>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

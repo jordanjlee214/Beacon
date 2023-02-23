@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/apricot"
-    android:backgroundFirst="@color/apricot"
     tools:context=".MainActivity">
 
     <TextView
@@ -36,6 +35,75 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.241" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/eventactivity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:fontFamily="@font/satoshi_black"
+        android:text="  EventActivity  "
+        android:textAllCaps="false"
+        android:padding="30px"
+        android:textColor="@color/white"
+        android:textSize="50px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:backgroundTint="@color/teal"/>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mapactivity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/teal"
+        android:fontFamily="@font/satoshi_black"
+        android:padding="30px"
+        android:text="  MapsActivity  "
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="50px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.585" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/friendactivity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/teal"
+        android:fontFamily="@font/satoshi_black"
+        android:padding="30px"
+        android:text="  FriendActivity  "
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="50px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.67" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/loginactivity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/teal"
+        android:fontFamily="@font/satoshi_black"
+        android:padding="30px"
+        android:text="  LoginActivity  "
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="50px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.755" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
