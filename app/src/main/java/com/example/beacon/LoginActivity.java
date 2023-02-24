@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
@@ -31,6 +32,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
@@ -42,12 +48,14 @@ public class LoginActivity extends AppCompatActivity {
     private BeginSignInRequest signInRequest; //manages GoogleAuthentication
     private SignInClient oneTapClient;
     private FirebaseAuth mAuth; //handles all Firebase Authentication protocols
+    private DatabaseReference usersRef; //reads and writes to Firebase database
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         //set up materials for a Google Sign In
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -60,13 +68,13 @@ public class LoginActivity extends AppCompatActivity {
                         // Your server's client ID, not your Android client ID.
                         .setServerClientId(getString(R.string.web_client_id))
                         // Only show accounts previously used to sign in.
-                        .setFilterByAuthorizedAccounts(true)
+                        .setFilterByAuthorizedAccounts(false)
                         .build())
                 .build();
 
         //set up button
         signInButton = findViewById(R.id.signInButton);
-        signInButton.setOnClickListener(new View.OnClickListener() {
+                signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn();
@@ -83,9 +91,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signIn(){ //helper method to carry out function to sign-in
-
-       // Intent signInIntent = gsc.getSignInIntent(); //opens up screen to sign in with Google
-       // startActivityForResult(signInIntent, 100);
         oneTapClient.beginSignIn(signInRequest)
                 .addOnSuccessListener(this, new OnSuccessListener<BeginSignInResult>() {
                     @Override
@@ -109,6 +114,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /*code pulled from Google's tutorial on authenticating Google accounts:
+    https://firebase.google.com/docs/auth/android/google-signin?utm_source=studio#java_2
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -127,14 +135,12 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-                                            // Sign in success, update UI with the signed-in user's information
                                             Log.d(TAG, "signInWithCredential:success");
                                             FirebaseUser user = mAuth.getCurrentUser();
-                                            //TODO: Check user email and make sure its Wheaton
+                                            checkWheaton(user);
                                         } else {
                                             // If sign in fails, display a message to the user.
                                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                            //updateUI(null);
                                         }
                                     }
                                 });
@@ -146,4 +152,87 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    /*this method will fully authenticate the account if the Google account is
+    a Wheaton student account. the account will be deleted if it is not. the user
+    will be asked to try again */
+    private void checkWheaton(FirebaseUser user){
+        if(isWheatonEmail(user.getEmail())){  //if its a wheaton email, put it's info on the database if we need to
+            usersRef.addValueEventListener(new ValueEventListener() { //read the database
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.child(mAuth.getCurrentUser().getUid()).exists()){ //if the user is already in database
+                        Log.d(TAG, "EXISTENCE: User already exists ");
+                        sendToMain(); //just send to home screen
+                    }
+                    else{
+                        Log.d(TAG, "EXISTENCE: User must be stored in database ");
+                        setUpUserData(user); //if not, store user data on database
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        else{ //if this isn't a wheaton email, delete the user and have them sign in again
+            user.delete()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "User account deleted.");
+                            }
+                            Toast.makeText(LoginActivity.this, "You must sign in with a Wheaton (my.wheaton.edu) Google account. Try again.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        }
+    }
+
+    //helper method to check if an email is a my.wheaton.edu account
+    private boolean isWheatonEmail(String email){
+        String domain = email.substring(email.indexOf('@')+1);
+        return domain.equals("my.wheaton.edu");
+    }
+
+    //sets up basic user data in the Firebase Database such as username and user ID
+    private void setUpUserData(FirebaseUser user){
+        User basicUser = new User();
+        basicUser.setUserID(mAuth.getCurrentUser().getUid());
+
+        String email = user.getEmail();
+        String username = email.substring(0, email.indexOf('@'));
+        basicUser.setUsername(username);
+
+        String firstName = user.getDisplayName().substring(0, user.getDisplayName().indexOf(" "));
+        String lastName = user.getDisplayName().substring(user.getDisplayName().indexOf(" ")+1);
+        basicUser.setFirstName(firstName);
+        basicUser.setLastName(lastName);
+
+        usersRef.child(mAuth.getCurrentUser().getUid()).updateChildren(basicUser.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(LoginActivity.this, "User data in database.", Toast.LENGTH_SHORT).show();
+                    sendToMain();
+                }
+                else{
+                    String message = task.getException().getMessage();
+                    Toast.makeText(LoginActivity.this, "Uh oh! An error occurred: " + message, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    //the following methods will send the user to other activities
+    private void sendToMain(){
+        Intent sendToMain = new Intent(LoginActivity.this, MainActivity.class);
+        sendToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(sendToMain);
+        finish();
+    }
+
 }

@@ -33,7 +33,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.241" />
+        app:layout_constraintVertical_bias="0.2" />
+
+    <TextView
+        android:id="@+id/userDataTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome"
+        android:textSize="60px"
+        android:textAlignment="center"
+        android:fontFamily="@font/satoshi_medium"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/eventactivity_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/beaconTitle_Main"
+        app:layout_constraintVertical_bias="0.45" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/eventactivity_button"
@@ -89,14 +104,14 @@
         app:layout_constraintVertical_bias="0.67" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/loginactivity_button"
+        android:id="@+id/signOut_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/input"
-        android:backgroundTint="@color/teal"
+        android:backgroundTint="@color/teal_700"
         android:fontFamily="@font/satoshi_black"
         android:padding="30px"
-        android:text="  LoginActivity  "
+        android:text="  Sign Out  "
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="50px"
@@ -104,6 +119,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.755" />
+        app:layout_constraintVertical_bias="0.92" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
