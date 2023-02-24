@@ -195,7 +195,8 @@ public class LoginActivity extends AppCompatActivity {
     //helper method to check if an email is a my.wheaton.edu account
     private boolean isWheatonEmail(String email){
         String domain = email.substring(email.indexOf('@')+1);
-        return domain.equals("my.wheaton.edu");
+        //return domain.equals("my.wheaton.edu");
+        return true; //i put this there so we can allow Non-Wheaton accounts for the sake of testing
     }
 
     //sets up basic user data in the Firebase Database such as username and user ID
