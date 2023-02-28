@@ -80,8 +80,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4"
-        android:hint="location"
-        android:labelFor="@id/location_event"/>
+        android:contentDescription="menu for location"
+        android:hint="location"/>
 
     <TextView
         android:id="@+id/description_event"
