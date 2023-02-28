@@ -19,6 +19,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -49,7 +52,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 location.addOnCompleteListener((OnCompleteListener<Location>) task -> {
                     if (task.isSuccessful()) {
                         Location currentLocation = (Location) task.getResult();
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("Someone"));
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                        System.out.println("Location recieved");
                     } else {
                         Toast.makeText(MapsActivity.this, "unable to get location", Toast.LENGTH_SHORT).show();
                     }
@@ -124,7 +129,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            mMap.setMyLocationEnabled(true);
+           // mMap.setMyLocationEnabled(true);
+            mMap.setLatLngBoundsForCameraTarget(new LatLngBounds(new LatLng(41.864406, -88.103689),new LatLng(41.874021, -88.087758)));
 
         }
 
