@@ -8,10 +8,48 @@
     tools:context=".ScheduleEventForm">
 
     <TextView
+        android:id="@+id/title_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:textSize="90px"
+        android:fontFamily="@font/outfit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".1"
+        app:layout_constraintVertical_bias="0.05" />
+
+    <EditText
+        android:id="@+id/title_event_box"
+        android:layout_width="800px"
+        android:layout_height="180px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.12"
+        android:hint="Event title"/>
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".3"
+        app:layout_constraintHorizontal_bias=".1"
+        />
+
+    <TextView
         android:id="@+id/time_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Time?"
+        android:text="Time:"
         android:textSize="75px"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
@@ -19,7 +57,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintHorizontal_bias=".1"
+        app:layout_constraintVertical_bias="0.55" />
 
     <TextView
         android:id="@+id/to_event"
@@ -33,35 +72,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.21" />
+        app:layout_constraintHorizontal_bias=".61"
+        app:layout_constraintVertical_bias="0.55" />
 
     <EditText
         android:id="@+id/start_time"
         android:layout_width="200px"
-        android:layout_height="200px"
+        android:layout_height="180px"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/time_event"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/time_event"
-        app:layout_constraintVertical_bias="0.09"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".4"
+        app:layout_constraintVertical_bias="0.55"
         android:hint="Start"/>
 
     <EditText
         android:id="@+id/end_time"
         android:layout_width="200px"
-        android:layout_height="200px"
+        android:layout_height="180px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/time_event"
-        app:layout_constraintTop_toTopOf="@id/time_event"
-        app:layout_constraintVertical_bias="0.09"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".9"
+        app:layout_constraintVertical_bias="0.55"
         android:hint="End  "/>
 
     <TextView
         android:id="@+id/location_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location?"
+        android:text="Location:"
         android:textSize="75px"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
@@ -69,7 +111,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintHorizontal_bias=".1"
+        app:layout_constraintVertical_bias="0.65" />
 
     <Spinner
         android:id="@+id/location_menu"
@@ -79,7 +122,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintVertical_bias="0.66"
+        app:layout_constraintHorizontal_bias=".9"
         android:contentDescription="menu for location"
         android:hint="location"/>
 
@@ -87,7 +131,7 @@
         android:id="@+id/description_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text="Description:"
         android:textSize="75px"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
@@ -95,17 +139,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.75"
+        app:layout_constraintHorizontal_bias=".1"/>
 
     <EditText
         android:id="@+id/description_box"
         android:layout_width="800px"
-        android:layout_height="800px"
+        android:layout_height="400px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/description_event"
-        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintVertical_bias="0.8"
         android:hint="Description"/>
 
 
