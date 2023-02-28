@@ -46,6 +46,9 @@
             android:name=".EventActivity"
             android:exported="false" />
         <activity
+            android:name=".ScheduleEventForm"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
