@@ -2,5 +2,6 @@
     <string name="app_name">Beacon</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="web_client_id">355311690445-hui5enr72kc9iic888b8dtmkpe5r6o1u.apps.googleusercontent.com</string>
+    <string name="friend_page_default">Nothing to see here</string>
 </resources>
 
