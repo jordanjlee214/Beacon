@@ -7,6 +7,8 @@ public class User { //entity class to represent user. Needs to be updated eventu
     private String username, firstName, lastName, birthday, gender, major, graduationYear;
     private String userID;
 
+    private double lati, longi;
+
     private int friends; //number of friends
 
     private HashMap<String, String> friendsList; //stores friends usernames and IDs
@@ -119,6 +121,24 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("major", major);
         userData.put("friends", friends);
         userData.put("friendsList", friendsList);
+        userData.put("lat", lati);
+        userData.put("long", longi);
         return userData;
+    }
+
+    public double getLati() {
+        return lati;
+    }
+
+    public void setLati(double lati) {
+        this.lati = lati;
+    }
+
+    public double getLongi() {
+        return longi;
+    }
+
+    public void setLongi(double longi) {
+        this.longi = longi;
     }
 }
