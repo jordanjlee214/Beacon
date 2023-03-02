@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class EventActivity extends AppCompatActivity {
 
-    private Button createEventButton;
+    private Button createEventButton, viewEventButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
