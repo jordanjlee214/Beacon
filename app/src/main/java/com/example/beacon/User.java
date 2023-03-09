@@ -11,7 +11,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
 
     private int friends; //number of friends
 
-    private HashMap<String, String> friendsList; //stores friends usernames and IDs
+    private HashMap<String, String> friendList; //stores friends usernames and IDs
     //Profile images
     //Group info
     //Classes, etc.
@@ -26,7 +26,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         graduationYear= "";
         userID = "";
         friends= 0;
-        friendsList = new HashMap<>();
+        friendList = new HashMap<String, String>();
     }
 
     public String getUserID() {
@@ -57,16 +57,16 @@ public class User { //entity class to represent user. Needs to be updated eventu
         return graduationYear;
     }
 
-    public HashMap<String, String> getFriendsList() {
-        return friendsList;
+    public HashMap<String, String> getFriendList() {
+        return friendList;
     }
 
     public int getFriends() {
         return friends;
     }
 
-    public void setFriendsList(HashMap<String, String> fList) {
-        this.friendsList = fList;
+    public void setFriendList(HashMap<String, String> fList) {
+        this.friendList = fList;
     }
 
     public void setBirthday(String birthday) {
@@ -120,7 +120,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("graduationYear", graduationYear);
         userData.put("major", major);
         userData.put("friends", friends);
-        userData.put("friendsList", friendsList);
+        userData.put("friendsList", friendList);
         userData.put("lat", lati);
         userData.put("long", longi);
         return userData;

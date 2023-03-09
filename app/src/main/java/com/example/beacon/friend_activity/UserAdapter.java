@@ -51,7 +51,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
      *                if you have a list of default messages, use
      *                the recommended constructor
      */
-    public UserAdapter(Context context, String message){
+    public UserAdapter(Context context, @NonNull String message){
         this.context = context;
         defaultM = message;
     }
@@ -70,12 +70,23 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.userV.setText(x.getUsername());
     }
 
+    /**
+     * How many items?
+     * @return size of dataset
+     */
     @Override
     public int getItemCount() {
-        return dataset.size();
+        if (isNull()) return 1; //1 default message
+        else return dataset.size();
     }
 
-    //TODO put together an boolean isNull() method
+    /**
+     * Is dataset null?
+     * @return dataset == null
+     */
+    public boolean isNull(){
+        return dataset == null;
+    }
 
     class UserViewHolder extends RecyclerView.ViewHolder{
         /**
