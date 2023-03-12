@@ -11,15 +11,34 @@
         android:id="@+id/eventTitle_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Event"
-        android:textSize="100px"
+        android:text="Events"
+        android:textSize="55dp"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.03" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:fontFamily="@font/satoshi_black"
+        android:text="<-"
+        android:textAllCaps="false"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".05"
+        app:layout_constraintVertical_bias=".03"
+        android:backgroundTint="@color/apricot"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createEvent_button"
@@ -29,31 +48,16 @@
         android:fontFamily="@font/satoshi_black"
         android:text="  Create Event  "
         android:textAllCaps="false"
-        android:padding="30px"
+        android:padding="15dp"
         android:textColor="@color/white"
-        android:textSize="55px"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".97"
+        app:layout_constraintVertical_bias=".98"
         android:backgroundTint="@color/apricot"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/viewEvent_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input"
-        android:fontFamily="@font/satoshi_black"
-        android:text="  View Events  "
-        android:textAllCaps="false"
-        android:padding="30px"
-        android:textColor="@color/white"
-        android:textSize="55px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/createEvent_button"
-        app:layout_constraintVertical_bias=".175"
-        android:backgroundTint="@color/apricot"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

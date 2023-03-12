@@ -1,9 +1,11 @@
 package com.example.beacon;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,6 +21,7 @@ public class ScheduleEventForm extends AppCompatActivity {
 
     private Button submitEventForm;
     private DatabaseReference eventRef;
+    private Boolean publicStatus;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class ScheduleEventForm extends AppCompatActivity {
         EditText endTime = findViewById(R.id.end_time);
         Spinner location = findViewById(R.id.location_menu);
         EditText description = findViewById(R.id.description_box);
+        CheckBox privacyCheck = findViewById(R.id.checkboxYes);
 
 
         submitEventForm = findViewById(R.id.submitEventForm_button);
@@ -48,6 +52,17 @@ public class ScheduleEventForm extends AppCompatActivity {
                 eventRef.child(currentEvent).child("End").setValue(endTime.getText().toString());
                 eventRef.child(currentEvent).child("Location").setValue(location.getDisplay().toString());
                 eventRef.child(currentEvent).child("Description").setValue(description.getText().toString());
+                if (privacyCheck.isChecked()){
+                    eventRef.child(currentEvent).child("Privacy").setValue("private");
+                    publicStatus = false;
+                } else {
+                    eventRef.child(currentEvent).child("Privacy").setValue("open");
+                    publicStatus = true;
+                }
+                //TODO finish
+                //Event newEvent = new Event(title.getText().toString(), publicStatus, );
+
+                sendToActivity(EventActivity.class);
             }
         });
         //add all campus locations
@@ -66,6 +81,13 @@ public class ScheduleEventForm extends AppCompatActivity {
     public String RandomID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
+    }
+
+    private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
+        Intent switchToNewActivity= new Intent(ScheduleEventForm.this, a);
+        startActivity(switchToNewActivity);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        //finish();
     }
 
 }

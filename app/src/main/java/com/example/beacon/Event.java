@@ -1,6 +1,5 @@
 package com.example.beacon;
 import java.time.*;
-import java.util.*;
 
 public class Event {
 
@@ -12,6 +11,8 @@ public class Event {
     private LocalDate eventDate;
 
     private LocalTime eventStartTime, eventEndTime;
+
+    String newline = System.lineSeparator();
 
 
 //check main activity set up user data, and display user data
@@ -82,6 +83,14 @@ public class Event {
         this.eventEndTime = eventEndTime;
     }
 
-
+    public String toString(){
+        System.out.println("Event: " + eventName + newline +
+                "Public?: " + isPublic + newline +
+                "Date: " + eventDate + newline +
+                "Time: " + eventStartTime + " to " + eventEndTime +
+                "Location: " + eventLocation +
+                "Description: " + eventDescription);
+        return null;
+    }
 
 }
