@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name:"
-        android:textSize="90px"
+        android:textSize="35dp"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,8 +24,8 @@
 
     <EditText
         android:id="@+id/title_event_box"
-        android:layout_width="800px"
-        android:layout_height="180px"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,14 +35,13 @@
 
     <DatePicker
         android:id="@+id/date_event"
-        android:layout_width="200dp"
-        android:layout_height="300dp"
+        android:layout_width="400dp"
+        android:layout_height="260dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".35"
-        app:layout_constraintHorizontal_bias=".1"
+        app:layout_constraintVertical_bias=".32"
         />
 
     <TextView
@@ -50,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Time:"
-        android:textSize="75px"
+        android:textSize="32dp"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -65,46 +64,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Private?"
-        android:textSize="75px"
+        android:textSize="32dp"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias=".8"
-        app:layout_constraintVertical_bias="0.22" />
+        app:layout_constraintHorizontal_bias=".1"
+        app:layout_constraintVertical_bias="0.63" />
 
     <CheckBox
         android:id="@+id/checkboxYes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias=".78"
-        app:layout_constraintVertical_bias="0.35"
-        android:text="Yes" />
-
-    <CheckBox
-        android:id="@+id/checkboxNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias=".78"
-        app:layout_constraintVertical_bias="0.5"
-        android:text="No" />
+        app:layout_constraintHorizontal_bias=".61"
+        app:layout_constraintVertical_bias="0.63"
+        android:text="(Check for yes)" />
 
     <TextView
         android:id="@+id/to_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="to"
-        android:textSize="75px"
+        android:textSize="30dp"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -116,8 +103,8 @@
 
     <EditText
         android:id="@+id/start_time"
-        android:layout_width="200px"
-        android:layout_height="180px"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,8 +115,8 @@
 
     <EditText
         android:id="@+id/end_time"
-        android:layout_width="200px"
-        android:layout_height="180px"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -143,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Location:"
-        android:textSize="75px"
+        android:textSize="32dp"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -155,8 +142,8 @@
 
     <Spinner
         android:id="@+id/location_menu"
-        android:layout_width="600px"
-        android:layout_height="150px"
+        android:layout_width="230dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -171,7 +158,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Description:"
-        android:textSize="30dp"
+        android:textSize="32dp"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -201,15 +188,15 @@
         android:fontFamily="@font/satoshi_black"
         android:text="Submit"
         android:textAllCaps="false"
-        android:padding="30px"
+        android:padding="13dp"
         android:textColor="@color/white"
-        android:textSize="55px"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".95"
-        app:layout_constraintHorizontal_bias=".88"
+        app:layout_constraintHorizontal_bias=".95"
         android:backgroundTint="@color/apricot"/>
 
 
