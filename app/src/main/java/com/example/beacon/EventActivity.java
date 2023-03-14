@@ -20,7 +20,6 @@ public class EventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-
         createEventButton = findViewById(R.id.createEvent_button);
 
         createEventButton.setOnClickListener(new View.OnClickListener() {

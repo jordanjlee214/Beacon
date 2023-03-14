@@ -1,5 +1,6 @@
 package com.example.beacon;
 import java.time.*;
+import java.util.HashMap;
 
 public class Event {
 
@@ -12,13 +13,19 @@ public class Event {
 
     private LocalTime eventStartTime, eventEndTime;
 
+    private String creatorID;
+    private String creatorUsername;
+    private HashMap<String, String> rsvpList;
+
     String newline = System.lineSeparator();
 
 
 //check main activity set up user data, and display user data
 
+    public Event(){
+    }
 
-    public Event(String eventName, Boolean isPublic, LocalDate eventDate, LocalTime startTime, LocalTime endTime, String eventLocation, String eventDescription) {
+    public Event(String eventName, Boolean isPublic, LocalDate eventDate, LocalTime startTime, LocalTime endTime, String eventLocation, String eventDescription, String creatorID, String creatorUsername) {
         this.eventName = eventName;
         this.isPublic = isPublic;
         this.eventDate = eventDate;
@@ -26,6 +33,8 @@ public class Event {
         this.eventStartTime = startTime;
         this.eventEndTime = endTime;
         this.eventLocation = eventLocation;
+        this.creatorID = creatorID;
+        this.creatorUsername = creatorUsername;
     }
     public String getEventName() {
         return eventName;
@@ -93,4 +102,33 @@ public class Event {
         return null;
     }
 
+    public String getCreatorID() {
+        return creatorID;
+    }
+
+    public void setCreatorID(String creatorID) {
+        this.creatorID = creatorID;
+    }
+
+    public String getCreatorUsername() {
+        return creatorUsername;
+    }
+
+    public void setCreatorUsername(String creatorUsername) {
+        this.creatorUsername = creatorUsername;
+    }
+
+    public HashMap<String, Object> toMap(){
+        HashMap eventData = new HashMap();
+        eventData.put("eventName", eventName);
+        eventData.put("eventDescription", eventDescription);
+        eventData.put("eventLocation", eventLocation);
+        eventData.put("creatorID", creatorID);
+        eventData.put("creatorUsername", creatorUsername);
+        eventData.put("eventDate", eventDate.toString());
+        eventData.put("eventStartTime", eventStartTime.toString());
+        eventData.put("eventEndTime", eventEndTime.toString());
+        eventData.put("rsvpList", rsvpList);
+        return eventData;
+    }
 }

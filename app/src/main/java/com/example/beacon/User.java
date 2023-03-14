@@ -7,6 +7,8 @@ public class User { //entity class to represent user. Needs to be updated eventu
     private String username, firstName, lastName, birthday, gender, major, graduationYear;
     private String userID;
 
+    private String nickname;
+
     private double lati, longi;
 
     private int friends; //number of friends
@@ -21,6 +23,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         firstName = "";
         lastName = "";
         birthday = "";
+        nickname = "";
         gender = "";
         major = "";
         graduationYear= "";
@@ -116,6 +119,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("firstName", firstName);
         userData.put("lastName", lastName);
         userData.put("gender", gender);
+        userData.put("nickname", nickname);
         userData.put("birthday", birthday);
         userData.put("graduationYear", graduationYear);
         userData.put("major", major);
@@ -140,5 +144,13 @@ public class User { //entity class to represent user. Needs to be updated eventu
 
     public void setLongi(double longi) {
         this.longi = longi;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
