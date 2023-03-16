@@ -12,6 +12,7 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -23,10 +24,14 @@ public class ScheduleEventForm extends AppCompatActivity {
     private DatabaseReference eventRef;
     private Boolean publicStatus;
 
+    private FirebaseAuth mAuth;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_form);
+
+        mAuth = FirebaseAuth.getInstance();
         eventRef = FirebaseDatabase.getInstance().getReference().child("Events");
         EditText title = findViewById(R.id.title_event_box);
         DatePicker date = findViewById(R.id.date_event);

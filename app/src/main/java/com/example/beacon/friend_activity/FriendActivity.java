@@ -4,12 +4,15 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.beacon.R;
+import com.google.firebase.auth.FirebaseAuth;
+
 import javax.sql.DataSource;
 
 public class FriendActivity extends AppCompatActivity {
 
     //The RecyclerView (doesn't/shouldn't change)
     private RecyclerView userList = findViewById(R.id.listOfX);
+    private FirebaseAuth mAuth;
     //The error message will be bought up several times
     private static String errorMessage = String.valueOf(R.string.friend_page_nullDataError);
 
@@ -17,6 +20,7 @@ public class FriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
+        mAuth = FirebaseAuth.getInstance();
 
         //TODO get the current user to grab the various user-lists from Firebase
         //FirebaseUser current = FirebaseAuth.getInstance().getCurrentUser();

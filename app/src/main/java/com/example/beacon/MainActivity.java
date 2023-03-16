@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
     private String currentUserID;
+
     //TODO fix SignInClient
     private SignInClient oneTapClient;
     @Override
