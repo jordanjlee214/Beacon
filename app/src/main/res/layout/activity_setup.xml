@@ -126,12 +126,13 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/satoshi_medium"
         android:textColor="@color/white"
+        android:backgroundTint="@color/white"
         android:text="Major"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.80"
+        app:layout_constraintVertical_bias="0.76"
         />
 
     <EditText
@@ -140,11 +141,91 @@
         android:layout_height="wrap_content"
         android:ems="11"
         android:inputType="date"
+        android:backgroundTint="@color/white"
+        android:text="Birthday"
+        android:fontFamily="@font/satoshi_medium"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.60"
+        />
+
+
+    <Button
+        android:id="@+id/setUpMaleField"
+        android:layout_width="130sp"
+        android:layout_height="wrap_content"
+        android:text="Male"
+        android:textColor="@color/black"
+        android:fontFamily="@font/satoshi_bold"
+        android:backgroundTint="@color/light_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/setUpGuideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.67"
+        app:layout_constraintHorizontal_bias="0.9"
+
+        />
+
+    <Button
+        android:id="@+id/setUpFemaleField"
+        android:layout_width="130sp"
+        android:layout_height="wrap_content"
+        android:text="Female"
+        android:textColor="@color/black"
+        android:fontFamily="@font/satoshi_bold"
+        android:backgroundTint="@color/light_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/setUpGuideline1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.67"
+        app:layout_constraintHorizontal_bias="0.1"
+
+        />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/setUpGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/setUpMajorTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select a Major"
+        android:textColor="@color/white"
+        android:fontFamily="@font/satoshi_black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.72"
+        />
+
+    <Button
+        android:id="@+id/setUpSaveButton"
+        android:layout_width="250sp"
+        android:layout_height="wrap_content"
+        android:text="Save Profile"
+        android:textColor="@color/black"
+        android:fontFamily="@font/outfit_black"
+        android:textAllCaps="false"
+        android:textSize="30sp"
+        android:padding="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setUpMajorField"
+        app:layout_constraintVertical_bias="0.4"
+        android:backgroundTint="@color/apricot"
         />
 
 
