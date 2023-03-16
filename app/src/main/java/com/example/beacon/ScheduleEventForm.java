@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.UUID;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ScheduleEventForm extends AppCompatActivity {
 
@@ -40,6 +42,7 @@ public class ScheduleEventForm extends AppCompatActivity {
         Spinner location = findViewById(R.id.location_menu);
         EditText description = findViewById(R.id.description_box);
         CheckBox privacyCheck = findViewById(R.id.checkboxYes);
+        String thisUser = mAuth.getUid();
 
 
         submitEventForm = findViewById(R.id.submitEventForm_button);
@@ -51,6 +54,7 @@ public class ScheduleEventForm extends AppCompatActivity {
                 //event ID for the current event being submitted
                 String currentEvent = RandomID();
                 //need to change check boxes for privacy to a switch that generates a boolean value
+                /*
                 eventRef.child(currentEvent).child("Title").setValue(title.getText().toString());
                 eventRef.child(currentEvent).child("Date").setValue(date.getDisplay().toString());
                 eventRef.child(currentEvent).child("Start").setValue(startTime.getText().toString());
@@ -64,14 +68,18 @@ public class ScheduleEventForm extends AppCompatActivity {
                     eventRef.child(currentEvent).child("Privacy").setValue("open");
                     publicStatus = true;
                 }
+                 */
                 //TODO finish
                 //Event newEvent = new Event(title.getText().toString(), publicStatus, );
+
+                String thisEventTitle = title.getText().toString();
+                String thisEventDate = date.getDisplay().toString();
 
                 sendToActivity(EventActivity.class);
             }
         });
         //add all campus locations
-        String[] items = {"Coray", "Buswell", "Anderson Commons", "Edman", "Lower Beamer", "Off-Campus"};
+        String[] items = {"Coray Gym", "Buswell Library", "Anderson Commons", "Edman Chapel", "Lower Beamer", "Off-Campus"};
 
         //connects string of locations to drop down menu in xml file
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
