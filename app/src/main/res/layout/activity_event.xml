@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/input"
         android:fontFamily="@font/satoshi_black"
-        android:text="<-"
+        android:text="Back"
         android:textAllCaps="false"
         android:padding="15dp"
         android:textColor="@color/white"

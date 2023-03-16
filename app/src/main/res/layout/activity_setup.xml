@@ -38,7 +38,7 @@
 
     <EditText
         android:id="@+id/setUpFirstNameField"
-        android:layout_width="wrap_content"
+        android:layout_width="280sp"
         android:layout_height="wrap_content"
         android:ems="11"
         android:textColor="@color/white"
@@ -54,7 +54,7 @@
 
     <EditText
         android:id="@+id/setUpLastNameField"
-        android:layout_width="wrap_content"
+        android:layout_width="280sp"
         android:layout_height="wrap_content"
         android:ems="11"
         android:textColor="@color/white"
@@ -67,6 +67,84 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.36"
+        />
+
+    <EditText
+        android:id="@+id/setUpUsernameField"
+        android:layout_width="280sp"
+        android:layout_height="wrap_content"
+        android:ems="11"
+        android:textColor="@color/white"
+        android:fontFamily="@font/satoshi_medium"
+        android:inputType="textPersonName"
+        android:backgroundTint="@color/white"
+        android:text="Username"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42"
+        />
+
+    <EditText
+        android:id="@+id/setUpNicknameField"
+        android:layout_width="280sp"
+        android:layout_height="wrap_content"
+        android:ems="11"
+        android:textColor="@color/white"
+        android:fontFamily="@font/satoshi_medium"
+        android:inputType="textPersonName"
+        android:backgroundTint="@color/white"
+        android:text="Nickname"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.48"
+        />
+
+    <EditText
+        android:id="@+id/setUpGradYearField"
+        android:layout_width="280sp"
+        android:layout_height="wrap_content"
+        android:ems="11"
+        android:textColor="@color/white"
+        android:fontFamily="@font/satoshi_medium"
+        android:inputType="number"
+        android:backgroundTint="@color/white"
+        android:text="Graduation Year"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.54"
+        />
+
+    <Spinner
+        android:id="@+id/setUpMajorField"
+        android:layout_width="280sp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/satoshi_medium"
+        android:textColor="@color/white"
+        android:text="Major"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.80"
+        />
+
+    <EditText
+        android:id="@+id/setUpBirthdayField"
+        android:layout_width="280sp"
+        android:layout_height="wrap_content"
+        android:ems="11"
+        android:inputType="date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.60"
         />
 
 

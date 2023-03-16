@@ -33,25 +33,28 @@ public class FriendActivity extends AppCompatActivity {
     //TODO initialize the DataSources (if available)
     //TODO set up Friends button (needs new adaptor)
     public void showFriends(View view){
-        DataSource friendsList;
-        if () friendsList = null;
-        if(friendsList == null) userList.setAdapter(new UserAdapter(this, errorMessage));
-        else userList.setAdapter(new UserAdapter(this, friendsList));
+//        DataSource friendsList;
+//        if () friendsList = null;
+//        if(friendsList == null) userList.setAdapter(new UserAdapter(this, errorMessage));
+//        else userList.setAdapter(new UserAdapter(this, friendsList));
     }
-
-    //TODO set up Requests button (needs new adaptor)
-    public void showRequests(View view){
-        DataSource requests;
-        if() requests = null;
-        if(requests == null) userList.setAdapter(new UserAdapter(this, errorMessage));
-        else userList.setAdapter(new UserAdapter(this, requests));}
 
     //TODO set up Blocked button (needs new adaptor)
     public void showBlocked(View view){
-        DataSource blocked;
-        if() blocked = null;
-        if(blocked == null) userList.setAdapter(new UserAdapter(this, errorMessage));
-        else userList.setAdapter(new UserAdapter(this, blocked));}
+//        DataSource blocked;
+//        if() blocked = null;
+//        if(blocked == null) userList.setAdapter(new UserAdapter(this, errorMessage));
+//        else userList.setAdapter(new UserAdapter(this, blocked));
+    }
+
+
+    //TODO set up Requests button (needs new adaptor)
+    public void showRequests(View view){
+        //        DataSource requests;
+//        if() requests = null;
+//        if(requests == null) userList.setAdapter(new UserAdapter(this, errorMessage));
+//        else userList.setAdapter(new UserAdapter(this, requests));
+    }
 
     //TODO set up searchbar
 
