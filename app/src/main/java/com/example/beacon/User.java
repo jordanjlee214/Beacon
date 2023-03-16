@@ -13,7 +13,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
 
     private int friends; //number of friends
 
-    private HashMap<String, String> friendList; //stores friends usernames and IDs
+    private HashMap<String, String> friendList, blocked; //stores friends usernames and IDs
     //Profile images
     //Group info
     //Classes, etc.
@@ -30,6 +30,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userID = "";
         friends= 0;
         friendList = new HashMap<String, String>();
+        blocked = new HashMap<String, String>();
     }
 
     public String getUserID() {
@@ -112,6 +113,14 @@ public class User { //entity class to represent user. Needs to be updated eventu
         this.major = major;
     }
 
+    public void setBlocked(HashMap<String, String> blockedM) {
+        blocked = blockedM;
+    }
+
+    public HashMap<String, String> getBlocked(){
+        return blocked;
+    }
+
     public Map<String, Object> toMap(){
         HashMap userData = new HashMap();
         userData.put("userID", userID);
@@ -124,9 +133,10 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("graduationYear", graduationYear);
         userData.put("major", major);
         userData.put("friends", friends);
-        userData.put("friendsList", friendList);
+        userData.put("friendList", friendList);
         userData.put("lat", lati);
         userData.put("long", longi);
+        userData.put("blocked", blocked);
         return userData;
     }
 
