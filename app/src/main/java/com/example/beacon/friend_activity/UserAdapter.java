@@ -8,7 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.beacon.R;
-import com.example.beacon.User;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.List;
 
 /**
@@ -22,12 +23,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     /**
      * The relevant list of users
      */
-    private List<User> dataset;
+    private List<String> dataset;
 
     /**
      * The context
      */
-    private Context context;
+    final private Context context;
 
     /**
      * a default message
@@ -35,11 +36,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     private String defaultM;
 
     /**
+     * The FirebaseAuth instance
+     */
+    final FirebaseAuth authInstance = FirebaseAuth.getInstance();
+
+    /**
      * Constructor (recommended)
      * @param context the Context
      * @param datalist the list of users for this specific adapter
      */
-    public UserAdapter(Context context, List<User> datalist){
+    public UserAdapter(Context context, List<String> datalist){
         this.context = context;
         dataset = datalist;
     }
@@ -65,9 +71,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        User x = dataset.get(position);
+        String x = dataset.get(position);
         //set text to the Username String
-        holder.userV.setText(x.getUsername());
+        holder.userV.setText(x);
     }
 
     /**
