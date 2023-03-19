@@ -104,6 +104,24 @@
         app:layout_constraintVertical_bias="0.67" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/setupactivity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/teal"
+        android:fontFamily="@font/satoshi_black"
+        android:text="  SetupActivity  "
+        android:textAllCaps="false"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.76" />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signOut_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

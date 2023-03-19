@@ -1,10 +1,9 @@
-package com.example.beacon.friend_activity;
+package com.example.beacon;
 import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.beacon.R;
-import com.example.beacon.User;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class FriendActivity extends AppCompatActivity {
 
     //The RecyclerView (doesn't/shouldn't change)
-    final private RecyclerView userList = findViewById(R.id.listOfX);
+    private RecyclerView userList;
     //the authenticator instance
     private FirebaseAuth mAuth;
     //the current user
@@ -29,6 +28,7 @@ public class FriendActivity extends AppCompatActivity {
         //TODO get the current user to grab the various user-lists from Firebase
         current = mAuth.getCurrentUser();
 
+        userList = findViewById(R.id.listOfX);
         //set up RecyclerView
         String defaultMessage = String.valueOf(R.string.friend_page_default);
         userList.setAdapter(new UserAdapter(this, defaultMessage));

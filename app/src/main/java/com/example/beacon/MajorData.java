@@ -4,6 +4,7 @@ public class MajorData {
     //this class holds data for all the majors at Wheaton College
     //TODO: Finish putting in majors
     public static String[] wheatonMajors = {
+            "Undecided",
             "Anthropology",
             "Art",
             "Biblical Archaeology",

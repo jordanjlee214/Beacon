@@ -1,4 +1,4 @@
-package com.example.beacon.friend_activity;
+package com.example.beacon;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.beacon.R;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;

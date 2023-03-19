@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.beacon.friend_activity.FriendActivity;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button eventActivityButton, signOutButton, friendActivityButton, mapsActivityButton;
+    private Button eventActivityButton, signOutButton, friendActivityButton, mapsActivityButton, setupActivityButton;
     private TextView userDataText; // a test that displays the username to show that the user has data stored
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
@@ -46,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         friendActivityButton = findViewById(R.id.friendactivity_button);
         mapsActivityButton = findViewById(R.id.mapactivity_button);
         userDataText = findViewById(R.id.userDataTest);
+        setupActivityButton = findViewById(R.id.setupactivity_button);
 
         //set up listeners for each button
         //each listener sends user to the corresponding activity
@@ -69,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
                 sendToActivity(MapsActivity.class);
             }
         });
+
+        setupActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToActivity(SetupActivity.class);
+            }
+        }
+        );
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
