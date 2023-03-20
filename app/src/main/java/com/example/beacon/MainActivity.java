@@ -18,6 +18,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.maps.model.LatLng;
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
     private String currentUserID;
+    public static ArrayList<LocationData> locDat;
 
     //TODO fix SignInClient
     private SignInClient oneTapClient;
@@ -87,6 +93,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Buildings setup
+        locDat = new ArrayList<LocationData>();
+        locDat.add(new LocationData("Anderson Commons", new LatLng(41.86911878272806, -88.09712665357651)));
+        locDat.add(new LocationData("Meyer Science Center", new LatLng(41.869734693386576, -88.0960876587158)));
+        locDat.add(new LocationData("Smith-Traber", new LatLng(41.87073447303972, -88.09464504447187)));
+        locDat.add(new LocationData("Chrouser Sports", new LatLng(41.870976913830596, -88.0966584645037)));
+        locDat.add(new LocationData("Fischer", new LatLng(41.87280642014386, -88.09680866820558)));
+        locDat.add(new LocationData("North Harrison Hall", new LatLng(41.872638651007705, -88.09764551742585)));
+        locDat.add(new LocationData("McManis-Evans", new LatLng(41.87005814636335, -88.09794592481995)));
+        locDat.add(new LocationData("Campus Store", new LatLng(41.86889968159881, -88.09795665364001)));
+        locDat.add(new LocationData("College Ave Apartments", new LatLng(41.86819660309276, -88.0948882065569)));
+        locDat.add(new LocationData("Terrace Apartments", new LatLng(41.869546826554284, -88.0899851284701)));
+        locDat.add(new LocationData("Saint & Elliot Apartments", new LatLng(41.869794497585, -88.0923454723106)));
+        locDat.add(new LocationData("Michigan-Crescent Apartments", new LatLng(41.86605536180369, -88.09593963243061)));
+        locDat.add(new LocationData("Sports Fields", new LatLng(41.867469547852814, -88.09532808875328)));
+        locDat.add(new LocationData("BGH", new LatLng(41.86667856630517, -88.09941577522754)));
+        locDat.add(new LocationData("Blanchard", new LatLng(41.86845226889066, -88.09958743662516)));
+        locDat.add(new LocationData("Adams", new LatLng(41.86913137621643, -88.09984492869775)));
+        locDat.add(new LocationData("Williston Hall", new LatLng(41.868929778746, -88.09820536242233)));
+        locDat.add(new LocationData(" Memorial Student Center", new LatLng(41.86918752932761, -88.09873709265132)));
+        locDat.add(new LocationData("Armerding", new LatLng(41.87056218155288, -88.09837090108482)));
+        locDat.add(new LocationData("Wyngarden & Schell", new LatLng(41.86992715567431, -88.09888758233473)));
+        locDat.add(new LocationData("Buswell Library", new LatLng(41.86999439400873, -88.09961494916328)));
+        locDat.add(new LocationData("Edman Chapel", new LatLng(41.86994583299493, -88.10065332801665)));
+        locDat.add(new LocationData("Wade Center", new LatLng(41.87058376852388, -88.10108889030053)));
+        locDat.add(new LocationData("Public Library", new LatLng(41.86681180911569, -88.10469784804484)));
     }
     @Override
     public void onStart() {

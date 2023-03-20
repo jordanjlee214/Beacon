@@ -22,9 +22,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,7 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             if (mLocationPermissionGranted) {
                 Task<Location> location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener((OnCompleteListener<Location>) task -> {
+                location.addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Location currentLocation = (Location) task.getResult();
                         mRef.child("lat").setValue(currentLocation.getLatitude());
@@ -164,6 +166,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(41.869092, -88.099211)));
+        for(LocationData e:MainActivity.locDat){
+            mMap.addMarker(new MarkerOptions().position(e.latLng).title(e.building));
+        }
+
         // Add a marker in Sydney and move the camera
         /*LatLng sydney = new LatLng(-41.860428, -88.09309);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
