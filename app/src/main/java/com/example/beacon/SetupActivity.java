@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,7 +33,7 @@ public class SetupActivity extends AppCompatActivity {
     private EditText firstNameField, lastNameField, usernameField, nicknameField, graduationField, birthdayField;
     private Button maleField, femaleField, saveProfileButton;
     private Spinner majorField;
-    
+
     private final int NONE = 0, MALE = 1, FEMALE = 2;
     private int genderState = NONE;
 
@@ -80,31 +81,56 @@ public class SetupActivity extends AppCompatActivity {
             }
         });
 
-        //TODO: set up first name, last name, username
+        /*first name, last name, and username fields cannot be edited.
+            if you try to touch the fields, it'll show a message saying you can't edit it
+        */
         firstNameField.setEnabled(false);
         lastNameField.setEnabled(false);
         usernameField.setEnabled(false);
 
-        firstNameField.setOnClickListener(new View.OnClickListener() {
+        firstNameField.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(SetupActivity.this, "You cannot change your first name, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
-            }
-        });
-        lastNameField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(SetupActivity.this, "You cannot change your last name, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
-            }
-        });
-        usernameField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(SetupActivity.this, "You cannot change your username, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    Toast.makeText(SetupActivity.this, "You cannot change your first name, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
             }
         });
 
-        //TODO: empty text field when you click on it
+        lastNameField.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    Toast.makeText(SetupActivity.this, "You cannot change your first name, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        usernameField.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    Toast.makeText(SetupActivity.this, "You cannot change your username, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        saveProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                submitFields();
+            }
+        });
+
 
     }
 
@@ -122,9 +148,29 @@ public class SetupActivity extends AppCompatActivity {
             usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    firstNameField.setText(snapshot.child("firstName").getValue().toString());
-                    lastNameField.setText(snapshot.child("lastName").getValue().toString());
-                    usernameField.setText(snapshot.child("username").getValue().toString());
+                    String firstName = snapshot.child("firstName").getValue().toString();
+                    String lastName = snapshot.child("lastName").getValue().toString();
+                    String username = snapshot.child("username").getValue().toString();
+                    String nickname = snapshot.child("nickname").getValue().toString();
+                    String gradYear = snapshot.child("graduationYear").getValue().toString();
+                    String birthday = snapshot.child("birthday").getValue().toString();
+                    String gender = snapshot.child("gender").getValue().toString();
+                    String major = snapshot.child("major").getValue().toString();
+
+                    firstNameField.setText(firstName);
+                    lastNameField.setText(lastName);
+                    usernameField.setText(username);
+                    nicknameField.setText(nickname);
+                    graduationField.setText(gradYear);
+                    birthdayField.setText(birthday.substring(0, 2) + "/" + birthday.substring(2, 4) + "/" + birthday.substring(4, 8));
+                    if(gender.equals("M")){
+                        maleField.callOnClick();
+                    }
+                    else if(gender.equals("F")){
+                        femaleField.callOnClick();
+                    }
+                    majorField.setSelection(findPositionOnSpinner(major));
+
                 }
 
                 @Override
@@ -136,6 +182,28 @@ public class SetupActivity extends AppCompatActivity {
 
     }
 
+    private void submitFields(){ //handle all the inputted data in the fields
+        if(checkFields()){
+            //upload relevant data to the database
+            usersRef.child(currentUserID).child("nickname").setValue(nicknameField.getText().toString());
+            String bday = birthdayField.getText().toString();
+            usersRef.child(currentUserID).child("birthday").setValue(bday.substring(0, 2) + bday.substring(3, 5) + bday.substring(6, 10));
+            usersRef.child(currentUserID).child("graduationYear").setValue(graduationField.getText().toString());
+            usersRef.child(currentUserID).child("major").setValue(majorField.getSelectedItem().toString());
+            if(genderState == MALE)
+                usersRef.child(currentUserID).child("gender").setValue("M");
+            else
+                usersRef.child(currentUserID).child("gender").setValue("F");
+
+            Toast.makeText(SetupActivity.this, "Profile successfully updated", Toast.LENGTH_SHORT).show();
+            sendToActivity(MainActivity.class);
+
+        }
+        else{
+            Toast.makeText(SetupActivity.this, "Make sure all fields are filled in correctly.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
         Intent switchToNewActivity= new Intent(SetupActivity.this, a);
         startActivity(switchToNewActivity);
@@ -143,12 +211,11 @@ public class SetupActivity extends AppCompatActivity {
         //finish();
     }
     
-    private boolean checkFields(){ //make sure all fields are filled
-        return (!nicknameField.getText().toString().equals("Nickname") && !nicknameField.getText().toString().isEmpty()) &&
-               (isInteger(graduationField.getText().toString()) && Integer.parseInt(graduationField.getText().toString()) > 2022 &&
-               genderState == NONE &&
-                       majorField.getSelectedItem() != null);
-
+    private boolean checkFields(){ //make sure all fields are filled, true if valid
+        return (isInteger(graduationField.getText().toString()) && Integer.parseInt(graduationField.getText().toString()) > 2022) &&
+               genderState != NONE &&
+                       majorField.getSelectedItem() != null &&
+                       isBirthday(birthdayField.getText().toString());
 
     }
 
@@ -165,6 +232,18 @@ public class SetupActivity extends AppCompatActivity {
     private boolean isBirthday(String s){
         String b = s.trim();
         return b.length() == 10 && b.charAt(2) == '/' && b.charAt(5) == '/' && isInteger(b.substring(0, 2)) && isInteger(b.substring(3, 5)) && isInteger(b.substring(6, 10));
+    }
+
+    //helper method that finds the position on a spinner of a certain text
+    private int findPositionOnSpinner(String s){ //TODO: do a more efficient search
+        int i = 0;
+        for(int pos = 0; pos < majorField.getAdapter().getCount(); pos++){
+            if(majorField.getItemAtPosition(pos).equals(s)){
+                i = pos;
+                break;
+            }
+        }
+        return i;
     }
 
 

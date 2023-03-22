@@ -4,9 +4,10 @@ public class MajorData {
     //this class holds data for all the majors at Wheaton College
     //TODO: Finish putting in majors
     public static String[] wheatonMajors = {
-            "Undecided",
+            "Deciding and Discovering",
             "Anthropology",
             "Art",
+            "Applied Health Science",
             "Biblical Archaeology",
             "Biblical and Theological Studies",
             "Biochemistry and Molecular Biology",
@@ -20,7 +21,31 @@ public class MajorData {
             "Computer Science",
             "Conservation and Ecological Health",
             "Economics",
-            "Education"
-
+            "Education",
+            "Engineering",
+            "English",
+            "Earth and Environmental Science",
+            "French",
+            "German",
+            "Geology",
+            "Greek",
+            "Hebrew",
+            "History",
+            "Interdisciplinary Studies",
+            "International Relations",
+            "Latin",
+            "Latin American and Latina/o Studies",
+            "Mathematics",
+            "Modern and Classical Languages",
+            "Music",
+            "Neuroscience",
+            "Nursing",
+            "Philosophy",
+            "Physics",
+            "Political Science",
+            "Psychology",
+            "Sociology",
+            "Spanish",
+            "Urban Studies",
     };
 }
