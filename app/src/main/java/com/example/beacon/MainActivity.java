@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         locDat.add(new LocationData("Blanchard", new LatLng(41.86845226889066, -88.09958743662516)));
         locDat.add(new LocationData("Adams", new LatLng(41.86913137621643, -88.09984492869775)));
         locDat.add(new LocationData("Williston Hall", new LatLng(41.868929778746, -88.09820536242233)));
-        locDat.add(new LocationData(" Memorial Student Center", new LatLng(41.86918752932761, -88.09873709265132)));
+        locDat.add(new LocationData("Memorial Student Center", new LatLng(41.86918752932761, -88.09873709265132)));
         locDat.add(new LocationData("Armerding", new LatLng(41.87056218155288, -88.09837090108482)));
         locDat.add(new LocationData("Wyngarden & Schell", new LatLng(41.86992715567431, -88.09888758233473)));
         locDat.add(new LocationData("Buswell Library", new LatLng(41.86999439400873, -88.09961494916328)));

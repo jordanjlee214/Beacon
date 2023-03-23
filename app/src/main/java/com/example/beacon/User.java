@@ -12,6 +12,8 @@ public class User { //entity class to represent user. Needs to be updated eventu
 
     private double lati, longi;
 
+    private boolean ping;
+
     private int friends; //number of friends
 
     private HashMap<String, String> friendList, blocked; //stores friends usernames and IDs
@@ -33,6 +35,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         graduationYear= "";
         photoURL = "https://firebasestorage.googleapis.com/v0/b/beacon-a071e.appspot.com/o/default.jpeg?alt=media&token=8ce30ccd-2856-48c9-a07b-49572c4bc213";
         userID = "";
+        ping = false;
         friends= 0;
         friendList = new HashMap<String, String>();
         blocked = new HashMap<String, String>();
@@ -75,6 +78,10 @@ public class User { //entity class to represent user. Needs to be updated eventu
         return friends;
     }
 
+    public boolean getPing(){
+        return ping;
+    }
+
     public void setFriendList(HashMap<String, String> fList) {
         this.friendList = fList;
     }
@@ -111,6 +118,10 @@ public class User { //entity class to represent user. Needs to be updated eventu
         this.username = username;
     }
 
+    public void setPing(boolean p){
+        this.ping = p;
+    }
+
     public String getMajor() {
         return major;
     }
@@ -144,7 +155,6 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("lat", lati);
         userData.put("long", longi);
         userData.put("blocked", blocked);
-        userData.put("requestList", requestList);
         return userData;
     }
 
