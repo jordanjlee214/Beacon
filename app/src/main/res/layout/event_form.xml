@@ -103,9 +103,9 @@
 
     <TimePicker
         android:id="@+id/start_time"
-        android:layout_width="85dp"
-        android:layout_height="60dp"
-        android:timePickerMode="spinner"
+        android:layout_width="175dp"
+        android:layout_height="80dp"
+        android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,10 +114,11 @@
         app:layout_constraintVertical_bias="0.7"
         android:hint="Start"/>
 
-    <EditText
+    <TimePicker
         android:id="@+id/end_time"
-        android:layout_width="70dp"
+        android:layout_width="100dp"
         android:layout_height="60dp"
+        android:timePickerMode="spinner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -143,14 +144,14 @@
 
     <Spinner
         android:id="@+id/location_menu"
-        android:layout_width="230dp"
+        android:layout_width="220dp"
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.78"
-        app:layout_constraintHorizontal_bias=".9"
+        app:layout_constraintHorizontal_bias=".95"
         android:contentDescription="menu for location"
         android:hint="location"/>
 

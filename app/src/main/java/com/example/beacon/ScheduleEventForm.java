@@ -25,7 +25,7 @@ public class ScheduleEventForm extends AppCompatActivity {
 
     private Button submitEventForm;
     private DatabaseReference eventRef;
-    private Boolean publicStatus;
+    private Boolean isPublic;
 
     private FirebaseAuth mAuth;
 
@@ -40,7 +40,7 @@ public class ScheduleEventForm extends AppCompatActivity {
         EditText title = findViewById(R.id.title_event_box);
         DatePicker date = findViewById(R.id.date_event);
         TimePicker startTime = findViewById(R.id.start_time);
-        EditText endTime = findViewById(R.id.end_time);
+        TimePicker endTime = findViewById(R.id.end_time);
         Spinner location = findViewById(R.id.location_menu);
         EditText description = findViewById(R.id.description_box);
         CheckBox privacyCheck = findViewById(R.id.checkboxYes);
@@ -71,13 +71,21 @@ public class ScheduleEventForm extends AppCompatActivity {
                     publicStatus = true;
                 }
                  */
-                //TODO finish
-                //Event newEvent = new Event(title.getText().toString(), publicStatus, );
 
                 String thisEventTitle = title.getText().toString();
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     LocalDate thisEventDate = LocalDate.parse(date.getDisplay().toString());
                 }
+
+                //NEED TO RETRIEVE START AND END TIME
+
+                if (privacyCheck.isChecked()){
+                    isPublic = false;
+                } else {
+                    isPublic = true;
+                }
+                String thisEventLocation = location.getDisplay().toString();
+                String thisEventDescription = description.getText().toString();
 
                 sendToActivity(EventActivity.class);
             }
