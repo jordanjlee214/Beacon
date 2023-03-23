@@ -162,8 +162,7 @@ public class SetupActivity extends AppCompatActivity {
                     usernameField.setText(username);
                     nicknameField.setText(nickname);
                     graduationField.setText(gradYear);
-                    if(!birthday.isEmpty())
-                        birthdayField.setText(birthday.substring(0, 2) + "/" + birthday.substring(2, 4) + "/" + birthday.substring(4, 8));
+                    birthdayField.setText(birthday);
                     if(gender.equals("M")){
                         maleField.callOnClick();
                     }
@@ -188,7 +187,7 @@ public class SetupActivity extends AppCompatActivity {
             //upload relevant data to the database
             usersRef.child(currentUserID).child("nickname").setValue(nicknameField.getText().toString());
             String bday = birthdayField.getText().toString();
-            usersRef.child(currentUserID).child("birthday").setValue(bday.substring(0, 2) + bday.substring(3, 5) + bday.substring(6, 10));
+            usersRef.child(currentUserID).child("birthday").setValue(bday);
             usersRef.child(currentUserID).child("graduationYear").setValue(graduationField.getText().toString());
             usersRef.child(currentUserID).child("major").setValue(majorField.getSelectedItem().toString());
             if(genderState == MALE)
@@ -232,7 +231,7 @@ public class SetupActivity extends AppCompatActivity {
 
     private boolean isBirthday(String s){
         String b = s.trim();
-        return b.length() == 10 && b.charAt(2) == '/' && b.charAt(5) == '/' && isInteger(b.substring(0, 2)) && isInteger(b.substring(3, 5)) && isInteger(b.substring(6, 10));
+        return b.length() == 6 && isInteger(s);
     }
 
     //helper method that finds the position on a spinner of a certain text

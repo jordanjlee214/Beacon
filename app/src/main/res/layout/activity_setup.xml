@@ -145,7 +145,7 @@
         android:ems="11"
         android:inputType="date"
         android:backgroundTint="@color/white"
-        android:hint="Birthday (mm/dd/yyyy)"
+        android:hint="Birthday (mmddyy)"
         android:fontFamily="@font/satoshi_medium"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
