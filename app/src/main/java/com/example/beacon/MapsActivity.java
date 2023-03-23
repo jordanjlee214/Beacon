@@ -3,6 +3,7 @@ package com.example.beacon;
 import static android.os.SystemClock.sleep;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -44,6 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private DatabaseReference mRef; //reads and writes to Firebase database
+    private Ping ping;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,35 +57,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         com.example.beacon.databinding.ActivityMapsBinding binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getLocationPermission();
-        //setContentView(R.layout.activity_maps);
+        ping = new Ping(mRef, user, this);
 
-        SwitchCompat pingSwitch = findViewById(R.id.ping);
+        AppCompatButton pingSwitch = findViewById(R.id.ping);
         pingSwitch.setOnClickListener(view -> {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            if(pingSwitch.isChecked()) {
-                getDeviceLocation();
-                mMap.setMyLocationEnabled(true);
-            }else{
-                mMap.setMyLocationEnabled(false);
-                mRef.child("lat").setValue("");
-                mRef.child("long").setValue("");
-            }
+            getDeviceLocation();
+            ping.togglePing();
         });
     }
 
-    private void getDeviceLocation() {
+    protected void getDeviceLocation() {
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try {
             if (mLocationPermissionGranted) {
                 Task<Location> location = mFusedLocationProviderClient.getLastLocation();
+                Location out;
                 location.addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Location currentLocation = (Location) task.getResult();
-                        mRef.child("lat").setValue(currentLocation.getLatitude());
-                        mRef.child("long").setValue(currentLocation.getLongitude());
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                        if(ping.isOn()) {
+                            mRef.child("lat").setValue(currentLocation.getLatitude());
+                            mRef.child("long").setValue(currentLocation.getLongitude());
+                        }
                     } else {
                         Toast.makeText(MapsActivity.this, "unable to get location", Toast.LENGTH_SHORT).show();
                     }
