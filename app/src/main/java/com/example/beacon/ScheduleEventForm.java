@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,9 +36,10 @@ public class ScheduleEventForm extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         eventRef = FirebaseDatabase.getInstance().getReference().child("Events");
+
         EditText title = findViewById(R.id.title_event_box);
         DatePicker date = findViewById(R.id.date_event);
-        EditText startTime = findViewById(R.id.start_time);
+        TimePicker startTime = findViewById(R.id.start_time);
         EditText endTime = findViewById(R.id.end_time);
         Spinner location = findViewById(R.id.location_menu);
         EditText description = findViewById(R.id.description_box);

@@ -101,10 +101,11 @@
         app:layout_constraintHorizontal_bias=".61"
         app:layout_constraintVertical_bias="0.7" />
 
-    <EditText
+    <TimePicker
         android:id="@+id/start_time"
-        android:layout_width="70dp"
+        android:layout_width="85dp"
         android:layout_height="60dp"
+        android:timePickerMode="spinner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
