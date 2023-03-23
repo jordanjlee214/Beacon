@@ -58,9 +58,9 @@
         android:fontFamily="@font/satoshi_black"
         android:text="  EventActivity  "
         android:textAllCaps="false"
-        android:padding="10dp"
+        android:padding="5sp"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,13 +77,13 @@
         android:text="  MapsActivity  "
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:padding="10dp"
-        android:textSize="20sp"
+        android:padding="5sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.585" />
+        app:layout_constraintVertical_bias="0.58" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/friendactivity_button"
@@ -94,14 +94,14 @@
         android:fontFamily="@font/satoshi_black"
         android:text="  FriendActivity  "
         android:textAllCaps="false"
-        android:padding="10dp"
+        android:padding="5sp"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.67" />
+        app:layout_constraintVertical_bias="0.66" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/setupactivity_button"
@@ -112,14 +112,32 @@
         android:fontFamily="@font/satoshi_black"
         android:text="  SetupActivity  "
         android:textAllCaps="false"
-        android:padding="10dp"
+        android:padding="5sp"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.76" />
+        app:layout_constraintVertical_bias="0.74" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/profileactivity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/teal"
+        android:fontFamily="@font/satoshi_black"
+        android:text="  ProfileActivity "
+        android:textAllCaps="false"
+        android:padding="5sp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.82" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signOut_button"
@@ -137,7 +155,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.92" />
+        app:layout_constraintVertical_bias="0.95" />
 
 
 
