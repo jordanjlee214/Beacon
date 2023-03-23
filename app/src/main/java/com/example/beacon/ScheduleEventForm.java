@@ -11,11 +11,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.UUID;
 import java.time.LocalDate;
@@ -25,6 +29,7 @@ public class ScheduleEventForm extends AppCompatActivity {
 
     private Button submitEventForm;
     private DatabaseReference eventRef;
+    private DatabaseReference usersRef;
     private Boolean isPublic;
 
     private FirebaseAuth mAuth;
@@ -36,6 +41,9 @@ public class ScheduleEventForm extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         eventRef = FirebaseDatabase.getInstance().getReference().child("Events");
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
 
         EditText title = findViewById(R.id.title_event_box);
         DatePicker date = findViewById(R.id.date_event);
@@ -55,31 +63,13 @@ public class ScheduleEventForm extends AppCompatActivity {
             public void onClick(View view) {
                 //event ID for the current event being submitted
                 String currentEvent = RandomID();
-                //need to change check boxes for privacy to a switch that generates a boolean value
-                /*
-                eventRef.child(currentEvent).child("Title").setValue(title.getText().toString());
-                eventRef.child(currentEvent).child("Date").setValue(date.getDisplay().toString());
-                eventRef.child(currentEvent).child("Start").setValue(startTime.getText().toString());
-                eventRef.child(currentEvent).child("End").setValue(endTime.getText().toString());
-                eventRef.child(currentEvent).child("Location").setValue(location.getDisplay().toString());
-                eventRef.child(currentEvent).child("Description").setValue(description.getText().toString());
-                if (privacyCheck.isChecked()){
-                    eventRef.child(currentEvent).child("Privacy").setValue("private");
-                    publicStatus = false;
-                } else {
-                    eventRef.child(currentEvent).child("Privacy").setValue("open");
-                    publicStatus = true;
-                }
-                 */
 
                 String thisEventTitle = title.getText().toString();
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    LocalDate thisEventDate = LocalDate.parse(date.getDisplay().toString());
-                }
+                String thisEventDate = date.getDisplay().toString();
+                String thisEventStartTime = startTime.getDisplay().toString();
+                String thisEventEndTime = endTime.getDisplay().toString();
 
                 //NEED TO RETRIEVE START AND END TIME
-                LocalTime thisEventStartTime = LocalTime.parse(startTime.getDisplay().toString());
-                LocalTime thisEventEndTime = LocalTime.parse(endTime.getDisplay().toString());
 
                 if (privacyCheck.isChecked()){
                     isPublic = false;
@@ -90,6 +80,7 @@ public class ScheduleEventForm extends AppCompatActivity {
                 String thisEventDescription = description.getText().toString();
 
                 //STORE ALL THIS INFO IN AN INSTANCE OF A CLASS AND SEND TO FIREBASE
+                //Event thisEvent = new Event(thisEventTitle, isPublic, thisEventDate, thisEventStartTime, thisEventEndTime, thisEventLocation, thisEventDescription, thisUser, );
 
                 sendToActivity(EventActivity.class);
             }
@@ -119,5 +110,21 @@ public class ScheduleEventForm extends AppCompatActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         //finish();
     }
+
+    private void getUserName(){
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String username = snapshot.child(mAuth.getCurrentUser().getUid()).child("username").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+
 
 }
