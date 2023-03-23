@@ -162,7 +162,8 @@ public class SetupActivity extends AppCompatActivity {
                     usernameField.setText(username);
                     nicknameField.setText(nickname);
                     graduationField.setText(gradYear);
-                    birthdayField.setText(birthday.substring(0, 2) + "/" + birthday.substring(2, 4) + "/" + birthday.substring(4, 8));
+                    if(!birthday.isEmpty())
+                        birthdayField.setText(birthday.substring(0, 2) + "/" + birthday.substring(2, 4) + "/" + birthday.substring(4, 8));
                     if(gender.equals("M")){
                         maleField.callOnClick();
                     }
