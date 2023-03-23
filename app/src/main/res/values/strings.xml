@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Beacon</string>
     <string name="title_activity_maps">MapsActivity</string>
-    <string name="web_client_id">355311690445-hui5enr72kc9iic888b8dtmkpe5r6o1u.apps.googleusercontent.com</string>
+    <string name="web_client_id">355311690445-ucl4g8vlg7t2p6ae4h4kfm81oe3bouj3.apps.googleusercontent.com</string>
     <string name="friend_page_default">Press a button, any button!</string>
     <string name="friend_page_noone">Nothing to see here</string>
     <string name="friend_page_nullDataError">Something went wrong, please try again!</string>
