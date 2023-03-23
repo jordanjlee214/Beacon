@@ -7,23 +7,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.List;
+import com.google.firebase.database.DataSnapshot;
 
 /**
  * Bonnie Rilea
  * CSCI 355
  * To adapt user information to XML output
- * List<Users> (friendsList<K, V> -> List<K>) -> Adaptor -> activity_friend.xml
+ * DatabaseReference -> Adaptor -> activity_friend.xml
  */
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
+public class RecyclerViewObjectAdaptor extends RecyclerView.Adapter<RecyclerViewObjectAdaptor.UserViewHolder>{
 
     /**
-     * The relevant list of users
+     * The source of data: a Reference to the Database
      */
-    private List<String> dataset;
+    private DataSnapshot datasource;
+
+    /**
+     * The set of data?
+     */
+    private Object dataset;
 
     /**
      * The context
@@ -35,29 +37,23 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
      */
     private String defaultM;
 
-    /**
-     * The FirebaseAuth instance
-     */
-    final FirebaseAuth authInstance = FirebaseAuth.getInstance();
 
     /**
-     * Constructor (recommended)
+     * Constructor (for DatabaseReference)
      * @param context the Context
      * @param datalist the list of users for this specific adapter
      */
-    public UserAdapter(Context context, List<String> datalist){
+    public RecyclerViewObjectAdaptor(Context context, DataSnapshot datalist){
         this.context = context;
-        dataset = datalist;
+        datasource = datalist;
     }
 
     /**
      * Constructor ("default")
      * @param context the Context
-     * @param message a default message to be used when starting up;
-     *                if you have a list of default messages, use
-     *                the recommended constructor
+     * @param message a (singular) default message to be used when starting up
      */
-    public UserAdapter(Context context, @NonNull String message){
+    public RecyclerViewObjectAdaptor(Context context, @NonNull String message){
         this.context = context;
         defaultM = message;
     }
@@ -69,11 +65,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         return new UserViewHolder(adapterLayout.inflate(R.layout.user_list, parent, false));
     }
 
+    /*
+    * Precondition: datasource holds either Users or FriendRequests
+     */
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        String x = dataset.get(position);
-        //set text to the Username String
-        holder.userV.setText(x);
+        if(isNull())
+            holder.userV.setText(defaultM);
+        else {
+            Object x = datasource.getValue();
+            if (x.getClass().equals(User.class))
+                holder.userV.setText(((User) x).getFirstName() + " " + ((User) x).getLastName());
+            else {
+                assert x.getClass().equals(FriendRequest.class);
+                holder.userV.setText(((FriendRequest) x).getSendersNickname());
+            }
+        }
     }
 
     /**
@@ -83,7 +90,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public int getItemCount() {
         if (isNull()) return 1; //1 default message
-        else return dataset.size();
+        else return (int) datasource.getChildrenCount();
     }
 
     /**
@@ -91,7 +98,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
      * @return dataset == null
      */
     public boolean isNull(){
-        return dataset == null;
+        return datasource == null;
     }
 
     class UserViewHolder extends RecyclerView.ViewHolder{
