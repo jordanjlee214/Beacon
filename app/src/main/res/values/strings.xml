@@ -5,5 +5,7 @@
     <string name="friend_page_default">Press a button, any button!</string>
     <string name="friend_page_noone">Nothing to see here</string>
     <string name="friend_page_nullDataError">Something went wrong, please try again!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
 

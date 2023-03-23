@@ -6,6 +6,7 @@ import java.util.Map;
 public class User { //entity class to represent user. Needs to be updated eventually.
     private String username, firstName, lastName, birthday, gender, major, graduationYear;
     private String userID;
+    private String photoURL; //url of the Google profile pic of the user
 
     private String nickname;
 
@@ -130,6 +131,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("gender", gender);
         userData.put("nickname", nickname);
         userData.put("birthday", birthday);
+        userData.put("photoURL", photoURL);
         userData.put("graduationYear", graduationYear);
         userData.put("major", major);
         userData.put("friends", friends);
@@ -162,5 +164,13 @@ public class User { //entity class to represent user. Needs to be updated eventu
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 }

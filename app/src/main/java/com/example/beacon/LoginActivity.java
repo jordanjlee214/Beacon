@@ -212,6 +212,7 @@ public class LoginActivity extends AppCompatActivity {
         String lastName = user.getDisplayName().substring(user.getDisplayName().indexOf(" ")+1);
         basicUser.setFirstName(firstName);
         basicUser.setLastName(lastName);
+        basicUser.setPhotoURL(user.getPhotoUrl().toString());
 
         usersRef.child(mAuth.getCurrentUser().getUid()).updateChildren(basicUser.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
