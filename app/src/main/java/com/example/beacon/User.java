@@ -31,6 +31,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         gender = "";
         major = "";
         graduationYear= "";
+        photoURL = "https://firebasestorage.googleapis.com/v0/b/beacon-a071e.appspot.com/o/default.jpeg?alt=media&token=8ce30ccd-2856-48c9-a07b-49572c4bc213";
         userID = "";
         friends= 0;
         friendList = new HashMap<String, String>();

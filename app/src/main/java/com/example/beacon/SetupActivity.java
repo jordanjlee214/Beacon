@@ -84,45 +84,45 @@ public class SetupActivity extends AppCompatActivity {
         /*first name, last name, and username fields cannot be edited.
             if you try to touch the fields, it'll show a message saying you can't edit it
         */
-        firstNameField.setEnabled(false);
-        lastNameField.setEnabled(false);
+//        firstNameField.setEnabled(false);
+//        lastNameField.setEnabled(false);
         usernameField.setEnabled(false);
 
-        firstNameField.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-                {
-                    Toast.makeText(SetupActivity.this, "You cannot change your first name, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        lastNameField.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-                {
-                    Toast.makeText(SetupActivity.this, "You cannot change your first name, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        usernameField.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-                {
-                    Toast.makeText(SetupActivity.this, "You cannot change your username, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                return false;
-            }
-        });
+//        firstNameField.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+//                {
+//                    Toast.makeText(SetupActivity.this, "You cannot change your first name, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+//
+//        lastNameField.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+//                {
+//                    Toast.makeText(SetupActivity.this, "You cannot change your first name, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+//
+//        usernameField.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+//                {
+//                    Toast.makeText(SetupActivity.this, "You cannot change your username, as it is linked to your Wheaton account.", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
         saveProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,6 +185,9 @@ public class SetupActivity extends AppCompatActivity {
     private void submitFields(){ //handle all the inputted data in the fields
         if(checkFields()){
             //upload relevant data to the database
+
+            usersRef.child(currentUserID).child("firstName").setValue(firstNameField.getText().toString());
+            usersRef.child(currentUserID).child("lastName").setValue(lastNameField.getText().toString());
             usersRef.child(currentUserID).child("nickname").setValue(nicknameField.getText().toString());
             String bday = birthdayField.getText().toString();
             usersRef.child(currentUserID).child("birthday").setValue(bday);
@@ -215,7 +218,9 @@ public class SetupActivity extends AppCompatActivity {
         return (isInteger(graduationField.getText().toString()) && Integer.parseInt(graduationField.getText().toString()) > 2022) &&
                genderState != NONE &&
                        majorField.getSelectedItem() != null &&
-                       isBirthday(birthdayField.getText().toString());
+                       isBirthday(birthdayField.getText().toString())
+                         && !firstNameField.getText().toString().isEmpty() &&
+                        !lastNameField.getText().toString().isEmpty();
 
     }
 

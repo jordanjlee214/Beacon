@@ -7,5 +7,9 @@
     <string name="friend_page_nullDataError">Something went wrong, please try again!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="maps_api_key2">AIzaSyD2TvNMRMFJDPT4DjLos-tCe1d_zzJFYgU</string>
+    <string name="maps_api_key1">AIzaSyCGQXx_qw5ix_vgqhjhtp72W_bhyKr4YuI</string>
+
+    android:value="AIzaSyD2TvNMRMFJDPT4DjLos-tCe1d_zzJFYgU"
 </resources>
 

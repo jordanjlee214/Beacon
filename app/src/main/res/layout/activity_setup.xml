@@ -41,32 +41,34 @@
         android:layout_width="280sp"
         android:layout_height="wrap_content"
         android:ems="11"
-        android:textColor="@color/slight_teal"
+        android:textColor="@color/white"
         android:fontFamily="@font/satoshi_medium"
         android:inputType="textPersonName"
         android:backgroundTint="@color/white"
         android:text="First Name"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3"/>
+        app:layout_constraintVertical_bias="0.36"/>
 
     <EditText
         android:id="@+id/setUpLastNameField"
         android:layout_width="280sp"
         android:layout_height="wrap_content"
         android:ems="11"
-        android:textColor="@color/slight_teal"
+        android:textColor="@color/white"
         android:fontFamily="@font/satoshi_medium"
         android:inputType="textPersonName"
         android:backgroundTint="@color/white"
         android:text="Last Name"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.36"
+        app:layout_constraintVertical_bias="0.42"
         />
 
     <EditText
@@ -79,11 +81,12 @@
         android:inputType="textPersonName"
         android:backgroundTint="@color/white"
         android:text="Username"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.42"
+        app:layout_constraintVertical_bias="0.3"
         />
 
     <EditText
@@ -96,6 +99,7 @@
         android:inputType="textPersonName"
         android:backgroundTint="@color/white"
         android:hint="Nickname (optional)"
+        android:singleLine="true"
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,6 +118,7 @@
         android:inputType="number"
         android:backgroundTint="@color/white"
         android:hint="Graduation Year"
+        android:singleLine="true"
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -144,6 +149,7 @@
         android:layout_height="wrap_content"
         android:ems="11"
         android:inputType="date"
+        android:singleLine="true"
         android:backgroundTint="@color/white"
         android:hint="Birthday (mmddyy)"
         android:fontFamily="@font/satoshi_medium"

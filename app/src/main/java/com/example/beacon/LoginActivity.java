@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
@@ -49,6 +50,11 @@ public class LoginActivity extends AppCompatActivity {
     private SignInClient oneTapClient;
     private FirebaseAuth mAuth; //handles all Firebase Authentication protocols
     private DatabaseReference usersRef; //reads and writes to Firebase database
+
+    /**these GUI items below are all for alternate sign in for testing**/
+    private Button altSignInButton;
+    private EditText altPasswordField, altEmailField;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +86,17 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
             }
         });
+
+       /**this is only for alternate sign **/
+       altSignInButton = findViewById(R.id.altSignInButton);
+       altEmailField = findViewById(R.id.altLogInEmailField);
+       altPasswordField = findViewById(R.id.altLogInPWField);
+       altSignInButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               altSignIn();
+           }
+       });
     }
 
     @Override
@@ -235,6 +252,72 @@ public class LoginActivity extends AppCompatActivity {
         sendToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(sendToMain);
         finish();
+    }
+
+    /**alternate way of setting up user accounts in database)**/
+    private void alternateSetUpUserData(FirebaseUser user){
+        User basicUser = new User();
+        basicUser.setUserID(mAuth.getCurrentUser().getUid());
+
+        String email = user.getEmail();
+        String username = email.substring(0, email.indexOf('@'));
+        basicUser.setUsername(username);
+
+        basicUser.setFirstName("Philip");
+        basicUser.setLastName("Ryken");
+
+        usersRef.child(mAuth.getCurrentUser().getUid()).updateChildren(basicUser.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(LoginActivity.this, "User data in database.", Toast.LENGTH_SHORT).show();
+                    sendToMain();
+                }
+                else{
+                    String message = task.getException().getMessage();
+                    Toast.makeText(LoginActivity.this, "Uh oh! An error occurred: " + message, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+
+    /** this method is for alternate sign ins for testing.
+     * the Google authentication doesn't always work, so this will be regular email
+     * authentication that we will use before fixing the GoogleAuth issue **/
+    private void altSignIn() {
+        if(!altEmailField.getText().toString().isEmpty() && !altPasswordField.getText().toString().isEmpty()) {
+            String email = altEmailField.getText().toString();
+            String password = altPasswordField.getText().toString();
+
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        sendToMain();
+                    }
+                    else{
+                        String msg = task.getException().getMessage();
+                        if(msg.equals("There is no user record corresponding to this identifier. The user may have been deleted.")){
+                            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()){
+                                        FirebaseUser altUser = mAuth.getCurrentUser();
+                                        alternateSetUpUserData(altUser);
+                                    }
+                                    else{
+                                        String msg = task.getException().getMessage();
+                                        Toast.makeText(LoginActivity.this, "Error: " + msg, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+                }
+            });
+        }
     }
 
 }
