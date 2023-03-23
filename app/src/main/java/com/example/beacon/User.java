@@ -15,6 +15,9 @@ public class User { //entity class to represent user. Needs to be updated eventu
     private int friends; //number of friends
 
     private HashMap<String, String> friendList, blocked; //stores friends usernames and IDs
+
+    private HashMap<String, FriendRequest> requestList;
+
     //Profile images
     //Group info
     //Classes, etc.
@@ -32,6 +35,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         friends= 0;
         friendList = new HashMap<String, String>();
         blocked = new HashMap<String, String>();
+        requestList = new HashMap<String, FriendRequest>();
     }
 
     public String getUserID() {
@@ -139,6 +143,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("lat", lati);
         userData.put("long", longi);
         userData.put("blocked", blocked);
+        userData.put("requestList", requestList);
         return userData;
     }
 
@@ -173,4 +178,6 @@ public class User { //entity class to represent user. Needs to be updated eventu
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
     }
+
+    public HashMap<String, FriendRequest> getRequestList() {return requestList;}
 }
