@@ -73,7 +73,9 @@ public class ScheduleEventForm extends AppCompatActivity {
                 //Event newEvent = new Event(title.getText().toString(), publicStatus, );
 
                 String thisEventTitle = title.getText().toString();
-                String thisEventDate = date.getDisplay().toString();
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    LocalDate thisEventDate = LocalDate.parse(date.getDisplay().toString());
+                }
 
                 sendToActivity(EventActivity.class);
             }
