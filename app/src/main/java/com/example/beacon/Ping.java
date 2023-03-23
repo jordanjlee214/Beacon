@@ -20,6 +20,7 @@ public class Ping {
     private boolean pingOn;
     private String currentUserID;
     private MapsActivity maps;
+
     public Ping(DatabaseReference mRef, FirebaseUser user, MapsActivity maps){
         this.mRef = mRef;
         this.user = user;
@@ -51,7 +52,7 @@ public class Ping {
         }else{
             System.out.println("Off");
             mRef.child("lat").setValue(0);
-            mRef.child("long").setValue(0);
+            mRef.child("lng").setValue(0);
         }
         pingOn = !pingOn;
         mRef.child("ping").setValue(pingOn);

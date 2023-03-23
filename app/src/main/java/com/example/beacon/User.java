@@ -10,7 +10,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
 
     private String nickname;
 
-    private double lati, longi;
+    private double lati, lngi;
 
     private boolean ping;
 
@@ -153,7 +153,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("friends", friends);
         userData.put("friendList", friendList);
         userData.put("lat", lati);
-        userData.put("long", longi);
+        userData.put("lng", lngi);
         userData.put("blocked", blocked);
         return userData;
     }
@@ -166,12 +166,12 @@ public class User { //entity class to represent user. Needs to be updated eventu
         this.lati = lati;
     }
 
-    public double getLongi() {
-        return longi;
+    public double getLngi() {
+        return lngi;
     }
 
-    public void setLongi(double longi) {
-        this.longi = longi;
+    public void setLngi(double lngi) {
+        this.lngi = lngi;
     }
 
     public String getNickname() {
