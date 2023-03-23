@@ -36,12 +36,12 @@
     <DatePicker
         android:id="@+id/date_event"
         android:layout_width="400dp"
-        android:layout_height="260dp"
+        android:layout_height="220dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".32"
+        app:layout_constraintVertical_bias=".28"
         />
 
     <TextView
@@ -56,8 +56,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias=".1"
-        app:layout_constraintVertical_bias="0.70" />
+        app:layout_constraintHorizontal_bias=".05"
+        app:layout_constraintVertical_bias="0.53" />
 
     <TextView
         android:id="@+id/privacy_event"
@@ -72,7 +72,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias=".1"
-        app:layout_constraintVertical_bias="0.63" />
+        app:layout_constraintVertical_bias="0.7" />
 
     <CheckBox
         android:id="@+id/checkboxYes"
@@ -83,7 +83,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias=".61"
-        app:layout_constraintVertical_bias="0.63"
+        app:layout_constraintVertical_bias="0.71"
         android:text="(Check for yes)" />
 
     <TextView
@@ -98,33 +98,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias=".61"
-        app:layout_constraintVertical_bias="0.7" />
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintVertical_bias="0.61" />
 
     <TimePicker
         android:id="@+id/start_time"
         android:layout_width="175dp"
-        android:layout_height="80dp"
-        android:textSize="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias=".4"
-        app:layout_constraintVertical_bias="0.7"
-        android:hint="Start"/>
-
-    <TimePicker
-        android:id="@+id/end_time"
-        android:layout_width="100dp"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
         android:timePickerMode="spinner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias=".9"
-        app:layout_constraintVertical_bias="0.7"
+        app:layout_constraintHorizontal_bias=".05"
+        app:layout_constraintVertical_bias="0.62"
+        android:hint="Start"/>
+
+    <TimePicker
+        android:id="@+id/end_time"
+        android:layout_width="175dp"
+        android:layout_height="65dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".95"
+        app:layout_constraintVertical_bias="0.62"
         android:hint="End  "/>
 
     <TextView

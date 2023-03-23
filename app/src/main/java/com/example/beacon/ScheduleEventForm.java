@@ -78,6 +78,8 @@ public class ScheduleEventForm extends AppCompatActivity {
                 }
 
                 //NEED TO RETRIEVE START AND END TIME
+                LocalTime thisEventStartTime = LocalTime.parse(startTime.getDisplay().toString());
+                LocalTime thisEventEndTime = LocalTime.parse(endTime.getDisplay().toString());
 
                 if (privacyCheck.isChecked()){
                     isPublic = false;
@@ -87,8 +89,11 @@ public class ScheduleEventForm extends AppCompatActivity {
                 String thisEventLocation = location.getDisplay().toString();
                 String thisEventDescription = description.getText().toString();
 
+                //STORE ALL THIS INFO IN AN INSTANCE OF A CLASS AND SEND TO FIREBASE
+
                 sendToActivity(EventActivity.class);
             }
+
         });
         //add all campus locations
         String[] items = {"Coray Gym", "Buswell Library", "Anderson Commons", "Edman Chapel", "Lower Beamer", "Off-Campus"};
