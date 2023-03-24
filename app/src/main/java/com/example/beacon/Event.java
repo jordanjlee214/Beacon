@@ -9,9 +9,9 @@ public class Event {
 
     private Boolean isPublic;
 
-    private LocalDate eventDate;
+    private String eventDate;
 
-    private LocalTime eventStartTime, eventEndTime;
+    private String eventStartTime, eventEndTime;
 
     private String creatorID;
     private String creatorUsername;
@@ -25,7 +25,7 @@ public class Event {
     public Event(){
     }
 
-    public Event(String eventName, Boolean isPublic, LocalDate eventDate, LocalTime startTime, LocalTime endTime, String eventLocation, String eventDescription, String creatorID, String creatorUsername) {
+    public Event(String eventName, Boolean isPublic, String eventDate, String startTime, String endTime, String eventLocation, String eventDescription, String creatorID, String creatorUsername) {
         this.eventName = eventName;
         this.isPublic = isPublic;
         this.eventDate = eventDate;
@@ -68,27 +68,27 @@ public class Event {
         isPublic = aPublic;
     }
 
-    public LocalDate getEventDate() {
+    public String getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(LocalDate eventDate) {
+    public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
 
-    public LocalTime getEventStartTime() {
+    public String getEventStartTime() {
         return eventStartTime;
     }
 
-    public void setEventStartTime(LocalTime eventStartTime) {
+    public void setEventStartTime(String eventStartTime) {
         this.eventStartTime = eventStartTime;
     }
 
-    public LocalTime getEventEndTime() {
+    public String getEventEndTime() {
         return eventEndTime;
     }
 
-    public void setEventEndTime(LocalTime eventEndTime) {
+    public void setEventEndTime(String eventEndTime) {
         this.eventEndTime = eventEndTime;
     }
 
