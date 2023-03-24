@@ -4,7 +4,6 @@ import static android.os.SystemClock.sleep;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -13,7 +12,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.widget.Switch;
+
 import android.widget.Toast;
 
 import com.example.beacon.databinding.ActivityMapsBinding;
@@ -23,17 +22,28 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CircleOptions;
+
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -46,6 +56,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final float DEFAULT_ZOOM = 15f;
     private DatabaseReference mRef; //reads and writes to Firebase database
     private Ping ping;
+    private HashMap<String,LatLng> pingList;
+    private HashMap<String, Marker> markerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +79,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             getDeviceLocation();
             ping.togglePing();
         });
+
+        pingList = new HashMap<>();
+        markerList = new HashMap<>();
     }
 
     protected void getDeviceLocation() {
@@ -81,7 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         if(ping.isOn()) {
                             mRef.child("lat").setValue(currentLocation.getLatitude());
-                            mRef.child("long").setValue(currentLocation.getLongitude());
+                            mRef.child("lng").setValue(currentLocation.getLongitude());
                         }
                     } else {
                         Toast.makeText(MapsActivity.this, "unable to get location", Toast.LENGTH_SHORT).show();
@@ -169,9 +184,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().position(e.latLng).title(e.building));
         }
 
+        getPings();
+
         // Add a marker in Sydney and move the camera
         /*LatLng sydney = new LatLng(-41.860428, -88.09309);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
     }
+
+    private void getPings() {
+        DatabaseReference lRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        lRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot s : snapshot.getChildren()){
+                    String userID = s.getKey();
+                    Number lat = (Number) s.child("lat").getValue();
+                    Number lng = (Number) s.child("lng").getValue();
+                    if(lat instanceof Long)
+                        lat = ((Long) lat).doubleValue();
+                    if(lng instanceof Long)
+                        lng = ((Long) lng).doubleValue();
+                    if((boolean) s.child("ping").getValue())
+                        pingList.put(userID, new LatLng((double)lat, (double)lng));
+                    else{
+                        pingList.remove(userID);
+                        if(markerList.containsKey(userID)) {
+                            markerList.get(userID).remove();
+                            markerList.remove(userID);
+                        }
+                    }
+                }
+                for (String m:pingList.keySet()) {
+                    if(markerList.containsKey(m)){
+                        markerList.get(m).setPosition(pingList.get(m));
+                    }else{ //key does not have a marker
+                        markerList.put(m, mMap.addMarker(new MarkerOptions().position(pingList.get(m)).title((String) snapshot.child("username").getValue()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }
+
