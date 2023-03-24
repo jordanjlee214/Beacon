@@ -28,6 +28,7 @@ import java.time.LocalTime;
 public class ScheduleEventForm extends AppCompatActivity {
 
     private Button submitEventForm;
+    private Button backButton;
     private DatabaseReference eventRef;
     private DatabaseReference usersRef;
     private Boolean isPublic;
@@ -57,19 +58,23 @@ public class ScheduleEventForm extends AppCompatActivity {
 
         submitEventForm = findViewById(R.id.submitEventForm_button);
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToActivity(EventActivity.class);
+            }
+        });
+
         submitEventForm.setOnClickListener(new View.OnClickListener() {
-            //need to set action for click
             @Override
             public void onClick(View view) {
                 //event ID for the current event being submitted
-                String currentEvent = RandomID();
+                String currentEventID = RandomID();
 
                 String thisEventTitle = title.getText().toString();
                 String thisEventDate = date.getDisplay().toString();
                 String thisEventStartTime = startTime.getDisplay().toString();
                 String thisEventEndTime = endTime.getDisplay().toString();
-
-                //NEED TO RETRIEVE START AND END TIME
 
                 if (privacyCheck.isChecked()){
                     isPublic = false;
@@ -79,11 +84,27 @@ public class ScheduleEventForm extends AppCompatActivity {
                 String thisEventLocation = location.getDisplay().toString();
                 String thisEventDescription = description.getText().toString();
 
+                usersRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        // This method is called once with the initial value and again
+                        // whenever data at this location is updated.
+                        String username = snapshot.child(mAuth.getCurrentUser().getUid()).child("username").getValue().toString();
+                        Event thisEvent = new Event(thisEventTitle, isPublic, thisEventDate, thisEventStartTime, thisEventEndTime, thisEventLocation, thisEventDescription, thisUser, username);
+                        eventRef.child(currentEventID).child(thisEventTitle).setValue(thisEvent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                    }
+                });
+
                 //STORE ALL THIS INFO IN AN INSTANCE OF A CLASS AND SEND TO FIREBASE
                 //Event thisEvent = new Event(thisEventTitle, isPublic, thisEventDate, thisEventStartTime, thisEventEndTime, thisEventLocation, thisEventDescription, thisUser, );
 
                 sendToActivity(EventActivity.class);
             }
+
 
         });
         //add all campus locations
@@ -111,20 +132,6 @@ public class ScheduleEventForm extends AppCompatActivity {
         //finish();
     }
 
-    private void getUserName(){
-        usersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String username = snapshot.child(mAuth.getCurrentUser().getUid()).child("username").getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
-    }
 
 
 }
