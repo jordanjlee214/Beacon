@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class EventActivity extends AppCompatActivity {
 
-    private Button createEventButton, viewEventButton;
+    private Button createEventButton, backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +21,14 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         createEventButton = findViewById(R.id.createEvent_button);
+        backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToActivity(EventActivity.class);
+            }
+        });
 
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -58,12 +58,6 @@ public class ScheduleEventForm extends AppCompatActivity {
 
         submitEventForm = findViewById(R.id.submitEventForm_button);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendToActivity(EventActivity.class);
-            }
-        });
 
         submitEventForm.setOnClickListener(new View.OnClickListener() {
             @Override

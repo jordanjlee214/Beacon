@@ -98,7 +98,8 @@ public class Event {
                 "Date: " + eventDate + newline +
                 "Time: " + eventStartTime + " to " + eventEndTime +
                 "Location: " + eventLocation +
-                "Description: " + eventDescription);
+                "Description: " + eventDescription + newline +
+                "Organizer: " + creatorUsername);
         return null;
     }
 
