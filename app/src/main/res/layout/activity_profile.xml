@@ -59,28 +59,64 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.75" />
 
-    <Button
-        android:id="@+id/profileSearchButton"
-        android:layout_width="30sp"
-        android:layout_height="30sp"
-        android:background="@drawable/input"
-        android:backgroundTint="@color/apricot"
-        android:drawableTint="@color/apricot"
-        android:foregroundTint="@color/apricot"
-        android:padding="3sp"
-        android:foreground="@drawable/input"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.23"
-        app:layout_constraintStart_toEndOf="@id/profileSearchGuideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.305" />
     
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/profileFragmentContainer"
+        app:layout_constraintTop_toBottomOf="@id/profileSearchGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
     </FrameLayout>
+
+    <ImageView
+        android:layout_width="35sp"
+        android:layout_height="35sp"
+        android:id="@+id/profileSearchButton"
+        android:src="@drawable/search_white"
+        android:clickable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/profileSearchGuideline"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintVertical_bias="0.303"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/apricot"
+        android:padding="7sp"
+        >
+    </ImageView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profileActivityGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.39" />
+
+    <TextView
+        android:id="@+id/profileExitButton"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:text="X"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:fontFamily="@font/outfit_bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/dark_teal"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/profileActivityGuideline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.03"
+        app:layout_constraintHorizontal_bias="0.96"
+        >
+    </TextView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

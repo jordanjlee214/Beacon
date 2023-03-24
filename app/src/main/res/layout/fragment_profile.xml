@@ -1,14 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".ProfileActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/profileViewGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.39" />
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="1sp"
+        android:id="@+id/profilePicInputBorder"
+        app:layout_constraintBottom_toBottomOf="@id/profilePicture_fragment"
+        app:layout_constraintTop_toTopOf="@id/profilePicture_fragment"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+>
+    </View>
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/profileNameContainer"
+        android:layout_width="340sp"
+        android:layout_height="140sp"
+        android:src="@drawable/input"
+        app:layout_constraintTop_toBottomOf="@id/profilePicInputBorder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:tint="@color/apricot"
+        >
+    </ImageView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilePicture_fragment"
+        android:layout_width="130sp"
+        android:layout_height="130sp"
+        app:layout_constraintTop_toBottomOf="@id/profileViewGuideline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        android:src="@drawable/blank_profile"
+        >
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <TextView
+        android:id="@+id/profileFemale_fragment"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:text="F"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:fontFamily="@font/outfit_bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/dark_red"
+        app:layout_constraintTop_toTopOf="@id/profileNameContainer"
+        app:layout_constraintBottom_toBottomOf="@id/profileNameContainer"
+        app:layout_constraintRight_toRightOf="@id/profileNameContainer"
+        app:layout_constraintLeft_toLeftOf="@id/profileNameContainer"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.04"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/profileMale_fragment"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:text="M"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:fontFamily="@font/outfit_bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/dark_teal"
+        app:layout_constraintTop_toTopOf="@id/profileNameContainer"
+        app:layout_constraintBottom_toBottomOf="@id/profileNameContainer"
+        app:layout_constraintRight_toRightOf="@id/profileNameContainer"
+        app:layout_constraintLeft_toLeftOf="@id/profileNameContainer"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.04"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/profileDisplayName_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Name Last Name"
+        android:fontFamily="@font/outfit_bold"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/profilePicture_fragment"
+        app:layout_constraintBottom_toBottomOf="@id/profileNameContainer"
+        app:layout_constraintRight_toRightOf="@id/profileNameContainer"
+        app:layout_constraintLeft_toLeftOf="@id/profileNameContainer"
+        app:layout_constraintVertical_bias="0.2"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/profileUsername_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="username"
+        android:fontFamily="@font/outfit_light"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/profileDisplayName_fragment"
+        app:layout_constraintBottom_toBottomOf="@id/profileNameContainer"
+        app:layout_constraintRight_toRightOf="@id/profileNameContainer"
+        app:layout_constraintLeft_toLeftOf="@id/profileNameContainer"
+        app:layout_constraintVertical_bias="0"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/profileGradYear_fragment"
+        android:layout_width="340sp"
+        android:layout_height="wrap_content"
+        android:text="Class of XXXX"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:fontFamily="@font/satoshi_medium"
+        android:textColor="@color/white"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/dark_teal"
+        android:padding="5sp"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/profileNameContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.15"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/profileBirthday_fragment"
+        android:layout_width="340sp"
+        android:layout_height="wrap_content"
+        android:text="mm/dd/yy"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:fontFamily="@font/satoshi_medium"
+        android:textColor="@color/white"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/dark_teal"
+        android:padding="5sp"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/profileNameContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.45"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/profileMajor_fragment"
+        android:layout_width="340sp"
+        android:layout_height="wrap_content"
+        android:text="Major"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:fontFamily="@font/satoshi_medium"
+        android:textColor="@color/white"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/dark_teal"
+        android:padding="5sp"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/profileNameContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.75"
+        >
+    </TextView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
