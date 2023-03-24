@@ -150,10 +150,12 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("photoURL", photoURL);
         userData.put("graduationYear", graduationYear);
         userData.put("major", major);
+        userData.put("ping", false);
         userData.put("friends", friends);
         userData.put("friendList", friendList);
         userData.put("lat", lati);
         userData.put("lng", lngi);
+        userData.put("ping", ping);
         userData.put("blocked", blocked);
         return userData;
     }
