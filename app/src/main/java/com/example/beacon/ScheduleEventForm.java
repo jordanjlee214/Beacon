@@ -66,16 +66,27 @@ public class ScheduleEventForm extends AppCompatActivity {
                 String currentEventID = RandomID();
 
                 String thisEventTitle = title.getText().toString();
-                String thisEventDate = date.getDisplay().toString();
-                String thisEventStartTime = startTime.getDisplay().toString();
-                String thisEventEndTime = endTime.getDisplay().toString();
+
+                int year = date.getYear();
+                int month = date.getMonth();
+                int day = date.getDayOfMonth();
+                String thisEventDate = month + "/" + day + "/" + year;
+
+                int startHour = startTime.getHour();
+                int startMinute = startTime.getMinute();
+                String thisEventStartTime = startHour + ":" + startMinute;
+
+                int endHour = endTime.getHour();
+                int endMinute = endTime.getMinute();
+                String thisEventEndTime = endHour + ":" + endMinute;
+
 
                 if (privacyCheck.isChecked()){
                     isPublic = false;
                 } else {
                     isPublic = true;
                 }
-                String thisEventLocation = location.getDisplay().toString();
+                String thisEventLocation = (String) location.getSelectedItem();
                 String thisEventDescription = description.getText().toString();
 
                 usersRef.addValueEventListener(new ValueEventListener() {

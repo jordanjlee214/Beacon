@@ -96,7 +96,7 @@ public class Event {
         System.out.println("Event: " + eventName + newline +
                 "Public?: " + isPublic + newline +
                 "Date: " + eventDate + newline +
-                "Time: " + eventStartTime + " to " + eventEndTime +
+                "Time: " + eventStartTime + " to " + eventEndTime + newline +
                 "Location: " + eventLocation +
                 "Description: " + eventDescription + newline +
                 "Organizer: " + creatorUsername);

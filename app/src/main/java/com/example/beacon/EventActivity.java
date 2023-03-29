@@ -1,6 +1,7 @@
 package com.example.beacon;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,15 +11,32 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class EventActivity extends AppCompatActivity {
 
     private Button createEventButton, backButton;
 
+    private FirebaseAuth mAuth;
+
+    private DatabaseReference eventRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
+        mAuth = FirebaseAuth.getInstance();
+        eventRef = FirebaseDatabase.getInstance().getReference().child("Events");
 
         createEventButton = findViewById(R.id.createEvent_button);
         backButton = findViewById(R.id.backButton);
@@ -26,7 +44,7 @@ public class EventActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToActivity(EventActivity.class);
+                sendToActivity(MainActivity.class);
             }
         });
 
@@ -34,6 +52,27 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendToActivity(ScheduleEventForm.class);
+            }
+        });
+
+
+        eventRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                List<String> items = new ArrayList<>();
+                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                    String item = itemSnapshot.getValue(Event.class).toString();
+                    items.add(item);
+                }
+                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.eventRecyclerView);
+                eventAdapter adapter = new eventAdapter(items);
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
             }
         });
 
