@@ -1,6 +1,7 @@
 package com.example.beacon;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
@@ -29,6 +30,8 @@ public class EventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private DatabaseReference eventRef;
+
+    ArrayList<String> events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,20 +64,24 @@ public class EventActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                List<String> items = new ArrayList<>();
+                //ArrayList<String> items = new ArrayList<>();
+                events = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    String item = itemSnapshot.getValue(Event.class).toString();
-                    items.add(item);
+                    String item = itemSnapshot.getValue(Event.class).getEventName();
+                    events.add(item);
                 }
-                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.eventRecyclerView);
-                eventAdapter adapter = new eventAdapter(items);
-                recyclerView.setAdapter(adapter);
+
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
             }
         });
+
+        RecyclerView recyclerView = findViewById(R.id.eventRecyclerView);
+        eventAdapter adapter = new eventAdapter(this, events);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
 

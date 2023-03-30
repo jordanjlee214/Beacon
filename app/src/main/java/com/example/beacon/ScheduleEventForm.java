@@ -96,7 +96,7 @@ public class ScheduleEventForm extends AppCompatActivity {
                         // whenever data at this location is updated.
                         String username = snapshot.child(mAuth.getCurrentUser().getUid()).child("username").getValue().toString();
                         Event thisEvent = new Event(thisEventTitle, isPublic, thisEventDate, thisEventStartTime, thisEventEndTime, thisEventLocation, thisEventDescription, thisUser, username);
-                        eventRef.child(currentEventID).child(thisEventTitle).setValue(thisEvent);
+                        eventRef.child(currentEventID).setValue(thisEvent);
                     }
 
                     @Override

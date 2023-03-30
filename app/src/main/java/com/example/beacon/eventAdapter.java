@@ -1,5 +1,6 @@
 package com.example.beacon;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,39 +8,47 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> {
 
-    private List<String> mData;
+    Context context;
+    ArrayList<String> data;
+    //private List<String> mData;
 
-    public eventAdapter(List<String> data) {
-        mData = data;
+    public eventAdapter(Context context, ArrayList<String> data) {
+        this.context = context;
+        this.data = data;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false);
-        return new ViewHolder(view);
+    public eventAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false);
+        //return new ViewHolder(view);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.event_list_item, parent, false);
+        return new eventAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String item = mData.get(position);
+        String item = data.get(position);
         holder.mTextView.setText(item);
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return data.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView;
+        TextView mTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.event_view);
+
+            mTextView = itemView.findViewById(R.id.event_view);
         }
     }
 
