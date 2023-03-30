@@ -94,10 +94,10 @@ public class Event {
 
     public String toString(){
         return "Event: " + eventName + newline +
-                "Public?: " + isPublic + newline +
+                "Public? " + isPublic + newline +
                 "Date: " + eventDate + newline +
                 "Time: " + eventStartTime + " to " + eventEndTime + newline +
-                "Location: " + eventLocation +
+                "Location: " + eventLocation + newline +
                 "Description: " + eventDescription + newline +
                 "Organizer: " + creatorUsername;
     }
