@@ -31,7 +31,7 @@ public class EventActivity extends AppCompatActivity {
 
     private DatabaseReference eventRef;
 
-    ArrayList<String> events;
+    //ArrayList<String> events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +65,16 @@ public class EventActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 //ArrayList<String> items = new ArrayList<>();
-                events = new ArrayList<>();
+                ArrayList<String> events = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    String item = itemSnapshot.getValue(Event.class).getEventName();
+                    String item = itemSnapshot.getValue(Event.class).toString();
                     events.add(item);
                 }
+
+                RecyclerView recyclerView = findViewById(R.id.eventRecyclerView);
+                eventAdapter adapter = new eventAdapter(events);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
 
             }
 
@@ -78,10 +83,6 @@ public class EventActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.eventRecyclerView);
-        eventAdapter adapter = new eventAdapter(this, events);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
 

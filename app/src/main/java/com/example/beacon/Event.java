@@ -93,14 +93,13 @@ public class Event {
     }
 
     public String toString(){
-        System.out.println("Event: " + eventName + newline +
+        return "Event: " + eventName + newline +
                 "Public?: " + isPublic + newline +
                 "Date: " + eventDate + newline +
                 "Time: " + eventStartTime + " to " + eventEndTime + newline +
                 "Location: " + eventLocation +
                 "Description: " + eventDescription + newline +
-                "Organizer: " + creatorUsername);
-        return null;
+                "Organizer: " + creatorUsername;
     }
 
     public String getCreatorID() {

@@ -13,12 +13,10 @@ import java.util.List;
 
 public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> {
 
-    Context context;
     ArrayList<String> data;
     //private List<String> mData;
 
-    public eventAdapter(Context context, ArrayList<String> data) {
-        this.context = context;
+    public eventAdapter(ArrayList<String> data) {
         this.data = data;
     }
 
@@ -26,7 +24,7 @@ public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder> 
     public eventAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_item, parent, false);
         //return new ViewHolder(view);
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.event_list_item, parent, false);
         return new eventAdapter.ViewHolder(view);
     }
