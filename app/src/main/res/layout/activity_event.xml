@@ -41,6 +41,25 @@
         android:backgroundTint="@color/apricot"/>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/deleteEvent_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:fontFamily="@font/satoshi_black"
+        android:text="  Delete Event  "
+        android:textAllCaps="false"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".03"
+        app:layout_constraintVertical_bias=".98"
+        android:backgroundTint="@color/apricot"/>
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createEvent_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

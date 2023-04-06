@@ -25,7 +25,7 @@ import java.util.List;
 
 public class EventActivity extends AppCompatActivity {
 
-    private Button createEventButton, backButton;
+    private Button createEventButton, backButton, deleteEventButton;
 
     private FirebaseAuth mAuth;
 
@@ -43,6 +43,7 @@ public class EventActivity extends AppCompatActivity {
 
         createEventButton = findViewById(R.id.createEvent_button);
         backButton = findViewById(R.id.backButton);
+        deleteEventButton = findViewById(R.id.deleteEvent_button);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +57,11 @@ public class EventActivity extends AppCompatActivity {
             public void onClick(View view) {
                 sendToActivity(ScheduleEventForm.class);
             }
+        });
+
+        deleteEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { sendToActivity(DeleteEventPage.class); }
         });
 
 
