@@ -28,7 +28,6 @@ import java.time.LocalTime;
 public class ScheduleEventForm extends AppCompatActivity {
 
     private Button submitEventForm;
-    private Button backButton;
     private DatabaseReference eventRef;
     private DatabaseReference usersRef;
     private Boolean isPublic;
@@ -113,7 +112,11 @@ public class ScheduleEventForm extends AppCompatActivity {
 
         });
         //add all campus locations
-        String[] items = {"Coray Gym", "Buswell Library", "Anderson Commons", "Edman Chapel", "Lower Beamer", "Off-Campus"};
+        String[] items = {"Anderson Commons", "Meyer Science Center", "Smith-Traber", "Chrouser Sports", "Fischer",
+                "North Harrison Hall", "McManis-Evans", "Campus Store", "College Ave Apartments", "Terrace Apartments",
+                "Saint & Elliot Apartments", "Michigan-Crescent Apartments", "Sports Fields", "BGH", "Blanchard",
+                "Adams", "Williston Hall", "Memorial Student Center", "Armerding", "Wyngarden & Schell", "Buswell Library",
+                "Edman Chapel", "Wade Center", "Public Library"};
 
         //connects string of locations to drop down menu in xml file
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);

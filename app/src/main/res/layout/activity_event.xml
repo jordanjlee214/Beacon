@@ -19,7 +19,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.01" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/filterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:fontFamily="@font/satoshi_black"
+        android:text="Filter"
+        android:textAllCaps="false"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".95"
+        app:layout_constraintVertical_bias=".13"
+        android:backgroundTint="@color/apricot"/>
+
+    <Spinner
+        android:id="@+id/location_filter"
+        android:layout_width="230dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13"
+        app:layout_constraintHorizontal_bias=".22"
+        android:contentDescription="menu for location"
+        android:hint="location"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/backButton"
@@ -37,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias=".05"
-        app:layout_constraintVertical_bias=".03"
+        app:layout_constraintVertical_bias=".02"
         android:backgroundTint="@color/apricot"/>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -85,7 +117,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".67"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
