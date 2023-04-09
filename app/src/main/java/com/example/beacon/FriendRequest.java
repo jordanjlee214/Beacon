@@ -1,5 +1,7 @@
 package com.example.beacon;
 
+import java.util.HashMap;
+
 /**
  * To Model a Friend Request
  * @author Bonnie Rilea
@@ -9,13 +11,13 @@ public class FriendRequest {
     /**
      * The Sender
      */
-    final private User sender;
+    private User sender;
 
     /**
      * The Receiver
      * (For Firebase)
      */
-    final private User receiver;
+    private User receiver;
 
     /**
      * Message to receiver
@@ -38,4 +40,19 @@ public class FriendRequest {
 
     public String getMessage() {return message;}
     public void setMessage(String message) {this.message = message;}
+
+    public String getKey(){ //returns a key for the database
+        return receiver.getUserID() + "_" + sender.getUserID();
+    }
+
+    public String getReverseKey(){
+        return sender.getUserID() + "_" + receiver.getUserID();
+    }
+    public HashMap<String, Object> toMap(){ //returns a map to upload to the database
+        HashMap<String, Object> toReturn = new HashMap<>();
+        toReturn.put("message", message);
+        toReturn.put("receiverUser", receiver.getUsername());
+        toReturn.put("senderUser", sender.getUsername());
+        return toReturn;
+    }
 }

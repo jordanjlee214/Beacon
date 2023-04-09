@@ -1,5 +1,8 @@
 package com.example.beacon;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -9,8 +12,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.nio.charset.StandardCharsets;
 
@@ -37,9 +47,13 @@ public class ProfileFragment extends Fragment {
     private TextView nameDisplay, maleDisplay, femaleDisplay, usernameDisplay, majorDisplay, birthdayDisplay, gradDisplay;
     private CircleImageView profilePicDisplay;
 
+    private Button requestButton;
+
     private FirebaseAuth mAuth;
 
     private DatabaseReference usersRef;
+    private DatabaseReference friendRequestRef;
+    private DatabaseReference friendRef;
 
 
     public ProfileFragment() {
@@ -62,6 +76,8 @@ public class ProfileFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        friendRequestRef = FirebaseDatabase.getInstance().getReference().child("FriendRequests");
+        friendRef = FirebaseDatabase.getInstance().getReference().child("Friends");
         currentUserID = mAuth.getCurrentUser().getUid();
     }
 
@@ -78,6 +94,7 @@ public class ProfileFragment extends Fragment {
         birthdayDisplay = v.findViewById(R.id.profileBirthday_fragment);
         gradDisplay = v.findViewById(R.id.profileGradYear_fragment);
         profilePicDisplay = v.findViewById(R.id.profilePicture_fragment);
+        requestButton = v.findViewById(R.id.requestRemoveButton);
 
         maleDisplay.setVisibility(View.GONE);
         femaleDisplay.setVisibility(View.GONE);
@@ -89,6 +106,18 @@ public class ProfileFragment extends Fragment {
     public void onStart() {
         super.onStart();
         displayUserData();
+
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentUserID.equals(profileUserID)){ //if you are looking at your own profile
+                    Toast.makeText(getContext(), "You cannot friend yourself.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    showAddItemDialog(getContext(), usernameDisplay.getText().toString());
+                }
+            }
+        });
     }
 
     //helper method to display the user data
@@ -159,4 +188,121 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+    /*this sends a friend request to the profileID of this user,
+    * the argument takes in a message for the friend request
+    * */
+    private void sendFriendRequest(String msg){
+            usersRef.addValueEventListener(new ValueEventListener() { //Check user database and gather user data
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User sendingUser = new User();
+                    User receivingUser = new User();
+                    sendingUser.buildUserFromSnapshot(snapshot, currentUserID);
+                    receivingUser.buildUserFromSnapshot(snapshot, profileUserID);
+                    //TODO: Message feature - pop up window?
+                    //Make a FriendRequest entity object to store info on the users involved.
+                    String message = msg;
+                    if(msg.isEmpty()){
+                        message = "Let's be friends!";
+                    }
+                    FriendRequest friendRequest = new FriendRequest(sendingUser, message, receivingUser);
+                    Toast.makeText(getContext(), "Receiving user is " + receivingUser.getUsername(), Toast.LENGTH_SHORT).show();
+//                    sendingUser.setUsername(snapshot.child(currentUserID).child("username").getValue().toString());
+//                    sendingUser.setNickname(snapshot.child(currentUserID).child("nickname").getValue().toString());
+//                    sendingUser.setFirstName(snapshot.child(currentUserID).child("firstName").getValue().toString());
+//                    sendingUser.setLastName(snapshot.child(currentUserID).child("lastName").getValue().toString());
+//                    sendingUser.setPhotoURL(snapshot.child(currentUserID).child("photoURL").getValue().toString());
+//                    sendingUser.setMajor(snapshot.child(currentUserID).child("major").getValue().toString());
+//                    sendingUser.setBirthday(snapshot.child(currentUserID).child("birthday").getValue().toString());
+//                    sendingUser.setGraduationYear(snapshot.child(currentUserID).child("graduationYear").getValue().toString());
+//                    sendingUser.setGender(snapshot.child(currentUserID).child("gender").getValue().toString());
+//                    sendingUser.setFriends(Integer.parseInt(snapshot.child(currentUserID).child("friends").getValue().toString()));
+//                    sendingUser.setLati(Double.parseDouble(snapshot.child(currentUserID).child("lat").getValue().toString()));
+//                    sendingUser.setLngi(Double.parseDouble(snapshot.child(currentUserID).child("lng").getValue().toString()));
+//                    sendingUser.setPing((Boolean) snapshot.child(currentUserID).child("ping").getValue());
+//                    sendingUser.setUserID(currentUserID);
+//
+//                    receivingUser.setUsername(snapshot.child(profileUserID).child("username").getValue().toString());
+//                    receivingUser.setNickname(snapshot.child(profileUserID).child("nickname").getValue().toString());
+//                    receivingUser.setFirstName(snapshot.child(profileUserID).child("firstName").getValue().toString());
+//                    receivingUser.setLastName(snapshot.child(profileUserID).child("lastName").getValue().toString());
+//                    receivingUser.setPhotoURL(snapshot.child(profileUserID).child("photoURL").getValue().toString());
+//                    receivingUser.setMajor(snapshot.child(profileUserID).child("major").getValue().toString());
+//                    receivingUser.setBirthday(snapshot.child(profileUserID).child("birthday").getValue().toString());
+//                    receivingUser.setGraduationYear(snapshot.child(profileUserID).child("graduationYear").getValue().toString());
+//                    receivingUser.setGender(snapshot.child(profileUserID).child("gender").getValue().toString());
+//                    receivingUser.setFriends(Integer.parseInt(snapshot.child(profileUserID).child("friends").getValue().toString()));
+//                    receivingUser.setLati(Double.parseDouble(snapshot.child(profileUserID).child("lat").getValue().toString()));
+//                    receivingUser.setLngi(Double.parseDouble(snapshot.child(profileUserID).child("lng").getValue().toString()));
+//                    receivingUser.setPing((Boolean) snapshot.child(profileUserID).child("ping").getValue());
+//                    receivingUser.setUserID(profileUserID);
+                    friendRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.child(currentUserID).child(profileUserID).exists()){ //are they friends?
+                                Toast.makeText(getContext(), "You are already friends with this user.", Toast.LENGTH_SHORT).show();
+                            }
+                            else{ //you aren't friends already
+                                friendRequestRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if(snapshot.child(friendRequest.getKey()).exists()){
+                                            Toast.makeText(getContext(), "You have already sent a friend request.", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else if(snapshot.child(friendRequest.getReverseKey()).exists()){
+                                            Toast.makeText(getContext(), receivingUser.getUsername() + " has already sent you a request. Check your friends page and accept it.", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{ //no friend request has been sent
+                                            friendRequestRef.child(friendRequest.getKey()).updateChildren(friendRequest.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    Toast.makeText(getContext(), "A friend request has been sent.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+    }
+
+    /**
+     * This method shows a pop-up window that allows the user to type in a FriendRequest message.
+     * It is taken from this site: https://alvinalexander.com/source-code/android-mockup-prototype-dialog-text-field/
+     */
+    private void showAddItemDialog(Context c, String username) {
+        final EditText taskEditText = new EditText(c);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("Friend Request to: " + username)
+                .setMessage("Type in a message: ")
+                .setView(taskEditText)
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String requestMessage = String.valueOf(taskEditText.getText());
+                        sendFriendRequest(requestMessage);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+    }
+
 }

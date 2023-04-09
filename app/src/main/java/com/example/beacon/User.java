@@ -1,5 +1,15 @@
 package com.example.beacon;
 
+import android.provider.ContactsContract;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +47,6 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userID = "";
         ping = false;
         friends= 0;
-        friendList = new HashMap<String, String>();
         blocked = new HashMap<String, String>();
         requestList = new HashMap<String, FriendRequest>();
     }
@@ -80,10 +89,6 @@ public class User { //entity class to represent user. Needs to be updated eventu
 
     public boolean getPing(){
         return ping;
-    }
-
-    public void setFriendList(HashMap<String, String> fList) {
-        this.friendList = fList;
     }
 
     public void setBirthday(String birthday) {
@@ -150,9 +155,7 @@ public class User { //entity class to represent user. Needs to be updated eventu
         userData.put("photoURL", photoURL);
         userData.put("graduationYear", graduationYear);
         userData.put("major", major);
-        userData.put("ping", false);
         userData.put("friends", friends);
-        userData.put("friendList", friendList);
         userData.put("lat", lati);
         userData.put("lng", lngi);
         userData.put("ping", ping);
@@ -193,4 +196,23 @@ public class User { //entity class to represent user. Needs to be updated eventu
     }
 
     public HashMap<String, FriendRequest> getRequestList() {return requestList;}
+
+    //CURRENTLY NOT WORKING
+    //takes a data snapshot accessing the Users branch and an ID and fills info accordingly
+    public void buildUserFromSnapshot(DataSnapshot snapshot, String id){
+        setUsername(snapshot.child(id).child("username").getValue().toString());
+        setNickname(snapshot.child(id).child("nickname").getValue().toString());
+        setFirstName(snapshot.child(id).child("firstName").getValue().toString());
+        setLastName(snapshot.child(id).child("lastName").getValue().toString());
+        setPhotoURL(snapshot.child(id).child("photoURL").getValue().toString());
+        setMajor(snapshot.child(id).child("major").getValue().toString());
+        setBirthday(snapshot.child(id).child("birthday").getValue().toString());
+        setGraduationYear(snapshot.child(id).child("graduationYear").getValue().toString());
+        setGender(snapshot.child(id).child("gender").getValue().toString());
+        setFriends(Integer.parseInt(snapshot.child(id).child("friends").getValue().toString()));
+        setLati(Double.parseDouble(snapshot.child(id).child("lat").getValue().toString()));
+        setLngi(Double.parseDouble(snapshot.child(id).child("lng").getValue().toString()));
+        setPing((Boolean) snapshot.child(id).child("ping").getValue());
+        setUserID(id);
+    }
 }
