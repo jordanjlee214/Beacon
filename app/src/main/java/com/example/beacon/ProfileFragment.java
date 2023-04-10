@@ -200,58 +200,29 @@ public class ProfileFragment extends Fragment {
                     User receivingUser = new User();
                     sendingUser.buildUserFromSnapshot(snapshot, currentUserID);
                     receivingUser.buildUserFromSnapshot(snapshot, profileUserID);
-                    //TODO: Message feature - pop up window?
+
                     //Make a FriendRequest entity object to store info on the users involved.
                     String message = msg;
                     if(msg.isEmpty()){
                         message = "Let's be friends!";
                     }
                     FriendRequest friendRequest = new FriendRequest(sendingUser, message, receivingUser);
-                    Toast.makeText(getContext(), "Receiving user is " + receivingUser.getUsername(), Toast.LENGTH_SHORT).show();
-//                    sendingUser.setUsername(snapshot.child(currentUserID).child("username").getValue().toString());
-//                    sendingUser.setNickname(snapshot.child(currentUserID).child("nickname").getValue().toString());
-//                    sendingUser.setFirstName(snapshot.child(currentUserID).child("firstName").getValue().toString());
-//                    sendingUser.setLastName(snapshot.child(currentUserID).child("lastName").getValue().toString());
-//                    sendingUser.setPhotoURL(snapshot.child(currentUserID).child("photoURL").getValue().toString());
-//                    sendingUser.setMajor(snapshot.child(currentUserID).child("major").getValue().toString());
-//                    sendingUser.setBirthday(snapshot.child(currentUserID).child("birthday").getValue().toString());
-//                    sendingUser.setGraduationYear(snapshot.child(currentUserID).child("graduationYear").getValue().toString());
-//                    sendingUser.setGender(snapshot.child(currentUserID).child("gender").getValue().toString());
-//                    sendingUser.setFriends(Integer.parseInt(snapshot.child(currentUserID).child("friends").getValue().toString()));
-//                    sendingUser.setLati(Double.parseDouble(snapshot.child(currentUserID).child("lat").getValue().toString()));
-//                    sendingUser.setLngi(Double.parseDouble(snapshot.child(currentUserID).child("lng").getValue().toString()));
-//                    sendingUser.setPing((Boolean) snapshot.child(currentUserID).child("ping").getValue());
-//                    sendingUser.setUserID(currentUserID);
-//
-//                    receivingUser.setUsername(snapshot.child(profileUserID).child("username").getValue().toString());
-//                    receivingUser.setNickname(snapshot.child(profileUserID).child("nickname").getValue().toString());
-//                    receivingUser.setFirstName(snapshot.child(profileUserID).child("firstName").getValue().toString());
-//                    receivingUser.setLastName(snapshot.child(profileUserID).child("lastName").getValue().toString());
-//                    receivingUser.setPhotoURL(snapshot.child(profileUserID).child("photoURL").getValue().toString());
-//                    receivingUser.setMajor(snapshot.child(profileUserID).child("major").getValue().toString());
-//                    receivingUser.setBirthday(snapshot.child(profileUserID).child("birthday").getValue().toString());
-//                    receivingUser.setGraduationYear(snapshot.child(profileUserID).child("graduationYear").getValue().toString());
-//                    receivingUser.setGender(snapshot.child(profileUserID).child("gender").getValue().toString());
-//                    receivingUser.setFriends(Integer.parseInt(snapshot.child(profileUserID).child("friends").getValue().toString()));
-//                    receivingUser.setLati(Double.parseDouble(snapshot.child(profileUserID).child("lat").getValue().toString()));
-//                    receivingUser.setLngi(Double.parseDouble(snapshot.child(profileUserID).child("lng").getValue().toString()));
-//                    receivingUser.setPing((Boolean) snapshot.child(profileUserID).child("ping").getValue());
-//                    receivingUser.setUserID(profileUserID);
-                    friendRef.addValueEventListener(new ValueEventListener() {
+
+                    friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.child(currentUserID).child(profileUserID).exists()){ //are they friends?
                                 Toast.makeText(getContext(), "You are already friends with this user.", Toast.LENGTH_SHORT).show();
                             }
                             else{ //you aren't friends already
-                                friendRequestRef.addValueEventListener(new ValueEventListener() {
+                                friendRequestRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         if(snapshot.child(friendRequest.getKey()).exists()){
                                             Toast.makeText(getContext(), "You have already sent a friend request.", Toast.LENGTH_SHORT).show();
                                         }
                                         else if(snapshot.child(friendRequest.getReverseKey()).exists()){
-                                            Toast.makeText(getContext(), receivingUser.getUsername() + " has already sent you a request. Check your friends page and accept it.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), receivingUser.getUsername() + " has already sent you a request. Check your friends page and accept it.", Toast.LENGTH_LONG).show();
                                         }
                                         else{ //no friend request has been sent
                                             friendRequestRef.child(friendRequest.getKey()).updateChildren(friendRequest.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
