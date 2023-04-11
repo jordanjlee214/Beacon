@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.beacon.databinding.ActivityMapsBinding;
@@ -55,11 +54,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private HashMap<String,LatLng> pingList;
     private HashMap<String, Marker> markerList;
     private HashMap<String, String> eventList;
+    private AppCompatButton pingSwitch, backButton, eventButton;
+    private String selectedLoc; //send locations to event page
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
@@ -68,7 +68,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getLocationPermission();
         ping = new Ping(mRef, user, this);
 
-        AppCompatButton pingSwitch = findViewById(R.id.ping);
+        //Set buttons
+        pingSwitch = findViewById(R.id.ping);
         pingSwitch.setOnClickListener(view -> {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -78,13 +79,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //TODO link to ping form fragment
         });
 
-        AppCompatButton backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener((view -> sendToActivity(MainActivity.class)));
         pingList = new HashMap<>();
         markerList = new HashMap<>();
         eventList = new HashMap<>();
         for(Location l:MainActivity.locDat)
             eventList.put(l.building,"");
+
+        selectedLoc = "";
+        eventButton = findViewById(R.id.eventButton);
+        eventButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MapsActivity.this, EventActivity.class);
+            intent.putExtra("methodName","setFilter");
+            intent.putExtra("location", selectedLoc);
+            startActivity(intent);
+        });
     }
 
     private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
@@ -190,35 +200,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(41.869092, -88.099211)));
-
-        DatabaseReference eRef = FirebaseDatabase.getInstance().getReference().child("Events");
-        eRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot s : snapshot.getChildren()){
-                    String eventID = s.getKey();
-                    String name = (String) s.child("eventLocation").getValue();
-                    String description = eventList.get(name);
-                    System.out.println(name);
-                    eventList.put(name,description+ "Event Name:"+s.child("eventName").getValue()+"\n" +
-                            "Creator:"+s.child("creatorUsername").getValue()+"\n" +
-                            "Date:"+s.child("eventDate").getValue()+"\n" +
-                            "Start Time:"+s.child("eventStartTime").getValue()+"\n" +
-                            "End Time:"+s.child("eventEndTime").getValue()+"\n" +
-                            "Description"+s.child("eventDescription").getValue()+"\n");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        
         for(Location e:MainActivity.locDat){ //place location pins on map
             MarkerOptions locPin = new MarkerOptions();
             locPin.position(e.latLng);
             locPin.title(e.building);
-            locPin.snippet(eventList.get(e.building));
 
             Marker m = mMap.addMarker(locPin);
         }
@@ -226,11 +212,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getPings();
 
         mMap.setOnMarkerClickListener(marker -> {
-            String title = marker.getTitle();
-            Intent intent = new Intent(MapsActivity.this, EventActivity.class);
-            intent.putExtra("methodName","setFilter");
-            intent.putExtra("location",title);
-            startActivity(intent);
+            selectedLoc = marker.getTitle();
+            marker.showInfoWindow();
             return true;
         });
     }

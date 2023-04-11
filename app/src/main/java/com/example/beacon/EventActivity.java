@@ -174,6 +174,8 @@ public class EventActivity extends AppCompatActivity {
      * @param location
      */
     private void setFilter(String location) {
+        if(location.equals(""))
+            return;
         Spinner filter = findViewById(R.id.location_filter);
         int index = 0;
         for(; index<items.length;index++){
