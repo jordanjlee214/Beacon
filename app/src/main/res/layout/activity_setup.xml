@@ -221,12 +221,13 @@
         app:layout_constraintVertical_bias="0.72"
         />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/setUpSaveButton"
         android:layout_width="250sp"
         android:layout_height="wrap_content"
         android:text="Save Profile"
         android:textColor="@color/black"
+        android:background="@drawable/input"
         android:fontFamily="@font/outfit_black"
         android:textAllCaps="false"
         android:textSize="30sp"

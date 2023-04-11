@@ -188,12 +188,13 @@
         >
     </TextView>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/requestRemoveButton"
         android:layout_width="90sp"
         android:layout_height="30sp"
         android:fontFamily="@font/outfit_bold"
         android:text="Request"
+        android:textColor="@color/white"
         android:textSize="10sp"
         android:background="@drawable/input"
         android:backgroundTint="@color/teal"
@@ -204,15 +205,16 @@
         app:layout_constraintTop_toBottomOf="@id/profileViewGuideline"
         app:layout_constraintVertical_bias="0.13">
 
-    </Button>
+    </androidx.appcompat.widget.AppCompatButton>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/blockButton"
         android:layout_width="90sp"
         android:layout_height="30sp"
         android:fontFamily="@font/outfit_bold"
         android:text="Block"
         android:textSize="10sp"
+        android:textColor="@color/white"
         android:background="@drawable/input"
         android:backgroundTint="@color/teal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -222,7 +224,7 @@
         app:layout_constraintTop_toBottomOf="@id/profileViewGuideline"
         app:layout_constraintVertical_bias="0.13">
 
-    </Button>
+    </androidx.appcompat.widget.AppCompatButton>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
