@@ -32,11 +32,7 @@ public class EventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private DatabaseReference eventRef;
-    private String[] items = {"All", "Anderson Commons", "Meyer Science Center", "Smith-Traber", "Chrouser Sports", "Fischer",
-            "North Harrison Hall", "McManis-Evans", "Campus Store", "College Ave Apartments", "Terrace Apartments",
-            "Saint & Elliot Apartments", "Michigan-Crescent Apartments", "Sports Fields", "BGH", "Blanchard",
-            "Adams", "Williston Hall", "Memorial Student Center", "Armerding", "Wyngarden & Schell", "Buswell Library",
-            "Edman Chapel", "Wade Center", "Public Library"};
+    private String[] items = CampusLocations.sorted();
 
     //ArrayList<String> events;
 
