@@ -41,11 +41,54 @@
         android:id="@+id/ping"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:fontFamily="@font/satoshi_black"
         android:text="Ping"
+        android:textAllCaps="false"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/eventButton"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:backgroundTint="@color/apricot"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/eventButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:fontFamily="@font/satoshi_black"
+        android:text="View Events"
+        android:textAllCaps="false"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ping"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:backgroundTint="@color/apricot"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input"
+        android:fontFamily="@font/satoshi_black"
+        android:text="Back"
+        android:textAllCaps="false"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias=".05"
+        app:layout_constraintVertical_bias=".02"
+        android:backgroundTint="@color/apricot"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

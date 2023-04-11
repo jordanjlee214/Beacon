@@ -32,6 +32,11 @@ public class EventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private DatabaseReference eventRef;
+    private String[] items = {"All", "Anderson Commons", "Meyer Science Center", "Smith-Traber", "Chrouser Sports", "Fischer",
+            "North Harrison Hall", "McManis-Evans", "Campus Store", "College Ave Apartments", "Terrace Apartments",
+            "Saint & Elliot Apartments", "Michigan-Crescent Apartments", "Sports Fields", "BGH", "Blanchard",
+            "Adams", "Williston Hall", "Memorial Student Center", "Armerding", "Wyngarden & Schell", "Buswell Library",
+            "Edman Chapel", "Wade Center", "Public Library"};
 
     //ArrayList<String> events;
 
@@ -92,7 +97,7 @@ public class EventActivity extends AppCompatActivity {
 
         });
 
-        String[] items = CampusLocations.sorted();
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -104,8 +109,12 @@ public class EventActivity extends AppCompatActivity {
             public void onClick(View view) { filterEvents(); }
         });
 
+        //to auto filter events by location if sent from map marker
+        String methodName = getIntent().getStringExtra("methodName");
+        if (methodName != null && methodName.equals("setFilter")) {
+            setFilter(getIntent().getStringExtra("location"));
+        }
     }
-
 
     private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
         Intent switchToNewActivity= new Intent(EventActivity.this, a);
@@ -158,6 +167,24 @@ public class EventActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    /**
+     *
+     * @param location
+     */
+    private void setFilter(String location) {
+        if(location.equals(""))
+            return;
+        Spinner filter = findViewById(R.id.location_filter);
+        int index = 0;
+        for(; index<items.length;index++){
+            if(items[index].equals(location))
+                break;
+        }
+        assert items[index].equals(location);
+        filter.setSelection(index);
+        filterEvents();
     }
 
 }
