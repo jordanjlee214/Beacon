@@ -121,8 +121,8 @@
 
     <TimePicker
         android:id="@+id/pingInfo_timeField"
-        android:layout_width="175dp"
-        android:layout_height="65dp"
+        android:layout_width="250sp"
+        android:layout_height="150sp"
         android:timePickerMode="spinner"
         android:background="@drawable/input"
         android:backgroundTint="@color/apricot"
@@ -131,8 +131,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pingInfo_endTimeTitle"
-        app:layout_constraintVertical_bias="0.07"
-        app:layout_constraintHorizontal_bias="0.33"
+        app:layout_constraintVertical_bias="0.15"
+        app:layout_constraintHorizontal_bias="0.25"
         android:hint="End  "/>
 
     <CheckBox
@@ -144,30 +144,47 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:buttonTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/pingInfo_timeField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/pingInfo_timeField"
         app:layout_constraintTop_toBottomOf="@id/pingInfo_endTimeTitle"
-        app:layout_constraintVertical_bias="0.09"
-        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintVertical_bias="0.55"
+        app:layout_constraintHorizontal_bias="0.15"
     />
+
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/pingInfo_submit"
-        android:layout_width="280sp"
-        android:layout_height="65sp"
+        android:layout_width="160sp"
+        android:layout_height="55sp"
         android:background="@drawable/input"
         android:fontFamily="@font/satoshi_black"
         android:text=" Send Ping "
         android:textAllCaps="false"
         android:padding="13dp"
-        android:textColor="@color/black"
-        android:textSize="25dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".88"
-        android:backgroundTint="@color/apricot"/>
+        app:layout_constraintTop_toBottomOf="@id/pingInfo_timeField"
+        app:layout_constraintVertical_bias=".5"
+        android:backgroundTint="@color/dark_teal"/>
+
+<!--    <Switch-->
+<!--        android:id="@+id/pingInfo_AMPMField"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="AM "-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="15sp"-->
+<!--        android:fontFamily="@font/satoshi_black"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/pingInfo_timeField"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/pingInfo_endTimeTitle"-->
+<!--        app:layout_constraintVertical_bias="0.185"-->
+<!--        app:layout_constraintHorizontal_bias="0.16" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

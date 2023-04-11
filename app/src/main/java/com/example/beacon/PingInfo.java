@@ -17,18 +17,16 @@ public class PingInfo {
     private String pingedUsername; //the username of the pinged user
     private String pingedDisplayName; //the first and last name of the pinged user
     private String endTime; //the specified time the user will be done, if specified
-    private String pingDuration; //how long the ping will last in total
 
     public PingInfo(String pingedUserID){
         this.pingedUserID = pingedUserID;
     }
 
-    public PingInfo(String title, String description, String pingLocation, String endTime, String pingDuration, String pingedUserID, String pingedUsername, String pingedDisplayName){
+    public PingInfo(String title, String description, String pingLocation, String endTime, String pingedUserID, String pingedUsername, String pingedDisplayName){
         this.title = title.trim();
         this.description = description.trim();
         this.pingLocation = pingLocation.trim();
         this.endTime = endTime.trim();
-        this.pingDuration = pingDuration.trim();
         this.pingedUserID = pingedUserID.trim();
         this.pingedUsername = pingedUsername.trim();
         this.pingedDisplayName = pingedDisplayName.trim();
@@ -37,14 +35,14 @@ public class PingInfo {
     public String toString(){
         String message = "";
         if(!endTime.isEmpty() && isLocationSpecific()){
-            message = pingedDisplayName + " is pinged at " + pingLocation + " for " + getHours() + " hours and " + getMinutes() + " minutes until " + getTime()
+            message = pingedDisplayName + " is pinged at " + pingLocation + " until " + getTime()
                     + ". " + "This is what's happening: " + title;
         }
         else if(endTime.isEmpty() && isLocationSpecific()){
             message = pingedDisplayName + " is pinged at " + pingLocation + ". This is what's happening: " + title;
         }
         else if (!endTime.isEmpty() && !isLocationSpecific()) {
-            message = pingedDisplayName + " is pinged for " + getHours() + " hours and " + getMinutes() + " minutes until " + getTime()
+            message = pingedDisplayName + " is pinged until " + getTime()
                     + ". " + "This is what's happening: " + title;
         }
         else if(endTime.isEmpty() && !isLocationSpecific()){
@@ -52,7 +50,7 @@ public class PingInfo {
         }
 
         if(!description.isEmpty()){
-            message = ": \"" + description + "\"";
+            message += "- \"" + description + "\"";
         }
 
         return message + " | See where they are on the map!";
@@ -76,7 +74,6 @@ public class PingInfo {
         toReturn.put("pingDescription", description);
         toReturn.put("pingLocation", pingLocation);
         toReturn.put("pingEndTime", endTime);
-        toReturn.put("pingDuration", pingDuration);
         toReturn.put("pingedID", pingedUserID);
         toReturn.put("pingedUsername", pingedUsername);
         toReturn.put("pingedDisplayName", pingedDisplayName);
@@ -90,7 +87,6 @@ public class PingInfo {
         setDescription(snapshot.child(id).child("pingDescription").getValue().toString());
         setPingLocation(snapshot.child(id).child("pingLocation").getValue().toString());
         setEndTime(snapshot.child(id).child("pingEndTime").getValue().toString());
-        setPingDuration(snapshot.child(id).child("pingDuration").getValue().toString());
         setPingedUsername(snapshot.child(id).child("pingedUsername").getValue().toString());
         setPingedDisplayName(snapshot.child(id).child("pingedDisplayName").getValue().toString());
         pingedUserID = id;
@@ -129,13 +125,6 @@ public class PingInfo {
         this.endTime = endTime;
     }
 
-    public String getPingDuration() {
-        return pingDuration;
-    }
-
-    public void setPingDuration(String pingDuration) {
-        this.pingDuration = pingDuration;
-    }
 
     public String getDescription() {
         return description;
@@ -161,18 +150,11 @@ public class PingInfo {
         this.pingedDisplayName = pingedDisplayName;
     }
 
-    public String getMinutes(){ //extracts the minutes from the 00:00 string
-        return pingDuration.substring(pingDuration.indexOf(":")+1);
-    }
-
-    public String getHours(){ //extracts the hours from the 00:00 string
-        return pingDuration.substring(0, pingDuration.indexOf(":"));
-    }
 
     public String getTime(){ //formats the time to AM/PM
         String timeString = "";
         int hour = Integer.parseInt(endTime.substring(0, endTime.indexOf(":")));
-        int minute = Integer.parseInt(endTime.substring(endTime.indexOf(":") + 1));
+        String minute = endTime.substring(endTime.indexOf(":") + 1);
         if(hour == 0){
             timeString = 12 + ":" + minute + " AM";
         }

@@ -92,11 +92,7 @@ public class EventActivity extends AppCompatActivity {
 
         });
 
-        String[] items = {"All", "Anderson Commons", "Meyer Science Center", "Smith-Traber", "Chrouser Sports", "Fischer",
-                "North Harrison Hall", "McManis-Evans", "Campus Store", "College Ave Apartments", "Terrace Apartments",
-                "Saint & Elliot Apartments", "Michigan-Crescent Apartments", "Sports Fields", "BGH", "Blanchard",
-                "Adams", "Williston Hall", "Memorial Student Center", "Armerding", "Wyngarden & Schell", "Buswell Library",
-                "Edman Chapel", "Wade Center", "Public Library"};
+        String[] items = CampusLocations.sorted();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
