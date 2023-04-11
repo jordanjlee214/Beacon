@@ -1,7 +1,5 @@
 package com.example.beacon;
 
-import static android.os.SystemClock.sleep;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
@@ -9,10 +7,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.beacon.databinding.ActivityMapsBinding;
@@ -40,9 +39,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -58,6 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Ping ping;
     private HashMap<String,LatLng> pingList;
     private HashMap<String, Marker> markerList;
+    private HashMap<String, String> eventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,21 +75,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             getDeviceLocation();
             ping.togglePing();
+            //TODO link to ping form fragment
         });
 
+        AppCompatButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener((view -> sendToActivity(MainActivity.class)));
         pingList = new HashMap<>();
         markerList = new HashMap<>();
+        eventList = new HashMap<>();
+        for(Location l:MainActivity.locDat)
+            eventList.put(l.building,"");
+    }
+
+    private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
+        Intent switchToNewActivity= new Intent(MapsActivity.this, a);
+        startActivity(switchToNewActivity);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        //finish();
     }
 
     protected void getDeviceLocation() {
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try {
             if (mLocationPermissionGranted) {
-                Task<Location> location = mFusedLocationProviderClient.getLastLocation();
-                Location out;
+                Task<android.location.Location> location = mFusedLocationProviderClient.getLastLocation();
+                android.location.Location out;
                 location.addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Location currentLocation = (Location) task.getResult();
+                        android.location.Location currentLocation = (android.location.Location) task.getResult();
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         if(ping.isOn()) {
                             mRef.child("lat").setValue(currentLocation.getLatitude());
@@ -180,16 +190,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(41.869092, -88.099211)));
-        for(LocationData e:MainActivity.locDat){
-            mMap.addMarker(new MarkerOptions().position(e.latLng).title(e.building));
+
+        DatabaseReference eRef = FirebaseDatabase.getInstance().getReference().child("Events");
+        eRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot s : snapshot.getChildren()){
+                    String eventID = s.getKey();
+                    String name = (String) s.child("eventLocation").getValue();
+                    String description = eventList.get(name);
+                    System.out.println(name);
+                    eventList.put(name,description+ "Event Name:"+s.child("eventName").getValue()+"\n" +
+                            "Creator:"+s.child("creatorUsername").getValue()+"\n" +
+                            "Date:"+s.child("eventDate").getValue()+"\n" +
+                            "Start Time:"+s.child("eventStartTime").getValue()+"\n" +
+                            "End Time:"+s.child("eventEndTime").getValue()+"\n" +
+                            "Description"+s.child("eventDescription").getValue()+"\n");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        for(Location e:MainActivity.locDat){ //place location pins on map
+            MarkerOptions locPin = new MarkerOptions();
+            locPin.position(e.latLng);
+            locPin.title(e.building);
+            locPin.snippet(eventList.get(e.building));
+
+            Marker m = mMap.addMarker(locPin);
         }
 
         getPings();
 
-        // Add a marker in Sydney and move the camera
-        /*LatLng sydney = new LatLng(-41.860428, -88.09309);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+        mMap.setOnMarkerClickListener(marker -> {
+            String title = marker.getTitle();
+            Intent intent = new Intent(MapsActivity.this, EventActivity.class);
+            intent.putExtra("methodName","setFilter");
+            intent.putExtra("location",title);
+            startActivity(intent);
+            return true;
+        });
     }
 
     private void getPings() {
@@ -214,14 +257,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             markerList.remove(userID);
                         }
                     }
-                }
-                for (String m:pingList.keySet()) {
-                    if(markerList.containsKey(m)){
-                        markerList.get(m).setPosition(pingList.get(m));
-                    }else{ //key does not have a marker
-                        markerList.put(m, mMap.addMarker(new MarkerOptions().position(pingList.get(m)).title((String) snapshot.child("username").getValue()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
+                    for (String m:pingList.keySet()) {
+                        if(markerList.containsKey(m)){
+                            markerList.get(m).setPosition(pingList.get(m));
+                        }else{ //key does not have a marker
+                            MarkerOptions newMarker = new MarkerOptions();
+                            newMarker.position(pingList.get(m));
+                            newMarker.title((String) s.child("username").getValue());
+                            newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                            markerList.put(m, mMap.addMarker(newMarker));
+                        }
                     }
                 }
+
             }
 
             @Override
