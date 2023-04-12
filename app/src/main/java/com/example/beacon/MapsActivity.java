@@ -5,12 +5,20 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.beacon.databinding.ActivityMapsBinding;
@@ -28,6 +36,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +53,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
 
+    private String currentUserID;
+
     private static final String Fine_location = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String Coarse_location = Manifest.permission.ACCESS_COARSE_LOCATION;
     private boolean mLocationPermissionGranted = false;
@@ -51,22 +62,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final float DEFAULT_ZOOM = 15f;
     private DatabaseReference mRef; //reads and writes to Firebase database
     private Ping ping;
+    private boolean locationSuccessful;
     private HashMap<String,LatLng> pingList;
     private HashMap<String, Marker> markerList;
     private HashMap<String, String> eventList;
     private AppCompatButton pingSwitch, backButton, eventButton;
     private String selectedLoc; //send locations to event page
 
+    private DatabaseReference pingInfoRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        currentUserID = user.getUid().toString();
         mRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
+        pingInfoRef = FirebaseDatabase.getInstance().getReference().child("Pings");
         com.example.beacon.databinding.ActivityMapsBinding binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getLocationPermission();
         ping = new Ping(mRef, user, this);
+
+        locationSuccessful = true; //this boolean says if location finding was successful or not
+
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!((boolean)snapshot.child("ping").getValue())){
+                    mRef.child("lat").setValue(0);
+                    mRef.child("lng").setValue(0);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         //Set buttons
         pingSwitch = findViewById(R.id.ping);
@@ -74,9 +107,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            getDeviceLocation();
-            ping.togglePing();
-            //TODO link to ping form fragment
+            openPingForm();
+            updateUserLocation();
         });
 
         backButton = findViewById(R.id.backButton);
@@ -111,15 +143,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Task<android.location.Location> location = mFusedLocationProviderClient.getLastLocation();
                 android.location.Location out;
                 location.addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful() && task.getResult() != null) {
                         android.location.Location currentLocation = (android.location.Location) task.getResult();
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         if(ping.isOn()) {
                             mRef.child("lat").setValue(currentLocation.getLatitude());
                             mRef.child("lng").setValue(currentLocation.getLongitude());
                         }
+                        locationSuccessful = true;
+
                     } else {
-                        Toast.makeText(MapsActivity.this, "unable to get location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show();
+                        locationSuccessful = false;
+
+                        LocationManager locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
+                        Criteria criteria = new Criteria();
+                        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+                        locationManager.requestLocationUpdates(bestProvider, (long) 1000, (float) 0, new LocationListener() {
+                            @Override
+                            public void onLocationChanged(@NonNull android.location.Location location) {
+
+                            }
+                        });
                     }
                 });
             }
@@ -200,7 +245,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(41.869092, -88.099211)));
-        
+
         for(Location e:MainActivity.locDat){ //place location pins on map
             MarkerOptions locPin = new MarkerOptions();
             locPin.position(e.latLng);
@@ -248,11 +293,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             newMarker.position(pingList.get(m));
                             newMarker.title((String) s.child("username").getValue());
                             newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                            if(userID.equals(currentUserID)) //if its the current user's pin, make it purple
+                                newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
                             markerList.put(m, mMap.addMarker(newMarker));
                         }
                     }
                 }
-
             }
 
             @Override
@@ -261,5 +307,97 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+
+    public void updateUserLocation(){ //toggles the ping and tracks device location
+        getDeviceLocation();
+        if(locationSuccessful)
+        {
+            ping.togglePing();
+        }
+        Log.i("jordanjlee", ""+ ping.isOn());
+        Log.i("jordanjlee", "locationSuccessful: "+ locationSuccessful);
+    }
+
+
+    private void openPingForm(){
+        //if you are turning a ping on, open the form
+        mRef.child("ping").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if((boolean) snapshot.getValue()){ //its pinged already, so just remove the ping info from database
+                    removePingInfo();
+                }
+                else{ //its not pinged, so open the ping form
+                    PingInfoFragment pingInfoFragment = PingInfoFragment.newInstance(currentUserID);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+                    transaction.addToBackStack(null);
+                    transaction.add(R.id.map, pingInfoFragment, "BLANK_FRAGMENT").commit();
+                    makeButtonsVisible(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void makeButtonsVisible(boolean visible){ //makes the buttons visible or invisible for when the ping form displays
+        if(visible){
+            pingSwitch.setVisibility(View.VISIBLE);
+            backButton.setVisibility(View.VISIBLE);
+            eventButton.setVisibility(View.VISIBLE);
+        }
+        else{
+            pingSwitch.setVisibility(View.GONE);
+            backButton.setVisibility(View.GONE);
+            eventButton.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onBackPressed() { //closes the ping form fragment
+        super.onBackPressed();
+
+        makeButtonsVisible(true);
+
+        /*in the case that you press the back button
+            and close the ping form fragment before filling it out,
+            this will check and see if ping info has been put on
+            the database. if it hasn't, that means nothing was
+            sent. therefore, we turn off the location ping if it is on
+            and take it off the map.
+        */
+        pingInfoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.child(currentUserID).exists()){
+                    if(ping.isOn()) //if you had been pinged, update it again
+                        updateUserLocation();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void removePingInfo(){ //removes the ping info from the database
+        pingInfoRef.child(currentUserID).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    Toast.makeText(MapsActivity.this, "You are no longer pinged.", Toast.LENGTH_SHORT).show();
+                    //TODO: Send notification?
+                }
+            }
+        });
+    }
+
 }
 

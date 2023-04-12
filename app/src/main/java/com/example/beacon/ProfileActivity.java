@@ -126,5 +126,6 @@ public class ProfileActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         closeButton.setVisibility(View.GONE);
+
     }
 }

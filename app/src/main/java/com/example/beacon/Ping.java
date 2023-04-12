@@ -43,6 +43,10 @@ public class Ping {
         return pingOn;
     }
 
+    public void onOrOff(boolean on){
+        pingOn = on;
+    }
+
     public void togglePing(){
 
 
