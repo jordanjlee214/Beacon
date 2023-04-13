@@ -25,6 +25,7 @@ public class DeleteEventPage extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference eventRef;
+    private RecyclerView recyclerView;
 
     private Query query;
     private ArrayList<String> myEvents;
@@ -33,45 +34,14 @@ public class DeleteEventPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.delete_event);
 
+        myEvents = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         eventRef = FirebaseDatabase.getInstance().getReference().child("Events");
         deleteEventButton = findViewById(R.id.deleteEvent_button);
 
-
+        recyclerView = findViewById(R.id.deleteEventRecyclerView);
         setUpMyEvents();
-        eventRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-/*
-
-                ArrayList<String> myEvents = new ArrayList<>();
-                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    String item = itemSnapshot.getValue(Event.class).toString();
-                    myEvents.add(item);
-                }
-
-               RecyclerView recyclerView = findViewById(R.id.deleteEventRecyclerView);
-               eventAdapter adapter = new eventAdapter(myEvents);                 recyclerView.setAdapter(adapter);
-               recyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
-*/
-            setUpMyEvents();
-
-          }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-
-        });
-        RecyclerView recyclerView = findViewById(R.id.deleteEventRecyclerView);
-
-        DeleteEventAdapter adapter = new DeleteEventAdapter(this, myEvents);
-
-        recyclerView.setAdapter(adapter);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
 
 
         deleteEventButton.setOnClickListener(new View.OnClickListener() {
@@ -82,16 +52,18 @@ public class DeleteEventPage extends AppCompatActivity {
 
     };
     private void setUpMyEvents() {
-        query = eventRef.orderByChild("creatorID").equalTo(mAuth.getCurrentUser().getUid());
-        query.addValueEventListener(new ValueEventListener() {
+        eventRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                ArrayList<String> myEvents = new ArrayList<>();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    String item = itemSnapshot.getValue(Event.class).toString();
-                    myEvents.add(item);
+                    if(itemSnapshot.child("creatorID").getValue().toString().equals(mAuth.getCurrentUser().getUid())){
+                        String item = itemSnapshot.getValue(Event.class).toString();
+                        myEvents.add(item);
+                    }
                 }
+                DeleteEventAdapter adapter = new DeleteEventAdapter(myEvents);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
             }
 
             @Override
