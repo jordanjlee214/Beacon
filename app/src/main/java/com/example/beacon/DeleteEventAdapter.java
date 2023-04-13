@@ -15,10 +15,8 @@ public class DeleteEventAdapter extends RecyclerView.Adapter<DeleteEventAdapter.
 
     ArrayList<String> data;
 
-    Context context;
 
-    public DeleteEventAdapter(Context context, ArrayList<String> data) {
-        this.context = context;
+    public DeleteEventAdapter(ArrayList<String> data) {
         this.data = data;
     }
 
