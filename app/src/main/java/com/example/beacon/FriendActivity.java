@@ -2,6 +2,7 @@ package com.example.beacon;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -135,6 +136,13 @@ public class FriendActivity extends AppCompatActivity {
         });
         if(blocked.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
         else xList.setAdapter(blockedAdaptor);
+    }
+
+    private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity that you put in the argument
+        Intent switchToNewActivity= new Intent(FriendActivity.this, a);
+        startActivity(switchToNewActivity);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        //finish();
     }
 
     //TODO Connect searchbar

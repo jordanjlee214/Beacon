@@ -78,13 +78,10 @@ public class EventActivity extends AppCompatActivity {
                     String item = itemSnapshot.getValue(Event.class).toString();
                     events.add(item);
                 }
-
                 RecyclerView recyclerView = findViewById(R.id.eventRecyclerView);
                 eventAdapter adapter = new eventAdapter(events);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
-
-
             }
 
             @Override
@@ -92,6 +89,7 @@ public class EventActivity extends AppCompatActivity {
             }
 
         });
+
 
 
 
