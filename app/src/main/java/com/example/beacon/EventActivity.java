@@ -32,6 +32,8 @@ public class EventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private DatabaseReference eventRef;
+    private DatabaseReference friendsRef;
+    private DatabaseReference databaseRef;
     private String[] items = CampusLocations.sorted();
 
     //ArrayList<String> events;
@@ -42,7 +44,10 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         mAuth = FirebaseAuth.getInstance();
+
         eventRef = FirebaseDatabase.getInstance().getReference().child("Events");
+        friendsRef = FirebaseDatabase.getInstance().getReference().child("Friends");
+        databaseRef = FirebaseDatabase.getInstance().getReference();
 
         createEventButton = findViewById(R.id.createEvent_button);
         backButton = findViewById(R.id.backButton);
@@ -65,23 +70,40 @@ public class EventActivity extends AppCompatActivity {
 
         deleteEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { sendToActivity(DeleteEventPage.class); }
+            public void onClick(View view) {
+                sendToActivity(DeleteEventPage.class);
+            }
         });
 
 
-        eventRef.addValueEventListener(new ValueEventListener() {
+        databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                String thisUserID = mAuth.getUid();
                 ArrayList<String> events = new ArrayList<>();
-                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    String item = itemSnapshot.getValue(Event.class).toString();
-                    events.add(item);
+                for (DataSnapshot eventSnapshot : dataSnapshot.child("Events").getChildren()) {
+                    if (!eventSnapshot.getValue(Event.class).getPublic()){
+                        String eventCreatorId = eventSnapshot.getValue(Event.class).getCreatorID();
+                        for (DataSnapshot friendSnapshot : dataSnapshot.child("Friends").child(thisUserID).getChildren()){
+                            if (friendSnapshot.equals(eventCreatorId)){
+                                String item = eventSnapshot.getValue(Event.class).toString();
+                                events.add(item);
+                                break;
+                            }
+                        }
+                    } else {
+                        String item = eventSnapshot.getValue(Event.class).toString();
+                        events.add(item);
+                    }
                 }
+
                 RecyclerView recyclerView = findViewById(R.id.eventRecyclerView);
                 eventAdapter adapter = new eventAdapter(events);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
+
+
             }
 
             @Override
@@ -91,8 +113,6 @@ public class EventActivity extends AppCompatActivity {
         });
 
 
-
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner spinner = (Spinner) findViewById(R.id.location_filter);
@@ -100,7 +120,9 @@ public class EventActivity extends AppCompatActivity {
 
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { filterEvents(); }
+            public void onClick(View view) {
+                filterEvents();
+            }
         });
 
         //to auto filter events by location if sent from map marker
@@ -111,13 +133,16 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
-        Intent switchToNewActivity= new Intent(EventActivity.this, a);
+        Intent switchToNewActivity = new Intent(EventActivity.this, a);
         startActivity(switchToNewActivity);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         //finish();
     }
 
-    private void filterEvents(){
+    /**
+     * reads location option from spinner and displays only events with matching location
+     */
+    private void filterEvents() {
 
         Spinner location = findViewById(R.id.location_filter);
         eventRef.addValueEventListener(new ValueEventListener() {
@@ -130,7 +155,7 @@ public class EventActivity extends AppCompatActivity {
                 //stores location to filter events by
                 String thisLocation = (String) location.getSelectedItem();
 
-                if (thisLocation.equals("All")){
+                if (thisLocation.equals("All")) {
                     for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                         String item = itemSnapshot.getValue(Event.class).toString();
                         events.add(item);
@@ -163,6 +188,35 @@ public class EventActivity extends AppCompatActivity {
         });
     }
 
+    private boolean verifyFriends(String eventCreatorID) {
+
+        boolean verified = false;
+
+        eventRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                for (DataSnapshot itemSnapshot : dataSnapshot.child(eventCreatorID).getChildren()) {
+                    if (itemSnapshot.equals(mAuth.getUid())){
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+
+        });
+
+        return verified;
+
+    }
+
+
+
     /**
      *
      * @param location
@@ -180,5 +234,6 @@ public class EventActivity extends AppCompatActivity {
         filter.setSelection(index);
         filterEvents();
     }
+
 
 }
