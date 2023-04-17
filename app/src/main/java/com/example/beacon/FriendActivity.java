@@ -42,7 +42,7 @@ public class FriendActivity extends AppCompatActivity {
     //the current user
     FirebaseUser current;
     //the reference paths for each lists of data for current
-    DatabaseReference friendsReference, blockedReference, requestsReference;
+    DatabaseReference friendsReference, blockedReference, requestsReference, usersRef;
     //Adaptors
     UserAdaptor friendAdaptor, blockedAdaptor, emptyListAdaptor;
     RequestAdaptor rAdaptor;
@@ -60,6 +60,7 @@ public class FriendActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         current = mAuth.getCurrentUser();
+        usersRef = database.getReference().child("Users");
 
         //set up RecyclerView
         xList = findViewById(R.id.listOfX);
@@ -84,29 +85,45 @@ public class FriendActivity extends AppCompatActivity {
     public void showFriends(View view){
         //Step 1: get database's reference
         friendsReference = database.getReference().child("Friends").child(current.getUid());
-        //Step 2: add listener
-        friendsReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                User newUser = snapshot.getValue(User.class);
-                if(!friendlist.contains(newUser))
-                    friendlist.add(newUser);
-            }
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {}
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-        //Step 3: set up adapter
+        //if its empty, show empty message
         if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
         else xList.setAdapter(friendAdaptor);
+
+        //Step 2: Set up listener
+        friendsReference.addValueEventListener(new ValueEventListener() { //read the Friends branch in database
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot friendChild : snapshot.getChildren()){ //iterate and visit each friend
+                    //the key of each friendChild is the ID of that user
+                    usersRef.addValueEventListener(new ValueEventListener() { //access that friend's data in the User branch
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String friendID = friendChild.getKey().toString();
+                            User newUser = new User();
+                            newUser.buildUserFromSnapshot(snapshot, friendID); //fill user object with database info
+                            if(!hasUser(newUser)) //must check if user is already in list
+                                friendlist.add(newUser); //if user isn't already in adapter's list, add it
+                            xList.setAdapter(friendAdaptor); //since we know there is at least 1 user, set adapter to friend adapter
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+                if(friendlist.isEmpty()) //if friends list is STILL empty even after reading database
+                    xList.setAdapter(emptyListAdaptor); //show empty message
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     /*public void showRequests(View view){
@@ -129,7 +146,7 @@ public class FriendActivity extends AppCompatActivity {
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {}
 
             @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            public void onChildMoved(@NonNull DataSnapshot snapshot,@Nullable String previousChildName) {}
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -145,6 +162,17 @@ public class FriendActivity extends AppCompatActivity {
         //finish();
     }
 
+    /**
+     * Checks if friendlist already has a User, does this by checking
+     * existence of a user ID.
+     */
+    private boolean hasUser(User checkUser){
+        for(User u : friendlist){
+            if(u.getUserID().equals(checkUser.getUserID()))
+                return true;
+        }
+        return false;
+    }
     //TODO Connect searchbar
 
 }
