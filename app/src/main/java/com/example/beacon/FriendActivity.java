@@ -86,37 +86,63 @@ public class FriendActivity extends AppCompatActivity {
         //Step 1: get database's reference
         friendsReference = database.getReference().child("Friends").child(current.getUid());
 
-        //if its empty, show empty message
-        if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
-        else xList.setAdapter(friendAdaptor);
-
         //Step 2: Set up listener
+        /*
+            THIS COMMENTED OUT SECTION is an alternate strategy for adding to Adapter.
+            It retrieves ALL user data and puts it in the friendList.
+            The alternate method that isn't commented out just stores ID and username, a lot simpler.
+         */
+//        friendsReference.addValueEventListener(new ValueEventListener() { //read the Friends branch in database
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for(DataSnapshot friendChild : snapshot.getChildren()){ //iterate and visit each friend
+//                    //the key of each friendChild is the ID of that user
+//                    usersRef.addValueEventListener(new ValueEventListener() { //access that friend's data in the User branch
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                            String friendID = friendChild.getKey().toString();
+//                            User newUser = new User();
+//                            newUser.buildUserFromSnapshot(snapshot, friendID); //fill user object with database info
+//                            if(!hasUser(newUser)) //must check if user is already in list
+//                                friendlist.add(newUser); //if user isn't already in adapter's list, add it
+//                            xList.setAdapter(friendAdaptor); //since we know there is at least 1 user, set adapter to friend adapter
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                        }
+//                    });
+//                }
+//                if(friendlist.isEmpty()) //if friends list is STILL empty even after reading database
+//                    xList.setAdapter(emptyListAdaptor); //show empty message
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+
         friendsReference.addValueEventListener(new ValueEventListener() { //read the Friends branch in database
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot friendChild : snapshot.getChildren()){ //iterate and visit each friend
                     //the key of each friendChild is the ID of that user
-                    usersRef.addValueEventListener(new ValueEventListener() { //access that friend's data in the User branch
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String friendID = friendChild.getKey().toString();
-                            User newUser = new User();
-                            newUser.buildUserFromSnapshot(snapshot, friendID); //fill user object with database info
-                            if(!hasUser(newUser)) //must check if user is already in list
-                                friendlist.add(newUser); //if user isn't already in adapter's list, add it
-                            xList.setAdapter(friendAdaptor); //since we know there is at least 1 user, set adapter to friend adapter
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                    String friendID = friendChild.getKey().toString();
+                    String friendUsername = friendChild.getValue().toString();
+                    User newUser = new User();
+                    newUser.setUserID(friendID);
+                    newUser.setUsername(friendUsername);
+                    if(!hasUser(newUser)) //must check if user is already in list
+                        friendlist.add(newUser); //if user isn't already in adapter's list, add it
                 }
                 if(friendlist.isEmpty()) //if friends list is STILL empty even after reading database
                     xList.setAdapter(emptyListAdaptor); //show empty message
-
-
+                else
+                    xList.setAdapter(friendAdaptor); //if there is at least 1 user, set adapter to friend adapter
             }
 
             @Override
