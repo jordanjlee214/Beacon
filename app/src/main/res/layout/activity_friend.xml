@@ -14,16 +14,16 @@
         android:id="@+id/topText"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Manage Friends"
         android:fontFamily="@font/outfit"
-        android:textColor="@color/white"
+        android:text="Manage Friends"
         android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="40sp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints,TextSizeCheck" />
 
     <!--Tabs-->
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="55dp"
@@ -32,43 +32,53 @@
 
         <Button
             android:id="@+id/friends"
-            android:layout_width="130dp"
+            android:layout_width="105dp"
             android:layout_height="match_parent"
-            android:text="Friends"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="@+id/friendRequests"
-            app:layout_constraintTop_toBottomOf="parent"
             android:layout_gravity="start"
-            android:onClick="showFriends"
+            android:backgroundTint="@color/apricot"
             android:fontFamily="@font/satoshi_black"
-            android:backgroundTint="@color/apricot"/>
+            android:onClick="showFriends"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Friends"
+            tools:ignore="TextSizeCheck" />
 
         <Button
             android:id="@+id/friendRequests"
-            android:layout_width="130dp"
+            android:layout_width="105dp"
             android:layout_height="match_parent"
-            android:text="Requests"
-            app:layout_constraintLeft_toLeftOf="@id/friends"
-            app:layout_constraintRight_toRightOf="@id/blocked"
-            app:layout_constraintTop_toBottomOf="parent"
-            android:layout_gravity="center"
-            android:onClick="showRequests"
+            android:backgroundTint="@color/apricot"
             android:fontFamily="@font/satoshi_black"
-            android:backgroundTint="@color/apricot"/>
+            android:onClick="showRequests"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Requests"
+            android:layout_toRightOf="@id/friends"/>
 
         <Button
             android:id="@+id/blocked"
-            android:layout_width="130dp"
+            android:layout_width="105dp"
             android:layout_height="match_parent"
-            android:text="Blocked"
-            app:layout_constraintLeft_toRightOf="@id/friendRequests"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"
-            android:layout_gravity="end"
-            android:onClick="showBlocked"
+            android:backgroundTint="@color/apricot"
             android:fontFamily="@font/satoshi_black"
-            android:backgroundTint="@color/apricot"/>
-    </FrameLayout>
+            android:onClick="showBlocked"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Blocked"
+            android:layout_toRightOf="@id/friendRequests"/>
+
+        <Button
+            android:id="@+id/search"
+            android:layout_width="105dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/apricot"
+            android:fontFamily="@font/satoshi_black"
+            android:onClick="toProfileFragment"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Search"
+            android:layout_toRightOf="@id/blocked"/>
+    </RelativeLayout>
 
     <!--List of (Connect to Firebase)-->
     <androidx.recyclerview.widget.RecyclerView

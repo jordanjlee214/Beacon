@@ -77,7 +77,6 @@ public class UserAdaptor extends
         //Set item view
         TextView textView = holder.nameTextView;
         textView.setText(user.getUsername());
-
     }
 
     /**

@@ -2,7 +2,6 @@ package com.example.beacon;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -42,7 +41,7 @@ public class FriendActivity extends AppCompatActivity {
     //the current user
     FirebaseUser current;
     //the reference paths for each lists of data for current
-    DatabaseReference friendsReference, blockedReference, requestsReference, usersRef;
+    DatabaseReference friendsReference, blockedReference, requestsReference;
     //Adaptors
     UserAdaptor friendAdaptor, blockedAdaptor, emptyListAdaptor;
     RequestAdaptor rAdaptor;
@@ -60,7 +59,6 @@ public class FriendActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         current = mAuth.getCurrentUser();
-        usersRef = database.getReference().child("Users");
 
         //set up RecyclerView
         xList = findViewById(R.id.listOfX);
@@ -73,9 +71,8 @@ public class FriendActivity extends AppCompatActivity {
         friendAdaptor = new UserAdaptor(friendlist);
         blockedAdaptor = new UserAdaptor(blocked);
         emptyListAdaptor = new UserAdaptor("Nothing to see here!");
-        //TODO Code RequestAdaptor
+        rAdaptor = new RequestAdaptor(requests);
 
-        //rAdaptor = new RequestAdaptor(requests);
         //Set Adaptors for each button
         xList.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -85,64 +82,49 @@ public class FriendActivity extends AppCompatActivity {
     public void showFriends(View view){
         //Step 1: get database's reference
         friendsReference = database.getReference().child("Friends").child(current.getUid());
+        //Step 2: add listener
+        friendsReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User newUser = snapshot.getValue(User.class);
+                if(!friendlist.contains(newUser))
+                    friendlist.add(newUser);
+                friendAdaptor.notifyDataSetChanged();
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User changedUser = snapshot.getValue(User.class);
+                if(friendlist.contains(changedUser)) {
+                    friendlist.remove(changedUser);
+                    friendlist.add(changedUser);
+                }
+                friendAdaptor.notifyDataSetChanged();
+            }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                User removedUser = snapshot.getValue(User.class);
+                //find the user who's id matches removedUser's
+                for(User u : friendlist) {
+                    if(u.getUserID().equals(removedUser.getUserID())) friendlist.remove(removedUser);
+                }
+                friendAdaptor.notifyDataSetChanged();
+            }
+            @Override //Do priorities change?
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+        //Step 3: set up adapter
+        if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
+        else xList.setAdapter(friendAdaptor);
+    }
 
-        //Step 2: Set up listener
-        /*
-            THIS COMMENTED OUT SECTION is an alternate strategy for adding to Adapter.
-            It retrieves ALL user data and puts it in the friendList.
-            The alternate method that isn't commented out just stores ID and username, a lot simpler.
-         */
-//        friendsReference.addValueEventListener(new ValueEventListener() { //read the Friends branch in database
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for(DataSnapshot friendChild : snapshot.getChildren()){ //iterate and visit each friend
-//                    //the key of each friendChild is the ID of that user
-//                    usersRef.addValueEventListener(new ValueEventListener() { //access that friend's data in the User branch
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                            String friendID = friendChild.getKey().toString();
-//                            User newUser = new User();
-//                            newUser.buildUserFromSnapshot(snapshot, friendID); //fill user object with database info
-//                            if(!hasUser(newUser)) //must check if user is already in list
-//                                friendlist.add(newUser); //if user isn't already in adapter's list, add it
-//                            xList.setAdapter(friendAdaptor); //since we know there is at least 1 user, set adapter to friend adapter
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                        }
-//                    });
-//                }
-//                if(friendlist.isEmpty()) //if friends list is STILL empty even after reading database
-//                    xList.setAdapter(emptyListAdaptor); //show empty message
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
-        friendsReference.addValueEventListener(new ValueEventListener() { //read the Friends branch in database
+    public void showRequests(View view){
+        requestsReference = database.getReference().child("FriendRequest");
+        requestsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot friendChild : snapshot.getChildren()){ //iterate and visit each friend
-                    //the key of each friendChild is the ID of that user
-                    String friendID = friendChild.getKey().toString();
-                    String friendUsername = friendChild.getValue().toString();
-                    User newUser = new User();
-                    newUser.setUserID(friendID);
-                    newUser.setUsername(friendUsername);
-                    if(!hasUser(newUser)) //must check if user is already in list
-                        friendlist.add(newUser); //if user isn't already in adapter's list, add it
-                }
-                if(friendlist.isEmpty()) //if friends list is STILL empty even after reading database
-                    xList.setAdapter(emptyListAdaptor); //show empty message
-                else
-                    xList.setAdapter(friendAdaptor); //if there is at least 1 user, set adapter to friend adapter
+
             }
 
             @Override
@@ -150,11 +132,9 @@ public class FriendActivity extends AppCompatActivity {
 
             }
         });
+        if(requests.isEmpty()) xList.setAdapter(emptyListAdaptor);
+        else xList.setAdapter(rAdaptor);
     }
-
-    /*public void showRequests(View view){
-        //TODO code up
-    }*/
 
     public void showBlocked(View view){
         blockedReference = database.getReference().child("Blocked").child(current.getUid());
@@ -166,14 +146,22 @@ public class FriendActivity extends AppCompatActivity {
                     friendlist.add(newUser);
             }
             @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
-
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User changedUser = snapshot.getValue(User.class);
+                if(friendlist.contains(changedUser)) {
+                    friendlist.remove(changedUser);
+                    friendlist.add(changedUser);
+                }
+                friendAdaptor.notifyDataSetChanged();
+            }
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {}
-
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                User removedUser = snapshot.getValue(User.class);
+                friendlist.remove(removedUser);
+                friendAdaptor.notifyDataSetChanged();
+            }
             @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot,@Nullable String previousChildName) {}
-
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
@@ -181,24 +169,6 @@ public class FriendActivity extends AppCompatActivity {
         else xList.setAdapter(blockedAdaptor);
     }
 
-    private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity that you put in the argument
-        Intent switchToNewActivity= new Intent(FriendActivity.this, a);
-        startActivity(switchToNewActivity);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        //finish();
-    }
-
-    /**
-     * Checks if friendlist already has a User, does this by checking
-     * existence of a user ID.
-     */
-    private boolean hasUser(User checkUser){
-        for(User u : friendlist){
-            if(u.getUserID().equals(checkUser.getUserID()))
-                return true;
-        }
-        return false;
-    }
-    //TODO Connect searchbar
+    public void toProfileFragment(View view){}
 
 }

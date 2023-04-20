@@ -5,15 +5,15 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:backgroundTint="@color/apricot">
 
     <TextView
         android:id="@+id/contact_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:backgroundTint="@color/apricot"
         android:fontFamily="@font/outfit"
         android:textColor="@color/white"
         />

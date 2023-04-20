@@ -38,6 +38,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
@@ -180,9 +181,10 @@ public class LoginActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.child(mAuth.getCurrentUser().getUid()).exists()){ //if the user is already in database
                         Log.d(TAG, "EXISTENCE: User already exists ");
+                        getNotificationToken();
                         sendToMain(); //just send to home screen
                     }
-                    else{
+                    else {
                         Log.d(TAG, "EXISTENCE: User must be stored in database ");
                         setUpUserData(user); //if not, store user data on database
                     }
@@ -236,6 +238,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "User data in database.", Toast.LENGTH_SHORT).show();
+                    getNotificationToken();
                     sendToMain();
                 }
                 else{
@@ -280,6 +283,24 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void getNotificationToken(){ //gets a notification token and puts it on the database under the user
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        usersRef.child(mAuth.getCurrentUser().getUid()).child("notificationKeys").child(token).setValue(true);
+                    }
+                });
+    }
+
 
 
     /** this method is for alternate sign ins for testing.
