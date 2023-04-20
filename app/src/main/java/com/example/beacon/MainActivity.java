@@ -1,13 +1,26 @@
 package com.example.beacon;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
@@ -34,6 +47,28 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO fix SignInClient
     private SignInClient oneTapClient;
+
+    private String[] notiPermissions = new String[]{
+            Manifest.permission.POST_NOTIFICATIONS
+    };
+
+    private boolean permission_post_notification =false;
+
+    //result launcher to request notification permissions
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                   permission_post_notification = true;
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                    permission_post_notification = false;
+                    Toast.makeText(MainActivity.this, "Permission for notifiactions is denied. Please enable to receive notifcations.", Toast.LENGTH_SHORT).show();
+               showPermissionDialog("Permission Dialog");
+                }
+            });
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
         profileActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                checkNotificationPermission();
                 sendToActivity(ProfileActivity.class);
             }
+
         });
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
         locDat.add(new Location("Edman Chapel", new LatLng(41.86994583299493, -88.10065332801665)));
         locDat.add(new Location("Wade Center", new LatLng(41.87058376852388, -88.10108889030053)));
         locDat.add(new Location("Public Library", new LatLng(41.86681180911569, -88.10469784804484)));
+
+        checkNotificationPermission();
     }
     @Override
     public void onStart() {
@@ -142,6 +181,12 @@ public class MainActivity extends AppCompatActivity {
             sendToActivity(LoginActivity.class);
             finish();
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
@@ -166,6 +211,73 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void checkNotificationPermission(){
+        if(!permission_post_notification){
+            askNotificationPermission();
+            Log.i("permission", "not enabled yet");
+        }
+        else{
+            Toast.makeText(MainActivity.this, "Notification permissions granted.", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    /**
+     * Notification checking code comes from this tutorial:
+     * https://www.youtube.com/watch?v=_UubmZ4qJlI
+     * and
+     * https://firebase.google.com/docs/cloud-messaging/android/client
+     */
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, notiPermissions[0]) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // FCM SDK (and your app) can post notifications.
+                Log.i("Permission: ", "it's granted!");
+            }
+            else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                    // TODO: display an educational UI explaining to the user the features that will be enabled
+                    //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                    //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                    //       If the user selects "No thanks," allow the user to continue without notifications.
+
+
+                } else {
+                    // Directly ask for the permission
+
+                }
+                Log.i("Permission: ", "requestPerm");
+                requestPermissionLauncher.launch(notiPermissions[0]);
+            }
+        }
+    }
+
+    private void showPermissionDialog(String msg){
+        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Permission for Notifications")
+                .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent rIntent = new Intent();
+                        rIntent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        rIntent.setData(uri);
+                        startActivity(rIntent);
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
     }
 
 }
