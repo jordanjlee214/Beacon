@@ -34,7 +34,10 @@ public class ScheduleEventForm extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-
+    /**
+     * sets up Schedule event form page
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_form);
@@ -127,12 +130,18 @@ public class ScheduleEventForm extends AppCompatActivity {
 
     }
 
-    //method that generates a random ID, used for events in database
+    /**
+     * method that generates a random ID, used for events in database
+     */
     public String RandomID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
     }
 
+    /**
+     * Sends user to a new activity
+     * @param a
+     */
     private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
         Intent switchToNewActivity= new Intent(ScheduleEventForm.this, a);
         startActivity(switchToNewActivity);

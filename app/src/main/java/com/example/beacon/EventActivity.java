@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -36,8 +38,15 @@ public class EventActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private String[] items = CampusLocations.sorted();
 
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+
     //ArrayList<String> events;
 
+    /**
+     * Sets up Events page
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +62,20 @@ public class EventActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         deleteEventButton = findViewById(R.id.deleteEvent_button);
         filterButton = findViewById(R.id.filterButton);
+
+        builder.setTitle("RSVP");
+        builder.setMessage("Would you like to RSVP to this event?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //eventRef.child().child("RSVP list").setValue(mAuth.getUid());
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +109,7 @@ public class EventActivity extends AppCompatActivity {
                     if (!eventSnapshot.getValue(Event.class).getPublic()){
                         String eventCreatorId = eventSnapshot.getValue(Event.class).getCreatorID();
                         for (DataSnapshot friendSnapshot : dataSnapshot.child("Friends").child(thisUserID).getChildren()){
-                            if (friendSnapshot.equals(eventCreatorId)){
+                            if (friendSnapshot.equals(eventCreatorId) || thisUserID.equals(eventCreatorId)){
                                 String item = eventSnapshot.getValue(Event.class).toString();
                                 events.add(item);
                                 break;
@@ -132,6 +155,10 @@ public class EventActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sends user to new activity
+     * @param a the activity user is sent to
+     */
     private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
         Intent switchToNewActivity = new Intent(EventActivity.this, a);
         startActivity(switchToNewActivity);
@@ -188,38 +215,10 @@ public class EventActivity extends AppCompatActivity {
         });
     }
 
-    private boolean verifyFriends(String eventCreatorID) {
-
-        boolean verified = false;
-
-        eventRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                for (DataSnapshot itemSnapshot : dataSnapshot.child(eventCreatorID).getChildren()) {
-                    if (itemSnapshot.equals(mAuth.getUid())){
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-
-        });
-
-        return verified;
-
-    }
-
-
 
     /**
-     *
-     * @param location
+     * Sets filter on events page when coming from map activity
+     * @param location the location to filter events by
      */
     private void setFilter(String location) {
         if(location.equals(""))
