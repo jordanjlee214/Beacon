@@ -53,6 +53,8 @@ public class FriendRequest {
         toReturn.put("message", message);
         toReturn.put("receiverUser", receiver.getUsername());
         toReturn.put("senderUser", sender.getUsername());
+        toReturn.put("receiverID", receiver.getUserID());
+        toReturn.put("senderID", sender.getUserID());
         return toReturn;
     }
 }
