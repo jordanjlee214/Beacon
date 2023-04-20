@@ -176,17 +176,20 @@ public class LoginActivity extends AppCompatActivity {
     will be asked to try again */
     private void checkWheaton(FirebaseUser user){
         if(isWheatonEmail(user.getEmail())){  //if its a wheaton email, put it's info on the database if we need to
-            usersRef.addValueEventListener(new ValueEventListener() { //read the database
+            usersRef.addListenerForSingleValueEvent(new ValueEventListener() { //read the database
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.child(mAuth.getCurrentUser().getUid()).exists()){ //if the user is already in database
-                        Log.d(TAG, "EXISTENCE: User already exists ");
-                        getNotificationToken();
-                        sendToMain(); //just send to home screen
-                    }
-                    else {
-                        Log.d(TAG, "EXISTENCE: User must be stored in database ");
-                        setUpUserData(user); //if not, store user data on database
+                    if(mAuth.getCurrentUser() != null){
+
+                        if(snapshot.child(mAuth.getCurrentUser().getUid()).exists()){ //if the user is already in database
+                            Log.d(TAG, "EXISTENCE: User already exists ");
+                            getNotificationToken();
+                            sendToMain(); //just send to home screen
+                        }
+                        else {
+                            Log.d(TAG, "EXISTENCE: User must be stored in database ");
+                            setUpUserData(user); //if not, store user data on database
+                        }
                     }
                 }
 
