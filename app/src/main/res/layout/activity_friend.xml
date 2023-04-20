@@ -83,11 +83,16 @@
     <!--List of (Connect to Firebase)-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listOfX"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="545dp"
+        android:foregroundGravity="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@id/buttons"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layout_constraintTop_toBottomOf="@id/buttons"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="5dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

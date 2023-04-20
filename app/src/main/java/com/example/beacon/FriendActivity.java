@@ -2,6 +2,7 @@ package com.example.beacon;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -73,11 +74,9 @@ public class FriendActivity extends AppCompatActivity {
         emptyListAdaptor = new UserAdaptor("Nothing to see here!");
         rAdaptor = new RequestAdaptor(requests);
 
-        //Set Adaptors for each button
         xList.setLayoutManager(new LinearLayoutManager(this));
+        xList.setAdapter(new UserAdaptor("~ Press a button ~"));
     }
-
-    //TODO Change childEventListeners to valueEventListeners
 
     public void showFriends(View view){
         //Step 1: get database's reference
@@ -169,6 +168,10 @@ public class FriendActivity extends AppCompatActivity {
         else xList.setAdapter(blockedAdaptor);
     }
 
-    public void toProfileFragment(View view){}
+    public void toProfileFragment(View view){
+        Intent switchToNewActivity= new Intent(this, ProfileActivity.class);
+        startActivity(switchToNewActivity);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 
 }
