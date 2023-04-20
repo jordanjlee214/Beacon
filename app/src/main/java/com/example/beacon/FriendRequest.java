@@ -11,13 +11,23 @@ public class FriendRequest {
     /**
      * The Sender
      */
-    private User sender;
+    private User senderUser;
+
+    /**
+     * The Sender's ID
+     */
+    private String senderID;
 
     /**
      * The Receiver
      * (For Firebase)
      */
-    private User receiver;
+    private User receiverUser;
+
+    /**
+     * The Receiver's ID
+     */
+    private String receiverID;
 
     /**
      * Message to receiver
@@ -27,34 +37,34 @@ public class FriendRequest {
     /**
      * Constructor
      */
-    public FriendRequest(User sender, String message, User receiver){
-        this.sender = sender;
-        this.receiver = receiver;
+    public FriendRequest(User senderUser, String message, User receiverUser){
+        this.senderUser = senderUser;
+        senderID = senderUser.getUserID();
+        this.receiverUser = receiverUser;
+        receiverID = receiverUser.getUserID();
         this.message = message;
     }
 
-    public User getSender() {return sender;}
-    public User getReceiver() {return receiver;}
+    public User getSenderUser() {return senderUser;}
+    public User getReceiverUser() {return receiverUser;}
 
-    public String getSendersNickname(){return sender.getNickname();}
+    public String getSendersNickname(){return senderUser.getNickname();}
 
     public String getMessage() {return message;}
     public void setMessage(String message) {this.message = message;}
 
     public String getKey(){ //returns a key for the database
-        return receiver.getUserID() + "_" + sender.getUserID();
+        return receiverUser.getUserID() + "_" + senderUser.getUserID();
     }
 
     public String getReverseKey(){
-        return sender.getUserID() + "_" + receiver.getUserID();
+        return senderUser.getUserID() + "_" + receiverUser.getUserID();
     }
     public HashMap<String, Object> toMap(){ //returns a map to upload to the database
         HashMap<String, Object> toReturn = new HashMap<>();
         toReturn.put("message", message);
-        toReturn.put("receiverUser", receiver.getUsername());
-        toReturn.put("senderUser", sender.getUsername());
-        toReturn.put("receiverID", receiver.getUserID());
-        toReturn.put("senderID", sender.getUserID());
+        toReturn.put("receiverUser", receiverUser.getUsername());
+        toReturn.put("senderUser", senderUser.getUsername());
         return toReturn;
     }
 }
