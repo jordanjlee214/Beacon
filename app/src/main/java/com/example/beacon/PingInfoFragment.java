@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +28,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -151,6 +155,7 @@ public class PingInfoFragment extends Fragment {
                        Toast.makeText(getContext(), "You have now been pinged!", Toast.LENGTH_SHORT).show();
                         ((MapsActivity) getActivity()).onBackPressed(); //closes the fragment from MapsActivity
                         //TODO: send notification
+                        sendNoti();
                     }
                 });
 
@@ -160,6 +165,30 @@ public class PingInfoFragment extends Fragment {
 
             }
         });
+
+
+    }
+
+    private void sendNoti(){
+//        // See documentation on defining a message payload.
+//        Message message = new Message();
+//        Bundle msg = new Bundle();
+//        msg.putString("message","hello world!");
+//        message.setData(msg)
+//        setToken("e5ei75SCT5y7BvQ84BrBDl:APA91bFYdpubTd1aW16r-kimMY5DA5jEX_YOSwhCYw2axOLNeEWygIW8N3uoxLsTcME-9B8D_8zKjXoR7CyT003qjtOE2lqlvg_HaSwtxQ1dFhU3LNwN9CJrT0d7xJILRSvg-ORUNFdP")
+//                .build();
+//
+//// Send a message to the device corresponding to the provided
+//// registration token.
+//        String response = FirebaseMessaging.getInstance().send(message);
+//// Response is a message ID string.
+//        System.out.println("Successfully sent message: " + response);
+        AtomicInteger msgId = new AtomicInteger();
+        FirebaseMessaging.getInstance().send(new RemoteMessage.Builder(getString(R.string.senderID) + "@gcm.googleapis.com")
+                .setMessageId(Integer.toString(msgId.incrementAndGet()))
+                .addData("my_message", "Hello World")
+                .addData("my_action","SAY_HELLO")
+                .build());
 
 
     }

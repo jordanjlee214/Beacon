@@ -37,12 +37,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private Button eventActivityButton, signOutButton, friendActivityButton, mapsActivityButton, setupActivityButton, profileActivityButton;
     private TextView userDataText; // a test that displays the username to show that the user has data stored
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
     private String currentUserID;
     public static ArrayList<Location> locDat;
+    private MyFirebaseMessagingService firebaseMessagingService;
 
     //TODO fix SignInClient
     private SignInClient oneTapClient;
@@ -182,7 +184,11 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser != null){
             //this is a test: if user is signed in, it displays their name
             currentUserID = currentUser.getUid();
+            firebaseMessagingService = new MyFirebaseMessagingService();
+            firebaseMessagingService.unsubscribeAll(); //unsubscribes from all friends to stay updated
+            firebaseMessagingService.subscribeToFriends(); //subscribe to current friends
             displayUserData();
+
         }
         else{ //if user isn't signed in, send them to the log-in page
             sendToActivity(LoginActivity.class);
@@ -325,6 +331,11 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 
 }
