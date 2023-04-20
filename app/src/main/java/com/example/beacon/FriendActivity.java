@@ -73,7 +73,6 @@ public class FriendActivity extends AppCompatActivity {
         emptyListAdaptor = new UserAdaptor("Nothing to see here!");
         rAdaptor = new RequestAdaptor(requests);
 
-        //rAdaptor = new RequestAdaptor(requests);
         //Set Adaptors for each button
         xList.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -104,7 +103,10 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 User removedUser = snapshot.getValue(User.class);
-                friendlist.remove(removedUser);
+                //find the user who's id matches removedUser's
+                for(User u : friendlist) {
+                    if(u.getUserID().equals(removedUser.getUserID())) friendlist.remove(removedUser);
+                }
                 friendAdaptor.notifyDataSetChanged();
             }
             @Override //Do priorities change?
@@ -118,7 +120,20 @@ public class FriendActivity extends AppCompatActivity {
     }
 
     public void showRequests(View view){
-        requestsReference = database.getReference().child("FriendRequests");
+        requestsReference = database.getReference().child("FriendRequest");
+        requestsReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        if(requests.isEmpty()) xList.setAdapter(emptyListAdaptor);
+        else xList.setAdapter(rAdaptor);
     }
 
     public void showBlocked(View view){
