@@ -169,6 +169,6 @@ public class FriendActivity extends AppCompatActivity {
         else xList.setAdapter(blockedAdaptor);
     }
 
-    //TODO Connect searchbar
+    public void toProfileFragment(View view){}
 
 }
