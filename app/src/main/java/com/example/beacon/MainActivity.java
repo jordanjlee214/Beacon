@@ -1,5 +1,7 @@
 package com.example.beacon;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -24,6 +26,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,9 +36,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -121,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
         profileActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkNotificationPermission();
                 sendToActivity(ProfileActivity.class);
             }
 
@@ -130,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String token = FirebaseMessaging.getInstance().getToken().toString();
+                removeToken();
                 mAuth.signOut();
                 oneTapClient.signOut(); //TODO fix signOut()
                 sendToActivity(LoginActivity.class);
@@ -278,6 +285,46 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .create();
         dialog.show();
+    }
+
+    private void removeToken(){
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        HashMap<String, Object> keysMap = new HashMap<>();
+                        usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.child("notificationKeys").exists()){
+                                    for(DataSnapshot key : snapshot.child("notificationKeys").getChildren()){
+                                        if(!key.getKey().equals(token))
+                                            keysMap.put(key.getKey(), true);
+                                    }
+                                    if(!keysMap.isEmpty()) {
+                                        usersRef.child(currentUserID).child("notificationKeys").updateChildren(keysMap);
+                                    }
+                                    else{
+                                        usersRef.child(currentUserID).child("notificationKeys").setValue(null);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                    }
+                });
     }
 
 }
