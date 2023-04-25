@@ -47,6 +47,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -61,16 +62,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private DatabaseReference mRef; //reads and writes to Firebase database
-    private Ping ping;
+    private Ping ping; //this user's ping object
     private boolean locationSuccessful;
-    private HashMap<String,LatLng> pingList;
-    private HashMap<String, Marker> markerList;
+    private HashMap<String,LatLng> pingList; //All pings to be displayed
+    private HashMap<String, Marker> markerList; //All markers to be displayed
     private HashMap<String, String> eventList;
     private AppCompatButton pingSwitch, backButton, eventButton;
     private String selectedLoc; //send locations to event page
 
     private DatabaseReference pingInfoRef;
 
+    /**
+     * Sets up the Maps page
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +87,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         com.example.beacon.databinding.ActivityMapsBinding binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getLocationPermission();
+
+        //set up this user's ping
         ping = new Ping(mRef, user, this);
 
         locationSuccessful = true; //this boolean says if location finding was successful or not
@@ -115,9 +122,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         backButton.setOnClickListener((view -> sendToActivity(MainActivity.class)));
         pingList = new HashMap<>();
         markerList = new HashMap<>();
-        eventList = new HashMap<>();
+        /*eventList = new HashMap<>();
         for(Location l:MainActivity.locDat)
-            eventList.put(l.building,"");
+            eventList.put(l.building,"");*/
 
         selectedLoc = "";
         eventButton = findViewById(R.id.eventButton);
@@ -129,6 +136,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    /**
+     * Switch to another activity
+     * @param a activity to go to
+     */
     private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
         Intent switchToNewActivity= new Intent(MapsActivity.this, a);
         startActivity(switchToNewActivity);
@@ -136,6 +147,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //finish();
     }
 
+    /**
+     * Use the Google maps API to find user's location
+     * Works with Ping class to put location in database
+     */
     protected void getDeviceLocation() {
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try {
@@ -146,7 +161,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (task.isSuccessful() && task.getResult() != null) {
                         android.location.Location currentLocation = (android.location.Location) task.getResult();
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                        if(ping.isOn()) {
+                        if(ping.isOn()) { //references the Ping object
                             mRef.child("lat").setValue(currentLocation.getLatitude());
                             mRef.child("lng").setValue(currentLocation.getLongitude());
                         }
@@ -173,10 +188,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * Move the camera to a specified location
+     * @param latLng where to move to
+     */
     private void moveCamera(LatLng latLng) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, MapsActivity.DEFAULT_ZOOM));
     }
 
+    /**
+     * Create the map
+     */
     private void initMap() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -185,6 +207,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(MapsActivity.this);
     }
 
+    /**
+     * Asks user for location Permissions
+     */
     private void getLocationPermission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), Fine_location) ==
@@ -200,6 +225,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -222,8 +248,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -241,7 +266,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setLatLngBoundsForCameraTarget(new LatLngBounds(new LatLng(41.864406, -88.103689),new LatLng(41.874021, -88.087758)));
             mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
             mMap.setMinZoomPreference(15.5f);
-
 
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(41.869092, -88.099211)));
@@ -263,39 +287,71 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    /**
+     * Accesses the database to display other user's pings
+     */
     private void getPings() {
         DatabaseReference lRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        DatabaseReference fRef = FirebaseDatabase.getInstance().getReference().child("Friends").child(currentUserID);
+        ArrayList<String> friends = new ArrayList<>();
+        friends.add(currentUserID);
+        fRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(String i:friends){
+                    if(i!=currentUserID)
+                        friends.remove(i);
+                }
+                for (DataSnapshot s: snapshot.getChildren()){
+                    friends.add(s.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         lRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot s : snapshot.getChildren()){
+                System.out.println("Pings Set");
+                for (DataSnapshot s : snapshot.getChildren()){ //Loop through the users
                     String userID = s.getKey();
-                    Number lat = (Number) s.child("lat").getValue();
-                    Number lng = (Number) s.child("lng").getValue();
-                    if(lat instanceof Long)
-                        lat = ((Long) lat).doubleValue();
-                    if(lng instanceof Long)
-                        lng = ((Long) lng).doubleValue();
-                    if((boolean) s.child("ping").getValue())
-                        pingList.put(userID, new LatLng((double)lat, (double)lng));
-                    else{
-                        pingList.remove(userID);
-                        if(markerList.containsKey(userID)) {
-                            markerList.get(userID).remove();
-                            markerList.remove(userID);
+                    if(friends.contains(userID)) {
+                        Number lat = (Number) s.child("lat").getValue();
+                        Number lng = (Number) s.child("lng").getValue();
+
+                        //Make sure types are all correct from database
+                        if (lat instanceof Long)
+                            lat = ((Long) lat).doubleValue();
+                        if (lng instanceof Long)
+                            lng = ((Long) lng).doubleValue();
+
+                        //Checks user ping
+                        if ((boolean) s.child("ping").getValue())
+                            pingList.put(userID, new LatLng((double) lat, (double) lng));
+                        else {
+                            pingList.remove(userID);
+                            if (markerList.containsKey(userID)) {
+                                markerList.get(userID).remove();
+                                markerList.remove(userID);
+                            }
                         }
-                    }
-                    for (String m:pingList.keySet()) {
-                        if(markerList.containsKey(m)){
-                            markerList.get(m).setPosition(pingList.get(m));
-                        }else{ //key does not have a marker
-                            MarkerOptions newMarker = new MarkerOptions();
-                            newMarker.position(pingList.get(m));
-                            newMarker.title((String) s.child("username").getValue());
-                            newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                            if(userID.equals(currentUserID)) //if its the current user's pin, make it purple
-                                newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-                            markerList.put(m, mMap.addMarker(newMarker));
+
+                        //puts the pings on the map
+                        for (String m : pingList.keySet()) {//Ping is already on the map
+                            if (markerList.containsKey(m)) {
+                                markerList.get(m).setPosition(pingList.get(m));
+                            } else { //key does not have a marker
+                                MarkerOptions newMarker = new MarkerOptions();
+                                newMarker.position(pingList.get(m));
+                                newMarker.title((String) s.child("username").getValue());
+                                newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                                if (userID.equals(currentUserID)) //if its the current user's pin, make it purple
+                                    newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+                                markerList.put(m, mMap.addMarker(newMarker));
+                            }
                         }
                     }
                 }
@@ -308,7 +364,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    public void updateUserLocation(){ //toggles the ping and tracks device location
+    /**
+     * toggles the ping and tracks device location
+     */
+    public void updateUserLocation(){
         getDeviceLocation();
         if(locationSuccessful)
         {
@@ -318,7 +377,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.i("jordanjlee", "locationSuccessful: "+ locationSuccessful);
     }
 
-
+    /**
+     * Connects to the ping form
+     */
     private void openPingForm(){
         //if you are turning a ping on, open the form
         mRef.child("ping").addListenerForSingleValueEvent(new ValueEventListener() {

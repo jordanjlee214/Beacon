@@ -2,9 +2,11 @@ package com.example.beacon;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -34,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
 
     private boolean fragmentDisplayed;
+    private AppCompatButton backButton;
 
     private User searchedUser; //the user class representing the user we are trying to find
     @Override
@@ -75,6 +78,19 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener((view -> sendToActivity(MainActivity.class)));
+    }
+
+    /**
+     * Switch to another activity
+     * @param a activity to go to
+     */
+    private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
+        Intent switchToNewActivity= new Intent(ProfileActivity.this, a);
+        startActivity(switchToNewActivity);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        //finish();
     }
 
     /*

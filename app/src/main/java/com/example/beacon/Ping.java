@@ -21,6 +21,13 @@ public class Ping {
     private String currentUserID;
     private MapsActivity maps;
 
+    /**
+     * Constructor
+     * Allows access to Database
+     * @param mRef reference to the Database
+     * @param user the current user
+     * @param maps the map object
+     */
     public Ping(DatabaseReference mRef, FirebaseUser user, MapsActivity maps){
         this.mRef = mRef;
         this.user = user;
@@ -39,22 +46,33 @@ public class Ping {
         });
     }
 
+    /**
+     * Getter for ping variable
+     * @return state of pingOn
+     */
     public boolean isOn(){
         return pingOn;
     }
 
+    /**
+     * Setter for ping variable
+     * @param on what state should be set to
+     */
     public void onOrOff(boolean on){
         pingOn = on;
     }
 
+    /**
+     * Switch the state of the ping
+     * Puts state and location in database
+     * Uses map reference to find location
+     */
     public void togglePing(){
 
 
         if(!pingOn) {
             maps.getDeviceLocation();
-            System.out.println("ON");
         }else{
-            System.out.println("Off");
             mRef.child("lat").setValue(0);
             mRef.child("lng").setValue(0);
         }
