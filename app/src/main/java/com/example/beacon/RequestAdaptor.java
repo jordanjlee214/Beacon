@@ -51,7 +51,9 @@ public class RequestAdaptor extends
                  */
                 @Override
                 public void onClick(View v) {
-
+                    //update friends list
+                    //inform sender of acceptance
+                    //remove request
                 }
             });
             denyButton.setOnClickListener(new View.OnClickListener(){
@@ -61,9 +63,14 @@ public class RequestAdaptor extends
                  */
                 @Override
                 public void onClick(View v){
-
+                    //inform sender of denial
+                    //remove request
                 }
             });
+        }
+        //helper for the OnClickListeners
+        private void removeRequest(){
+            notifyDataSetChanged();
         }
     }
 
