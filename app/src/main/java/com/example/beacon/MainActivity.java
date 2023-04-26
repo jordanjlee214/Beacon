@@ -185,8 +185,7 @@ public class MainActivity extends AppCompatActivity{
             //this is a test: if user is signed in, it displays their name
             currentUserID = currentUser.getUid();
             firebaseMessagingService = new MyFirebaseMessagingService();
-            firebaseMessagingService.unsubscribeAll(); //unsubscribes from all friends to stay updated
-            firebaseMessagingService.subscribeToFriends(); //subscribe to current friends
+            firebaseMessagingService.unsubscribeAllThenSubToFriends(); //unsubscribes from all friends to stay updated
             displayUserData();
 
         }

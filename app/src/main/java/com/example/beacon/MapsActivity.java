@@ -298,10 +298,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(String i:friends){
-                    if(i!=currentUserID)
-                        friends.remove(i);
-                }
+                friends.clear();
+                friends.add(currentUserID);
                 for (DataSnapshot s: snapshot.getChildren()){
                     friends.add(s.getKey());
                 }

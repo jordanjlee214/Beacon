@@ -215,4 +215,11 @@ public class User { //entity class to represent user. Needs to be updated eventu
         setPing((Boolean) snapshot.child(id).child("ping").getValue());
         setUserID(id);
     }
+
+    public static User buildUserFromFriendSnapshot(DataSnapshot snapshot, String id){
+        User newUser = new User();
+        newUser.setUsername(snapshot.getValue().toString());
+        newUser.setUserID(id);
+        return newUser;
+    }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -80,33 +81,38 @@ public class FriendActivity extends AppCompatActivity {
 
     public void showFriends(View view){
         //Step 1: get database's reference
+        friendlist.clear();
+        if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
         friendsReference = database.getReference().child("Friends").child(current.getUid());
         //Step 2: add listener
         friendsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                User newUser = snapshot.getValue(User.class);
-                if(!friendlist.contains(newUser))
+                User newUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
+                if(!listHasUser(friendlist, newUser))
                     friendlist.add(newUser);
                 friendAdaptor.notifyDataSetChanged();
+                if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }else xList.setAdapter(friendAdaptor);
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                User changedUser = snapshot.getValue(User.class);
-                if(friendlist.contains(changedUser)) {
+                User changedUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
+                if(listHasUser(friendlist, changedUser)) {
                     friendlist.remove(changedUser);
                     friendlist.add(changedUser);
                 }
                 friendAdaptor.notifyDataSetChanged();
+                if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }else xList.setAdapter(friendAdaptor);
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                User removedUser = snapshot.getValue(User.class);
+                User removedUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
                 //find the user who's id matches removedUser's
                 for(User u : friendlist) {
                     if(u.getUserID().equals(removedUser.getUserID())) friendlist.remove(removedUser);
                 }
                 friendAdaptor.notifyDataSetChanged();
+                if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }else xList.setAdapter(friendAdaptor);
             }
             @Override //Do priorities change?
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
@@ -114,15 +120,25 @@ public class FriendActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {}
         });
         //Step 3: set up adapter
-        if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
-        else xList.setAdapter(friendAdaptor);
+
     }
 
     public void showRequests(View view){
-        requestsReference = database.getReference().child("FriendRequest");
+        requestsReference = database.getReference().child("FriendRequests");
+        requests.clear();
         requestsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot requestChild : snapshot.getChildren()){ //go through each request
+                    if(isReceivingUser(requestChild.getKey())){
+                        FriendRequest request = FriendRequest.buildRequestFromSnapshot(requestChild);
+                        if(!listHasRequest(requests, request)){
+                            requests.add(request);
+                        }
+                        xList.setAdapter(rAdaptor);
+                    }
+                }
+                if(requests.isEmpty()) xList.setAdapter(emptyListAdaptor); //if still empty, there's nothing
 
             }
 
@@ -131,8 +147,8 @@ public class FriendActivity extends AppCompatActivity {
 
             }
         });
-        if(requests.isEmpty()) xList.setAdapter(emptyListAdaptor);
-        else xList.setAdapter(rAdaptor);
+//        if(requests.isEmpty()) xList.setAdapter(emptyListAdaptor);
+//        else xList.setAdapter(rAdaptor);
     }
 
     public void showBlocked(View view){
@@ -140,13 +156,13 @@ public class FriendActivity extends AppCompatActivity {
         blockedReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                User newUser = snapshot.getValue(User.class);
+                User newUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
                 if(!friendlist.contains(newUser))
                     friendlist.add(newUser);
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                User changedUser = snapshot.getValue(User.class);
+                User changedUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
                 if(friendlist.contains(changedUser)) {
                     friendlist.remove(changedUser);
                     friendlist.add(changedUser);
@@ -155,7 +171,7 @@ public class FriendActivity extends AppCompatActivity {
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                User removedUser = snapshot.getValue(User.class);
+                User removedUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
                 friendlist.remove(removedUser);
                 friendAdaptor.notifyDataSetChanged();
             }
@@ -174,5 +190,42 @@ public class FriendActivity extends AppCompatActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
+    private boolean listHasUser(List<User> userList, User u){
+        for(User current : userList){
+            if(current.getUserID().equals(u.getUserID()))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean listHasRequest(List<FriendRequest> requestList, FriendRequest u){
+        for(FriendRequest current : requestList){
+            if(current.getSenderUser().getUserID().equals(u.getSenderUser().getUserID()) && current.getReceiverUser().getUserID().equals(u.getReceiverUser().getUserID()))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if current user is the receiving user of the friend request.
+     */
+    private boolean isReceivingUser(String key){
+        String receiverID = key.substring(0, key.indexOf('_'));
+     //   Log.d("KEY", receiverID + " and " + current.getUid());
+        return receiverID.equals(current.getUid());
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        sendToActivity(MainActivity.class);
+    }
+
+    private void sendToActivity(Class<?> a) { //this method changes the activity to appropriate activity
+        Intent switchToNewActivity= new Intent(FriendActivity.this, a);
+        startActivity(switchToNewActivity);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        //finish();
+    }
 
 }

@@ -79,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener((view -> sendToActivity(MainActivity.class)));
+        backButton.setOnClickListener((view -> sendToActivity(FriendActivity.class)));
     }
 
     /**

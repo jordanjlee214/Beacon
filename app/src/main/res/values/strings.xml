@@ -7,7 +7,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="maps_api_key2">AIzaSyD2TvNMRMFJDPT4DjLos-tCe1d_zzJFYgU</string>
     <string name="maps_api_key1">AIzaSyCGQXx_qw5ix_vgqhjhtp72W_bhyKr4YuI</string>
-    <string name="senderID">355311690445</string>
     android:value="AIzaSyD2TvNMRMFJDPT4DjLos-tCe1d_zzJFYgU"
+    <string name="senderID">355311690445</string>
+    <string name="messagingServerKey">
+    AAAAUro6Is0:APA91bH-Hwl0BbXevxhKEECxEFoc6odhZFNN3lGoKVoipA8V--fyiK_M1GWY785Qk8f8jFcnr4zesbkjlLD99RStpOEFIy5_TC_GGKWLpxYTbiTc22u6FeXrtXrztA7houzINaPOV3fQ</string>
 </resources>
 

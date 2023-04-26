@@ -1,5 +1,7 @@
 package com.example.beacon;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.HashMap;
 
 /**
@@ -48,7 +50,7 @@ public class FriendRequest {
     public User getSenderUser() {return senderUser;}
     public User getReceiverUser() {return receiverUser;}
 
-    public String getSendersNickname(){return senderUser.getNickname();}
+    public String getSendersUsername(){return senderUser.getUsername();}
 
     public String getMessage() {return message;}
     public void setMessage(String message) {this.message = message;}
@@ -68,5 +70,16 @@ public class FriendRequest {
         toReturn.put("receiverID", receiverUser.getUserID());
         toReturn.put("senderID", senderUser.getUserID());
         return toReturn;
+    }
+
+    public static FriendRequest buildRequestFromSnapshot(DataSnapshot snapshot){
+        User senderUser = new User();
+        senderUser.setUserID(snapshot.child("senderID").getValue().toString());
+        senderUser.setUsername(snapshot.child("senderUser").getValue().toString());
+        User receiverUser = new User();
+        receiverUser.setUserID(snapshot.child("receiverID").getValue().toString());
+        receiverUser.setUsername(snapshot.child("receiverUser").getValue().toString());
+        FriendRequest newRequest = new FriendRequest(senderUser, snapshot.child("message").getValue().toString(), receiverUser);
+        return newRequest;
     }
 }
