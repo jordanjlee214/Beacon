@@ -30,7 +30,6 @@ import java.util.List;
 /**
  * The Friend Activity Control
  * Functionality: Show Friends, Blocked, Requests
- * @author Bonnie Rilea
  * CSCI 335
  */
 
@@ -84,14 +83,15 @@ public class FriendActivity extends AppCompatActivity {
         friendlist.clear();
         if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
         friendsReference = database.getReference().child("Friends").child(current.getUid());
-        //Step 2: add listener
+        //Step 2: add listener + Step 3: set up adapter
         friendsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User newUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
-                if(!listHasUser(friendlist, newUser))
+                if(!listHasUser(friendlist, newUser)) {
                     friendlist.add(newUser);
-                friendAdaptor.notifyDataSetChanged();
+                    friendAdaptor.notifyDataSetChanged();
+                }
                 if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }else xList.setAdapter(friendAdaptor);
             }
             @Override
@@ -100,8 +100,8 @@ public class FriendActivity extends AppCompatActivity {
                 if(listHasUser(friendlist, changedUser)) {
                     friendlist.remove(changedUser);
                     friendlist.add(changedUser);
+                    friendAdaptor.notifyDataSetChanged();
                 }
-                friendAdaptor.notifyDataSetChanged();
                 if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }else xList.setAdapter(friendAdaptor);
             }
             @Override
@@ -109,9 +109,11 @@ public class FriendActivity extends AppCompatActivity {
                 User removedUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
                 //find the user who's id matches removedUser's
                 for(User u : friendlist) {
-                    if(u.getUserID().equals(removedUser.getUserID())) friendlist.remove(removedUser);
+                    if(u.getUserID().equals(removedUser.getUserID())) {
+                        friendlist.remove(removedUser);
+                        friendAdaptor.notifyDataSetChanged();
+                    }
                 }
-                friendAdaptor.notifyDataSetChanged();
                 if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }else xList.setAdapter(friendAdaptor);
             }
             @Override //Do priorities change?
@@ -119,8 +121,6 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
-        //Step 3: set up adapter
-
     }
 
     //remove friends
