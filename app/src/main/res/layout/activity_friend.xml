@@ -8,7 +8,6 @@
     android:background="@color/teal"
     tools:context=".FriendActivity">
 
-    <!-- TODO fix android:text strings -->
     <!--Top Text Box (jump to the top? it's supposed to do that)-->
     <TextView
         android:id="@+id/topText"
@@ -55,6 +54,7 @@
             android:text="Requests"
             android:layout_toRightOf="@id/friends"/>
 
+        <!--
         <Button
             android:id="@+id/blocked"
             android:layout_width="105dp"
@@ -66,7 +66,7 @@
             android:paddingRight="10dp"
             android:text="Blocked"
             android:layout_toRightOf="@id/friendRequests"/>
-
+        -->
         <Button
             android:id="@+id/search"
             android:layout_width="105dp"
@@ -77,7 +77,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Search"
-            android:layout_toRightOf="@id/blocked"/>
+            android:layout_toRightOf="@id/friendRequests" />
     </RelativeLayout>
 
     <!--List of (Connect to Firebase)-->

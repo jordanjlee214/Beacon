@@ -123,6 +123,8 @@ public class FriendActivity extends AppCompatActivity {
 
     }
 
+    //remove friends
+
     public void showRequests(View view){
         requestsReference = database.getReference().child("FriendRequests");
         requests.clear();
@@ -151,29 +153,30 @@ public class FriendActivity extends AppCompatActivity {
 //        else xList.setAdapter(rAdaptor);
     }
 
-    public void showBlocked(View view){
+   /* public void showBlocked(View view){
         blockedReference = database.getReference().child("Blocked").child(current.getUid());
         blockedReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User newUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
-                if(!friendlist.contains(newUser))
-                    friendlist.add(newUser);
+                if(!blocked.contains(newUser))
+                    blocked.add(newUser);
+                blockedAdaptor.notifyDataSetChanged();
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User changedUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
-                if(friendlist.contains(changedUser)) {
-                    friendlist.remove(changedUser);
-                    friendlist.add(changedUser);
+                if(listHasUser(blocked, changedUser)) {
+                    blocked.remove(changedUser);
+                    blocked.add(changedUser);
+                    blockedAdaptor.notifyDataSetChanged();
                 }
-                friendAdaptor.notifyDataSetChanged();
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 User removedUser = User.buildUserFromFriendSnapshot(snapshot, snapshot.getKey());
-                friendlist.remove(removedUser);
-                friendAdaptor.notifyDataSetChanged();
+                blocked.remove(removedUser);
+                blockedAdaptor.notifyDataSetChanged();
             }
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
@@ -182,13 +185,14 @@ public class FriendActivity extends AppCompatActivity {
         });
         if(blocked.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
         else xList.setAdapter(blockedAdaptor);
+    }*/
+
+    //user search feature
+    public void toProfileFragment(View view){
+        sendToActivity(ProfileActivity.class);
     }
 
-    public void toProfileFragment(View view){
-        Intent switchToNewActivity= new Intent(this, ProfileActivity.class);
-        startActivity(switchToNewActivity);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
+    /* Helpers for show friends*/
 
     private boolean listHasUser(List<User> userList, User u){
         for(User current : userList){
@@ -215,6 +219,9 @@ public class FriendActivity extends AppCompatActivity {
         return receiverID.equals(current.getUid());
     }
 
+    /**
+     * Go home
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();

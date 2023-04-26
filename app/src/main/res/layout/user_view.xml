@@ -18,4 +18,17 @@
         android:textColor="@color/white"
         />
 
+    <Button
+        android:id="@+id/removeFriendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:fontFamily="@font/satoshi_black"
+        android:layout_gravity="end"
+        android:text="Remove"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/apricot"
+        android:textSize="10sp"/>
+
 </LinearLayout>

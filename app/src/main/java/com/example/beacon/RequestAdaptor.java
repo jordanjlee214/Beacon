@@ -45,36 +45,6 @@ public class RequestAdaptor extends
             messageView = (TextView) itemView.findViewById(R.id.message);
             acceptButton = (Button) itemView.findViewById(R.id.acceptButton);
             denyButton = (Button) itemView.findViewById(R.id.denyButton);
-
-            //Apply onClickListener - moved listeners down to onBindViewHolder
-//            acceptButton.setOnClickListener(new View.OnClickListener(){
-//                /**
-//                 * Removes the request from firebase
-//                 *  and adds sending user to friend list
-//                 * @param v The view that was clicked.
-//                 */
-//                @Override
-//                public void onClick(View v) {
-//                    //update friends list
-//                    //inform sender of acceptance
-//                    //remove request
-//                }
-//            });
-//            denyButton.setOnClickListener(new View.OnClickListener(){
-//                /**
-//                 * Removes request from firebase
-//                 * @param v The view that was clicked.
-//                 */
-//                @Override
-//                public void onClick(View v){
-//                    //inform sender of denial
-//                    //remove request
-//                }
-//            });
-        }
-        //helper for the OnClickListeners
-        private void removeRequest(){
-            notifyDataSetChanged();
         }
     }
 
