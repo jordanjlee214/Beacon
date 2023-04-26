@@ -207,24 +207,7 @@
 
     </androidx.appcompat.widget.AppCompatButton>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/blockButton"
-        android:layout_width="90sp"
-        android:layout_height="30sp"
-        android:fontFamily="@font/outfit_bold"
-        android:text="Block"
-        android:textSize="10sp"
-        android:textColor="@color/white"
-        android:background="@drawable/input"
-        android:backgroundTint="@color/dark_teal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.87"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileViewGuideline"
-        app:layout_constraintVertical_bias="0.13">
 
-    </androidx.appcompat.widget.AppCompatButton>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

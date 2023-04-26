@@ -13,11 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:fontFamily="@font/outfit"
+        android:fontFamily="@font/outfit_bold"
         android:textColor="@color/white"
         android:layout_gravity="top"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="message"
+        app:layout_constraintBottom_toTopOf="@id/message"
         app:layout_constraintLeft_toLeftOf="parent"
         />
 
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:fontFamily="@font/outfit"
+        android:fontFamily="@font/outfit_medium"
         android:textColor="@color/white"
         android:layout_gravity="center"
         app:layout_constraintTop_toBottomOf="@id/sender_name"

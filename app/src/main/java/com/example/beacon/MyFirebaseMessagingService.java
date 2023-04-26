@@ -68,6 +68,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.i("jordanjlee", "message received!");
         super.onMessageReceived(remoteMessage);
 
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         String title = remoteMessage.getNotification().getTitle();
         String body = remoteMessage.getNotification().getBody();
         String CHANNEL_ID = "MESSAGE";
@@ -78,12 +79,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         );
         getSystemService(NotificationManager.class).createNotificationChannel(channel);
         Context context;
-        Notification.Builder notification = new Notification.Builder(this, CHANNEL_ID)
+        Notification.Builder notification = new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true);
-        NotificationManagerCompat.from(this).notify(1, notification.build());
+        NotificationManagerCompat.from(getApplicationContext()).notify(123, notification.build());
 
 
 

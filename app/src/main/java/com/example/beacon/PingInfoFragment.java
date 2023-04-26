@@ -168,7 +168,7 @@ public class PingInfoFragment extends Fragment {
                         ((MapsActivity) getActivity()).onBackPressed(); //closes the fragment from MapsActivity
 
                         //send notification friends with ping information
-                        String pingNotificationTitle = pingInfo.getPingedUsername() + "has pinged themselves!";
+                        String pingNotificationTitle = pingInfo.getPingedUsername() + " has pinged themselves!";
                         String pingNotificationBody = (String) pingInfo.toMap().get("pingMessage");
                         firebaseMessagingService.sendNotification(
                                 currentUserID,

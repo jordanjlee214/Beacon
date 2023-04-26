@@ -131,6 +131,7 @@ public class FriendActivity extends AppCompatActivity {
         requestsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                requests.clear();
                 for(DataSnapshot requestChild : snapshot.getChildren()){ //go through each request
                     if(isReceivingUser(requestChild.getKey())){
                         FriendRequest request = FriendRequest.buildRequestFromSnapshot(requestChild);
