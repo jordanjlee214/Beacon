@@ -12,6 +12,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -67,10 +68,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private HashMap<String,LatLng> pingList; //All pings to be displayed
     private HashMap<String, Marker> markerList; //All markers to be displayed
     private HashMap<String, String> eventList;
-    private AppCompatButton pingSwitch, backButton, eventButton;
+    private AppCompatButton pingButton;
+    private AppCompatButton backButton;
+    private AppCompatButton eventButton;
+    private static AppCompatButton updateButton;
     private String selectedLoc; //send locations to event page
 
     private DatabaseReference pingInfoRef;
+    private ArrayList<String> friends;
+    protected static boolean formOpen = false;
 
     /**
      * Sets up the Maps page
@@ -109,13 +115,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         //Set buttons
-        pingSwitch = findViewById(R.id.ping);
-        pingSwitch.setOnClickListener(view -> {
+        pingButton = findViewById(R.id.ping);
+        pingButton.setOnClickListener(view -> {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             openPingForm();
             updateUserLocation();
+        });
+
+        updateButton = findViewById(R.id.updateButton);
+       /* assert ping.isOn();
+        if(ping.isOn()){
+            updateButton.setVisibility(View.VISIBLE);
+        }else{
+            updateButton.setVisibility(View.GONE);
+        }*/
+        updateButton.setOnClickListener(view -> {
+            if(ping.isOn()){
+                getDeviceLocation();
+                Toast.makeText(MapsActivity.this, "Location Updated", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(MapsActivity.this, "Ping Inactive", Toast.LENGTH_SHORT).show();
+            }
         });
 
         backButton = findViewById(R.id.backButton);
@@ -134,6 +156,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             intent.putExtra("location", selectedLoc);
             startActivity(intent);
         });
+        friends=getFriends();
     }
 
     /**
@@ -291,17 +314,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * Accesses the database to display other user's pings
      */
     private void getPings() {
+        DatabaseReference pRef = FirebaseDatabase.getInstance().getReference().child("Pings");
         DatabaseReference lRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        DatabaseReference fRef = FirebaseDatabase.getInstance().getReference().child("Friends").child(currentUserID);
-        ArrayList<String> friends = new ArrayList<>();
-        friends.add(currentUserID);
-        fRef.addValueEventListener(new ValueEventListener() {
+        HashMap<String, String> pingInfo = new HashMap<>();
+        pRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                friends.clear();
-                friends.add(currentUserID);
-                for (DataSnapshot s: snapshot.getChildren()){
-                    friends.add(s.getKey());
+                for(DataSnapshot s: snapshot.getChildren()){
+                    String userID = s.getKey();
+                    String message = (String) s.child("pingTitle").getValue();
+                    pingInfo.put(userID,message);
                 }
             }
 
@@ -313,10 +335,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("Pings Set");
+
                 for (DataSnapshot s : snapshot.getChildren()){ //Loop through the users
                     String userID = s.getKey();
                     if(friends.contains(userID)) {
+
                         Number lat = (Number) s.child("lat").getValue();
                         Number lng = (Number) s.child("lng").getValue();
 
@@ -346,6 +369,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 newMarker.position(pingList.get(m));
                                 newMarker.title((String) s.child("username").getValue());
                                 newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                                newMarker.snippet(pingInfo.get(m));
                                 if (userID.equals(currentUserID)) //if its the current user's pin, make it purple
                                     newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
                                 markerList.put(m, mMap.addMarker(newMarker));
@@ -360,6 +384,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+    }
+
+    @NonNull
+    private ArrayList<String> getFriends() {
+        DatabaseReference fRef = FirebaseDatabase.getInstance().getReference().child("Friends").child(currentUserID);
+        ArrayList<String> friends = new ArrayList<>();
+        friends.add(currentUserID);
+        fRef.addValueEventListener(new ValueEventListener() {//retrieve friends
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> temp = new ArrayList<>();
+                temp.add(currentUserID);
+                for (DataSnapshot s: snapshot.getChildren()){
+                    temp.add(s.getKey());
+                }
+                for(String s:friends){
+                    if(!temp.contains(s))
+                        friends.remove(s);
+                }
+                for(String s:temp){
+                    friends.add(s);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return friends;
     }
 
     /**
@@ -387,6 +441,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     removePingInfo();
                 }
                 else{ //its not pinged, so open the ping form
+                    formOpen = true;
                     PingInfoFragment pingInfoFragment = PingInfoFragment.newInstance(currentUserID);
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -394,6 +449,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     transaction.addToBackStack(null);
                     transaction.add(R.id.map, pingInfoFragment, "BLANK_FRAGMENT").commit();
                     makeButtonsVisible(false);
+                    //setUpdateVisibility(false);
                 }
             }
 
@@ -406,14 +462,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void makeButtonsVisible(boolean visible){ //makes the buttons visible or invisible for when the ping form displays
         if(visible){
-            pingSwitch.setVisibility(View.VISIBLE);
+            pingButton.setVisibility(View.VISIBLE);
             backButton.setVisibility(View.VISIBLE);
             eventButton.setVisibility(View.VISIBLE);
+            setUpdateVisibility(ping.isOn());
         }
         else{
-            pingSwitch.setVisibility(View.GONE);
+            pingButton.setVisibility(View.GONE);
             backButton.setVisibility(View.GONE);
             eventButton.setVisibility(View.GONE);
+            setUpdateVisibility(false);
         }
     }
 
@@ -421,6 +479,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onBackPressed() { //closes the ping form fragment
         super.onBackPressed();
 
+       // setUpdateVisibility(ping.isOn());
+        formOpen = false;
         makeButtonsVisible(true);
 
         /*in the case that you press the back button
@@ -456,6 +516,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
+    }
+
+    /**
+     * To allow other classes to affect the Update button's visibility
+     * @param b visibility boolean
+     */
+    public static void setUpdateVisibility(boolean b) {
+        if(b && !formOpen){
+            System.out.println("UPDATE BUTTON TURNED ON!!!!!!!!!!!");
+            updateButton.setVisibility(View.VISIBLE);
+        }else{
+            System.out.println("UPDATE BUTTON TURNED OFF !!!!!!!!!!!!!!!!!!!!");
+            updateButton.setVisibility(View.GONE);
+        }
     }
 
 }

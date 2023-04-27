@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import android.location.Location;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,6 +38,7 @@ public class Ping {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 pingOn = (boolean) snapshot.child("ping").getValue();
+                MapsActivity.setUpdateVisibility(pingOn);
             }
 
             @Override
@@ -51,6 +53,7 @@ public class Ping {
      * @return state of pingOn
      */
     public boolean isOn(){
+        System.out.println("Ping is "+pingOn);
         return pingOn;
     }
 
@@ -71,12 +74,15 @@ public class Ping {
 
 
         if(!pingOn) {
+            //MapsActivity.setUpdateVisibility(true);
             maps.getDeviceLocation();
         }else{
+            //MapsActivity.setUpdateVisibility(false);
             mRef.child("lat").setValue(0);
             mRef.child("lng").setValue(0);
         }
         pingOn = !pingOn;
+        MapsActivity.setUpdateVisibility(pingOn);
         mRef.child("ping").setValue(pingOn);
     }
 }
