@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -260,6 +261,7 @@ public class ProfileFragment extends Fragment {
      */
     private void showAddItemDialog(Context c, String username) {
         final EditText taskEditText = new EditText(c);
+        taskEditText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(55) });
         AlertDialog dialog = new AlertDialog.Builder(c)
                 .setTitle("Friend Request to: " + username)
                 .setMessage("Type in a message: ")

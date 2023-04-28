@@ -59,6 +59,11 @@ public class RequestAdaptor extends
     private Context currentContext;
 
     /**
+     * A reference to FriendActivity to access its public methods.
+     */
+    private FriendActivity friendActivity;
+
+    /**
      * Database references to access friend and friend request data
      */
     private DatabaseReference friendRef = FirebaseDatabase.getInstance().getReference().child("Friends");
@@ -68,7 +73,9 @@ public class RequestAdaptor extends
      * Constructor!
      * @param rl List of Requests!
      */
-    public RequestAdaptor(List<FriendRequest> rl){ requestList = rl; }
+    public RequestAdaptor(List<FriendRequest> rl){ requestList = rl;
+
+    }
     /**
      * Let us inflate the layout and set up some stuff!
      */
@@ -87,6 +94,7 @@ public class RequestAdaptor extends
      */
     @Override
     public void onBindViewHolder(RequestAdaptor.ViewHolder holder, int pos){
+        friendActivity = (FriendActivity) currentContext;
         //data model, cha cha cha
         FriendRequest request = requestList.get(pos);
 
@@ -133,6 +141,7 @@ public class RequestAdaptor extends
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(currentContext, "Friend request accepted. You are now friends.", Toast.LENGTH_SHORT);
+                    friendActivity.showRequests(); //refresh requests
                 }
             }
         });
@@ -146,6 +155,7 @@ public class RequestAdaptor extends
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(currentContext, "Friend request denied.", Toast.LENGTH_SHORT);
+                    friendActivity.showRequests(); //refresh requests
                 }
             }
         });

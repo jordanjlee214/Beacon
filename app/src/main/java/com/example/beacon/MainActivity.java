@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
@@ -45,7 +46,8 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity{
 
-    private Button eventActivityButton, signOutButton, friendActivityButton, mapsActivityButton, setupActivityButton, profileActivityButton;
+    private AppCompatImageButton eventActivityButton, friendActivityButton, mapsActivityButton, setupActivityButton;
+    private Button signOutButton;
     private TextView userDataText; // a test that displays the username to show that the user has data stored
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity{
         mapsActivityButton = findViewById(R.id.mapactivity_button);
         userDataText = findViewById(R.id.userDataTest);
         setupActivityButton = findViewById(R.id.setupactivity_button);
-        profileActivityButton = findViewById(R.id.profileactivity_button);
 
         //set up listeners for each button
         //each listener sends user to the corresponding activity
@@ -125,14 +126,6 @@ public class MainActivity extends AppCompatActivity{
             }
         }
         );
-
-        profileActivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendToActivity(ProfileActivity.class);
-            }
-
-        });
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,7 +208,7 @@ public class MainActivity extends AppCompatActivity{
                 String firstName = snapshot.child(currentUserID).child("firstName").getValue().toString();
                 String lastName = snapshot.child(currentUserID).child("lastName").getValue().toString();
                 String username = snapshot.child(currentUserID).child("username").getValue().toString();
-                userDataText.setText("Welcome, " + firstName + " " + lastName + "!\n" + "Your username is: " + username);
+                userDataText.setText("Welcome, " + firstName + " " + lastName + "!");
             }
 
             @Override

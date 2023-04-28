@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Bonnie Rilea-->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:backgroundTint="@color/apricot">
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/contact_name"
-        android:layout_width="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:textSize="20sp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:fontFamily="@font/outfit"
+        android:fontFamily="@font/outfit_medium"
         android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/removeFriendButton"
         />
 
     <Button
@@ -29,6 +33,13 @@
         android:text="Remove"
         android:textColor="@color/white"
         android:backgroundTint="@color/apricot"
-        android:textSize="10sp"/>
+        android:textSize="13sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.85"
 
-</LinearLayout>
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

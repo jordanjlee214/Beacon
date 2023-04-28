@@ -147,10 +147,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         selectedLoc = "";
         eventButton = findViewById(R.id.eventButton);
         eventButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MapsActivity.this, EventActivity.class);
-            intent.putExtra("methodName","setFilter");
-            intent.putExtra("location", selectedLoc);
-            startActivity(intent);
+            if(!selectedLoc.isEmpty() && isLocation(selectedLoc)){
+                Intent intent = new Intent(MapsActivity.this, EventActivity.class);
+                intent.putExtra("methodName","setFilter");
+                intent.putExtra("location", selectedLoc);
+                startActivity(intent);
+            }
         });
 
         //initial Database retrieval
@@ -536,6 +538,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }else{
             updateButton.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * Helper method to see if a string is a user or a location
+     * @param s
+     * @return
+     */
+    private boolean isLocation(String s){
+        for(int i = 0; i < CampusLocations.LOCATION_LIST.length; i++){
+            if(s.equals(CampusLocations.LOCATION_LIST[i])){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

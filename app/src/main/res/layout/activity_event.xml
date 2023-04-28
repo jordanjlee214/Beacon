@@ -44,6 +44,7 @@
         android:id="@+id/location_filter"
         android:layout_width="230dp"
         android:layout_height="50dp"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

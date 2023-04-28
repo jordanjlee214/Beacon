@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +41,10 @@ public class FriendActivity extends AppCompatActivity {
     private RecyclerView xList;
     //instance of Database (doesn't/shouldn't change)
     private FirebaseDatabase database;
+    private Button friendButton;
+    private Button requestButton;
+    private ImageView searchButton;
+
     //the current user
     FirebaseUser current;
     //the reference paths for each lists of data for current
@@ -64,6 +70,29 @@ public class FriendActivity extends AppCompatActivity {
         //set up RecyclerView
         xList = findViewById(R.id.listOfX);
 
+        friendButton = findViewById(R.id.friends);
+        friendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFriends();
+            }
+        });
+        requestButton = findViewById(R.id.friendRequests);
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRequests();
+            }
+        });
+
+        searchButton = findViewById(R.id.search);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToActivity(ProfileActivity.class);
+            }
+        });
+
         //Initialize Lists
         friendlist = new ArrayList<User>();
         blocked = new ArrayList<User>();
@@ -78,7 +107,7 @@ public class FriendActivity extends AppCompatActivity {
         xList.setAdapter(new UserAdaptor("~ Press a button ~"));
     }
 
-    public void showFriends(View view){
+    public void showFriends(){
         //Step 1: get database's reference
         friendlist.clear();
         if(friendlist.isEmpty()){ xList.setAdapter(emptyListAdaptor); }
@@ -125,7 +154,7 @@ public class FriendActivity extends AppCompatActivity {
 
     //remove friends
 
-    public void showRequests(View view){
+    public void showRequests(){
         requestsReference = database.getReference().child("FriendRequests");
         requests.clear();
         requestsReference.addValueEventListener(new ValueEventListener() {
@@ -137,12 +166,12 @@ public class FriendActivity extends AppCompatActivity {
                         FriendRequest request = FriendRequest.buildRequestFromSnapshot(requestChild);
                         if(!listHasRequest(requests, request)){
                             requests.add(request);
+                            xList.setAdapter(rAdaptor);
                         }
-                        xList.setAdapter(rAdaptor);
                     }
                 }
                 if(requests.isEmpty()) xList.setAdapter(emptyListAdaptor); //if still empty, there's nothing
-
+                else xList.setAdapter(rAdaptor);
             }
 
             @Override
@@ -188,11 +217,6 @@ public class FriendActivity extends AppCompatActivity {
         else xList.setAdapter(blockedAdaptor);
     }*/
 
-    //user search feature
-    public void toProfileFragment(View view){
-        sendToActivity(ProfileActivity.class);
-    }
-
     /* Helpers for show friends*/
 
     private boolean listHasUser(List<User> userList, User u){
@@ -235,5 +259,6 @@ public class FriendActivity extends AppCompatActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         //finish();
     }
+
 
 }

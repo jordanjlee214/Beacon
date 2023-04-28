@@ -93,13 +93,13 @@ public class Event {
     }
 
     public String toString(){
-        return "Event: " + eventName + newline +
-                "Public? " + isPublic + newline +
-                "Date: " + eventDate + newline +
-                "Time: " + eventStartTime + " to " + eventEndTime + newline +
-                "Location: " + eventLocation + newline +
-                "Description: " + eventDescription + newline +
-                "Organizer: " + creatorUsername;
+        return  eventName + newline +
+                privacyStatus(isPublic)+ newline +
+                "WHEN: " + eventDate + newline +
+                "\t\t" + getTime(eventStartTime) + " to " + getTime(eventEndTime) + newline +
+                "WHERE: " + eventLocation + newline +
+                "WHAT: " + eventDescription + newline +
+                "HOST: " + creatorUsername;
     }
 
     public String getCreatorID() {
@@ -131,4 +131,34 @@ public class Event {
         eventData.put("rsvpList", rsvpList);
         return eventData;
     }
+
+    public String getTime(String time){ //formats the time to AM/PM
+        String timeString = "";
+        int hour = Integer.parseInt(time.substring(0, time.indexOf(":")));
+        String minute = time.substring(time.indexOf(":") + 1);
+        if(hour == 0){
+            timeString = 12 + ":" + minute + " AM";
+        }
+        else if(hour > 0 && hour < 12){
+            timeString = hour + ":" + minute + " AM";
+        }
+        else if(hour == 12){
+            timeString = hour + ":" + minute + " PM";
+        }
+        else{
+            assert hour > 12;
+            timeString = (hour - 12) + ":" + minute + " PM";
+        }
+        return timeString;
+    }
+
+    public String privacyStatus(boolean isPublic){
+        if(isPublic){
+            return "PUBLIC";
+        }
+        else{
+            return "PRIVATE";
+        }
+    }
+
 }

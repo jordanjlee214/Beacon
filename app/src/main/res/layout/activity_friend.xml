@@ -13,72 +13,86 @@
         android:id="@+id/topText"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:fontFamily="@font/outfit"
-        android:text="Manage Friends"
+        android:fontFamily="@font/outfit_bold"
+        android:text="FRIENDS"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="40sp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints,TextSizeCheck" />
+        app:layout_constraintBottom_toTopOf="@id/friendHeaderGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
 
-    <!--Tabs-->
-    <RelativeLayout
-        android:id="@+id/buttons"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        app:layout_constraintTop_toBottomOf="@id/topText"
-        tools:context=".FriendActivity">
+        />
 
-        <Button
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/friendHeaderGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1"
+        ></androidx.constraintlayout.widget.Guideline>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/friendButtonGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"
+        ></androidx.constraintlayout.widget.Guideline>
+
+    <Button
             android:id="@+id/friends"
             android:layout_width="105dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:backgroundTint="@color/apricot"
             android:fontFamily="@font/satoshi_black"
-            android:onClick="showFriends"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Friends"
-            tools:ignore="TextSizeCheck" />
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@id/friendHeaderGuideline"
+            app:layout_constraintBottom_toTopOf="@id/friendButtonGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        />
 
         <Button
             android:id="@+id/friendRequests"
-            android:layout_width="105dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:backgroundTint="@color/apricot"
             android:fontFamily="@font/satoshi_black"
-            android:onClick="showRequests"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Requests"
-            android:layout_toRightOf="@id/friends"/>
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@id/friendHeaderGuideline"
+            app:layout_constraintBottom_toTopOf="@id/friendButtonGuideline"
+            app:layout_constraintStart_toEndOf="@id/friends"
+            app:layout_constraintEnd_toStartOf="@id/search"
+            />
 
-        <!--
-        <Button
-            android:id="@+id/blocked"
-            android:layout_width="105dp"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/apricot"
-            android:fontFamily="@font/satoshi_black"
-            android:onClick="showBlocked"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Blocked"
-            android:layout_toRightOf="@id/friendRequests"/>
-        -->
-        <Button
-            android:id="@+id/search"
-            android:layout_width="105dp"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/apricot"
-            android:fontFamily="@font/satoshi_black"
-            android:onClick="toProfileFragment"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Search"
-            android:layout_toRightOf="@id/friendRequests" />
-    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/search"
+        android:layout_width="35sp"
+        android:layout_height="35sp"
+        android:background="@drawable/input"
+        android:backgroundTint="@color/apricot"
+        android:clickable="true"
+        android:padding="7sp"
+        android:src="@drawable/search_white"
+        app:layout_constraintBottom_toTopOf="@id/friendButtonGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintTop_toBottomOf="@id/friendHeaderGuideline">
+
+    </ImageView>
+
 
     <!--List of (Connect to Firebase)-->
     <androidx.recyclerview.widget.RecyclerView
@@ -91,9 +105,9 @@
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttons"
+        app:layout_constraintTop_toBottomOf="@id/friendButtonGuideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.05"/>
+        app:layout_constraintVertical_bias="0.0"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

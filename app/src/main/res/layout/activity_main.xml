@@ -35,6 +35,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.2" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainGuideline1"
+        app:layout_constraintGuide_percent="0.5"
+        android:orientation="vertical"
+        >
+    </androidx.constraintlayout.widget.Guideline>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainGuideline2"
+        app:layout_constraintGuide_percent="0.55"
+        android:orientation="horizontal"
+        >
+    </androidx.constraintlayout.widget.Guideline>
+
     <TextView
         android:id="@+id/userDataTest"
         android:layout_width="wrap_content"
@@ -44,100 +61,88 @@
         android:textAlignment="center"
         android:fontFamily="@font/satoshi_medium"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/eventactivity_button"
+        app:layout_constraintBottom_toTopOf="@id/wheatonTitle_Main"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/eventactivity_button"
+        android:src="@drawable/calendar_icon"
+        android:scaleType="fitCenter"
+        android:layout_width="130sp"
+        android:layout_height="130sp"
+        android:fontFamily="@font/satoshi_black"
+        android:textAllCaps="false"
+        android:padding="5sp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/mainGuideline2"
+        app:layout_constraintEnd_toStartOf="@id/mainGuideline1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/beaconTitle_Main"
-        app:layout_constraintVertical_bias="0.45" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/eventactivity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input"
-        android:fontFamily="@font/satoshi_black"
-        android:text="  EventActivity  "
-        android:textAllCaps="false"
-        android:padding="5sp"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintVertical_bias="0.9"
         android:backgroundTint="@color/teal"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/mapactivity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input"
-        android:backgroundTint="@color/teal"
+        android:src="@drawable/ping_icon"
+        android:scaleType="fitCenter"
+        android:layout_width="130sp"
+        android:layout_height="130sp"
         android:fontFamily="@font/satoshi_black"
-        android:text="  MapsActivity  "
         android:textAllCaps="false"
-        android:textColor="@color/white"
         android:padding="5sp"
+        android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mainGuideline2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.58" />
+        app:layout_constraintStart_toEndOf="@id/mainGuideline1"
+        app:layout_constraintTop_toBottomOf="@id/beaconTitle_Main"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintVertical_bias="0.9"
+        android:backgroundTint="@color/teal"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/friendactivity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input"
-        android:backgroundTint="@color/teal"
+        android:src="@drawable/friends_icon"
+        android:scaleType="fitCenter"
+        android:layout_width="130sp"
+        android:layout_height="130sp"
         android:fontFamily="@font/satoshi_black"
-        android:text="  FriendActivity  "
         android:textAllCaps="false"
         android:padding="5sp"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/signOut_button"
+        app:layout_constraintEnd_toStartOf="@id/mainGuideline1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.66" />
+        app:layout_constraintTop_toBottomOf="@id/mainGuideline2"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintVertical_bias="0.1"
+        android:backgroundTint="@color/teal"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/setupactivity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input"
-        android:backgroundTint="@color/teal"
+        android:src="@drawable/setup_icon"
+        android:scaleType="fitCenter"
+        android:layout_width="130sp"
+        android:layout_height="130sp"
         android:fontFamily="@font/satoshi_black"
-        android:text="  SetupActivity  "
         android:textAllCaps="false"
         android:padding="5sp"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/signOut_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.74" />
+        app:layout_constraintStart_toEndOf="@id/mainGuideline1"
+        app:layout_constraintTop_toBottomOf="@id/mainGuideline2"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintVertical_bias="0.1"
+        android:backgroundTint="@color/teal"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/profileactivity_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/input"
-        android:backgroundTint="@color/teal"
-        android:fontFamily="@font/satoshi_black"
-        android:text="  ProfileActivity "
-        android:textAllCaps="false"
-        android:padding="5sp"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signOut_button"
@@ -155,7 +160,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95" />
+        app:layout_constraintVertical_bias="0.9" />
 
 
 

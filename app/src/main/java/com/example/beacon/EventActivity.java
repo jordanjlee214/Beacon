@@ -38,7 +38,7 @@ public class EventActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private String[] items = CampusLocations.sorted();
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    private AlertDialog.Builder builder;
 
 
     //ArrayList<String> events;
@@ -62,6 +62,8 @@ public class EventActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         deleteEventButton = findViewById(R.id.deleteEvent_button);
         filterButton = findViewById(R.id.filterButton);
+
+        builder = new AlertDialog.Builder(this);
 
         builder.setTitle("RSVP");
         builder.setMessage("Would you like to RSVP to this event?");
