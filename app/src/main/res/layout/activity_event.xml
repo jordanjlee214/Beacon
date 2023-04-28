@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Events"
         android:textSize="55dp"
-        android:fontFamily="@font/outfit"
+        android:fontFamily="@font/outfit_black"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
