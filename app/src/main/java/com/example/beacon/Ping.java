@@ -53,7 +53,6 @@ public class Ping {
      * @return state of pingOn
      */
     public boolean isOn(){
-        System.out.println("Ping is "+pingOn);
         return pingOn;
     }
 

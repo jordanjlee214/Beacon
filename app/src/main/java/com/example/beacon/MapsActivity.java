@@ -67,6 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean locationSuccessful;
     private HashMap<String,LatLng> pingList; //All pings to be displayed
     private HashMap<String, Marker> markerList; //All markers to be displayed
+    private HashMap<String, String> pingNames, pingInfo; //Get info to be displayed with pings
     private HashMap<String, String> eventList;
     private AppCompatButton pingButton;
     private AppCompatButton backButton;
@@ -87,7 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        currentUserID = user.getUid().toString();
+        currentUserID = user.getUid();
         mRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
         pingInfoRef = FirebaseDatabase.getInstance().getReference().child("Pings");
         com.example.beacon.databinding.ActivityMapsBinding binding = ActivityMapsBinding.inflate(getLayoutInflater());
@@ -122,15 +123,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             openPingForm();
             updateUserLocation();
+            //getPingInfo();
         });
 
         updateButton = findViewById(R.id.updateButton);
-       /* assert ping.isOn();
-        if(ping.isOn()){
-            updateButton.setVisibility(View.VISIBLE);
-        }else{
-            updateButton.setVisibility(View.GONE);
-        }*/
         updateButton.setOnClickListener(view -> {
             if(ping.isOn()){
                 getDeviceLocation();
@@ -156,7 +152,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             intent.putExtra("location", selectedLoc);
             startActivity(intent);
         });
+
+        //initial Database retrieval
         friends=getFriends();
+        getPingInfo();
     }
 
     /**
@@ -183,7 +182,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 location.addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         android.location.Location currentLocation = (android.location.Location) task.getResult();
-                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                        //moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                         if(ping.isOn()) { //references the Ping object
                             mRef.child("lat").setValue(currentLocation.getLatitude());
                             mRef.child("lng").setValue(currentLocation.getLongitude());
@@ -196,7 +195,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         LocationManager locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
                         Criteria criteria = new Criteria();
-                        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+                        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true));
                         locationManager.requestLocationUpdates(bestProvider, (long) 1000, (float) 0, new LocationListener() {
                             @Override
                             public void onLocationChanged(@NonNull android.location.Location location) {
@@ -314,28 +313,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * Accesses the database to display other user's pings
      */
     private void getPings() {
-        DatabaseReference pRef = FirebaseDatabase.getInstance().getReference().child("Pings");
         DatabaseReference lRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        HashMap<String, String> pingInfo = new HashMap<>();
-        pRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot s: snapshot.getChildren()){
-                    String userID = s.getKey();
-                    String message = (String) s.child("pingTitle").getValue();
-                    pingInfo.put(userID,message);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         lRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+            //not here
                 for (DataSnapshot s : snapshot.getChildren()){ //Loop through the users
                     String userID = s.getKey();
                     if(friends.contains(userID)) {
@@ -367,7 +349,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             } else { //key does not have a marker
                                 MarkerOptions newMarker = new MarkerOptions();
                                 newMarker.position(pingList.get(m));
-                                newMarker.title((String) s.child("username").getValue());
+                                //newMarker.title((String) s.child("username").getValue());
+                                newMarker.title(pingNames.get(m));
                                 newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                                 newMarker.snippet(pingInfo.get(m));
                                 if (userID.equals(currentUserID)) //if its the current user's pin, make it purple
@@ -375,6 +358,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 markerList.put(m, mMap.addMarker(newMarker));
                             }
                         }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getPingInfo() {
+        DatabaseReference pRef = FirebaseDatabase.getInstance().getReference().child("Pings");
+        pingNames = new HashMap<>();
+        pingInfo = new HashMap<>();
+        pRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot s: snapshot.getChildren()){
+                    String userID = s.getKey();
+                    String name = (String) s.child("pingedDisplayName").getValue();
+                    pingNames.put(userID, name);
+                    String message = (String) s.child("pingTitle").getValue();
+                  //  message = message + "\n" + (String) s.child("pingDescription").getValue();
+                    pingInfo.put(userID,message);
+                    Marker change = markerList.get(userID);
+                    if(change != null) {
+                        change.setTitle(name);
+                        change.setSnippet(message);
                     }
                 }
             }
@@ -399,13 +411,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 for (DataSnapshot s: snapshot.getChildren()){
                     temp.add(s.getKey());
                 }
-                for(String s:friends){
-                    if(!temp.contains(s))
-                        friends.remove(s);
-                }
-                for(String s:temp){
-                    friends.add(s);
-                }
+                friends.removeIf(s -> !temp.contains(s));
+                friends.addAll(temp);
             }
 
             @Override
@@ -423,6 +430,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getDeviceLocation();
         if(locationSuccessful)
         {
+           // getPingInfo();
             ping.togglePing();
         }
         Log.i("jordanjlee", ""+ ping.isOn());
@@ -524,10 +532,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     public static void setUpdateVisibility(boolean b) {
         if(b && !formOpen){
-            System.out.println("UPDATE BUTTON TURNED ON!!!!!!!!!!!");
             updateButton.setVisibility(View.VISIBLE);
         }else{
-            System.out.println("UPDATE BUTTON TURNED OFF !!!!!!!!!!!!!!!!!!!!");
             updateButton.setVisibility(View.GONE);
         }
     }
