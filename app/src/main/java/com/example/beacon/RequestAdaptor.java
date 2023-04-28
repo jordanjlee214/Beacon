@@ -108,7 +108,7 @@ public class RequestAdaptor extends
         Button yes = holder.acceptButton;
         Button no = holder.denyButton;
         yes.setEnabled(true);
-        no.setEnabled(false);
+        no.setEnabled(true);
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
