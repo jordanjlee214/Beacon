@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class Event {
 
-
     private String eventName, eventDescription, eventLocation;
 
     private Boolean isPublic;

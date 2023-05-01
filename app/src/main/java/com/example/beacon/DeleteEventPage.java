@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,7 @@ public class DeleteEventPage extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private Query query;
-    private ArrayList<String> myEvents;
+    private ArrayList<Event> myEvents;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +48,7 @@ public class DeleteEventPage extends AppCompatActivity {
         deleteEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToActivity(DeleteEventPage.class);
+                Toast.makeText(DeleteEventPage.this, "Click on an event to delete it.", Toast.LENGTH_SHORT);
             }     });
 
     };
@@ -55,9 +56,11 @@ public class DeleteEventPage extends AppCompatActivity {
         eventRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                myEvents.clear();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     if(itemSnapshot.child("creatorID").getValue().toString().equals(mAuth.getCurrentUser().getUid())){
-                        String item = itemSnapshot.getValue(Event.class).toString();
+                        Event item = itemSnapshot.getValue(Event.class);
+                    //    String item = itemSnapshot.getValue(Event.class).toString();
                         myEvents.add(item);
                     }
                 }
@@ -73,9 +76,16 @@ public class DeleteEventPage extends AppCompatActivity {
         });
     };
 
-    private void sendToActivity(Class<?> a) {
+    public void sendToActivity(Class<?> a) {
         Intent switchToNewActivity= new Intent(DeleteEventPage.this, a);
         startActivity(switchToNewActivity);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
+
+//    private boolean eventExists(Event e){
+//        for(Event current : myEvents){
+//            if(current.get)
+//        }
+//    }
+
 }
