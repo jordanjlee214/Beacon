@@ -517,7 +517,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void removePingInfo(){ //removes the ping info from the database
-        pingInfoRef.child(currentUserID).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        pingInfoRef.child(currentUserID).removeValue().addOnCompleteListener(
+                new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
